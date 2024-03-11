@@ -661,7 +661,7 @@ MmWaveCodebookBeamforming::ComputeBeamformingCodebookMatrix(
                                                             thisMob,
                                                             otherMob,
                                                             m_antenna,
-                                                            otherAntenna);
+                                                            otherAntenna)->psd;
             }
 
             double avgRxPsd = Sum(*rxPsd) / (rxPsd->GetSpectrumModel()->GetNumBands());
