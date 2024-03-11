@@ -50,7 +50,6 @@
 #include <ns3/spectrum-interference.h>
 #include <ns3/string.h>
 #include <ns3/test.h>
-#include <ns3/unused.h>
 
 #include <iostream>
 
