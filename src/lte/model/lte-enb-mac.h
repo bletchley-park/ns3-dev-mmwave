@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -24,19 +25,17 @@
 #ifndef LTE_ENB_MAC_H
 #define LTE_ENB_MAC_H
 
-#include "ff-mac-csched-sap.h"
-#include "ff-mac-sched-sap.h"
-#include "lte-ccm-mac-sap.h"
-#include "lte-common.h"
-#include "lte-enb-cmac-sap.h"
-#include "lte-enb-phy-sap.h"
-#include "lte-mac-sap.h"
-
-#include <ns3/nstime.h>
+#include "ns3/trace-source-accessor.h"
+#include "ns3/traced-value.h"
+#include <ns3/ff-mac-csched-sap.h>
+#include <ns3/ff-mac-sched-sap.h>
+#include <ns3/lte-ccm-mac-sap.h>
+#include <ns3/lte-common.h>
+#include <ns3/lte-enb-cmac-sap.h>
+#include <ns3/lte-enb-phy-sap.h>
+#include <ns3/lte-mac-sap.h>
 #include <ns3/packet-burst.h>
 #include <ns3/packet.h>
-#include <ns3/trace-source-accessor.h>
-#include <ns3/traced-value.h>
 
 #include <map>
 #include <vector>
@@ -74,11 +73,11 @@ class LteEnbMac : public Object
      * \brief Get the type ID.
      * \return the object TypeId
      */
-    static TypeId GetTypeId();
+    static TypeId GetTypeId(void);
 
-    LteEnbMac();
-    ~LteEnbMac() override;
-    void DoDispose() override;
+    LteEnbMac(void);
+    virtual ~LteEnbMac(void);
+    virtual void DoDispose(void);
 
     /**
      * \brief Set the component carrier ID
@@ -94,7 +93,7 @@ class LteEnbMac : public Object
      * \brief Get the scheduler SAP user
      * \return a pointer to the SAP user of the scheduler
      */
-    FfMacSchedSapUser* GetFfMacSchedSapUser();
+    FfMacSchedSapUser* GetFfMacSchedSapUser(void);
     /**
      * \brief Set the control scheduler SAP provider
      * \param s a pointer to the control scheduler SAP provider
@@ -104,7 +103,7 @@ class LteEnbMac : public Object
      * \brief Get the control scheduler SAP user
      * \return a pointer to the control scheduler SAP user
      */
-    FfMacCschedSapUser* GetFfMacCschedSapUser();
+    FfMacCschedSapUser* GetFfMacCschedSapUser(void);
 
     /**
      * \brief Set the MAC SAP user
@@ -115,7 +114,7 @@ class LteEnbMac : public Object
      * \brief Get the MAC SAP provider
      * \return a pointer to the SAP provider of the MAC
      */
-    LteMacSapProvider* GetLteMacSapProvider();
+    LteMacSapProvider* GetLteMacSapProvider(void);
     /**
      * \brief Set the control MAC SAP user
      * \param s a pointer to the control MAC SAP user
@@ -125,7 +124,7 @@ class LteEnbMac : public Object
      * \brief Get the control MAC SAP provider
      * \return a pointer to the control MAC SAP provider
      */
-    LteEnbCmacSapProvider* GetLteEnbCmacSapProvider();
+    LteEnbCmacSapProvider* GetLteEnbCmacSapProvider(void);
 
     /**
      * \brief Get the eNB-PHY SAP User
@@ -218,7 +217,7 @@ class LteEnbMac : public Object
      * \param ulBandwidth the UL bandwidth
      * \param dlBandwidth the DL bandwidth
      */
-    void DoConfigureMac(uint16_t ulBandwidth, uint16_t dlBandwidth);
+    void DoConfigureMac(uint8_t ulBandwidth, uint8_t dlBandwidth);
     /**
      * \brief Add UE function
      * \param rnti the RNTI
@@ -255,7 +254,7 @@ class LteEnbMac : public Object
      * \brief Get RACH configuration function
      * \returns LteEnbCmacSapProvider::RachConfig
      */
-    LteEnbCmacSapProvider::RachConfig DoGetRachConfig() const;
+    LteEnbCmacSapProvider::RachConfig DoGetRachConfig();
     /**
      * \brief Allocate NC RA preamble function
      * \param rnti the RNTI
@@ -345,16 +344,6 @@ class LteEnbMac : public Object
      */
     void DoReportMacCeToScheduler(MacCeListElement_s bsr);
 
-    /**
-     * \brief Report SR to scheduler
-     * \param rnti RNTI of the UE that requested the SR
-     *
-     * Since SR is not implemented in LTE, this method does nothing.
-     */
-    void DoReportSrToScheduler(uint16_t rnti [[maybe_unused]])
-    {
-    }
-
   public:
     /**
      * legacy public for use the Phy callback
@@ -367,12 +356,12 @@ class LteEnbMac : public Object
      * \brief UL Info List ELements HARQ Feedback function
      * \param params UlInfoListElement_s
      */
-    void DoUlInfoListElementHarqFeedback(UlInfoListElement_s params);
+    void DoUlInfoListElementHarqFeeback(UlInfoListElement_s params);
     /**
      * \brief DL Info List ELements HARQ Feedback function
      * \param params DlInfoListElement_s
      */
-    void DoDlInfoListElementHarqFeedback(DlInfoListElement_s params);
+    void DoDlInfoListElementHarqFeeback(DlInfoListElement_s params);
 
     /// RNTI, LC ID, SAP of the RLC instance
     std::map<uint16_t, std::map<uint8_t, LteMacSapUser*>> m_rlcAttached;
@@ -437,7 +426,6 @@ class LteEnbMac : public Object
     uint8_t m_numberOfRaPreambles;  ///< number of RA preambles
     uint8_t m_preambleTransMax;     ///< preamble transmit maximum
     uint8_t m_raResponseWindowSize; ///< RA response window size
-    uint8_t m_connEstFailCount;     ///< the counter value for T300 timer expiration
 
     /**
      * info associated with a preamble allocated for non-contention based RA
@@ -459,7 +447,7 @@ class LteEnbMac : public Object
 
     std::map<uint8_t, uint32_t> m_receivedRachPreambleCount; ///< received RACH preamble count
 
-    std::map<uint16_t, uint32_t> m_rapIdRntiMap; ///< RAPID RNTI map
+    std::map<uint8_t, uint32_t> m_rapIdRntiMap; ///< RAPID RNTI map
 
     /// component carrier Id used to address sap
     uint8_t m_componentCarrierId;

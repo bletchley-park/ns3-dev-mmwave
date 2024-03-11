@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2014 Piotr Gawlowicz
  *
@@ -31,11 +32,11 @@ NS_LOG_COMPONENT_DEFINE("LteFfrAlgorithm");
 
 /// Type 0 RGB allocation
 static const int Type0AllocationRbg[4] = {
-    10,  // RGB size 1
-    26,  // RGB size 2
-    63,  // RGB size 3
-    110, // RGB size 4
-};       // see table 7.1.6.1-1 of 3GPP TS 36.213
+    10, // RGB size 1
+    26, // RGB size 2
+    63, // RGB size 3
+    110 // RGB size 4
+};      // see table 7.1.6.1-1 of 3GPP TS 36.213
 
 NS_OBJECT_ENSURE_REGISTERED(LteFfrAlgorithm);
 
@@ -78,7 +79,7 @@ LteFfrAlgorithm::DoDispose()
     NS_LOG_FUNCTION(this);
 }
 
-uint16_t
+uint8_t
 LteFfrAlgorithm::GetUlBandwidth() const
 {
     NS_LOG_FUNCTION(this);
@@ -86,9 +87,9 @@ LteFfrAlgorithm::GetUlBandwidth() const
 }
 
 void
-LteFfrAlgorithm::SetUlBandwidth(uint16_t bw)
+LteFfrAlgorithm::SetUlBandwidth(uint8_t bw)
 {
-    NS_LOG_FUNCTION(this << bw);
+    NS_LOG_FUNCTION(this << uint16_t(bw));
     switch (bw)
     {
     case 6:
@@ -101,12 +102,12 @@ LteFfrAlgorithm::SetUlBandwidth(uint16_t bw)
         break;
 
     default:
-        NS_FATAL_ERROR("invalid bandwidth value " << bw);
+        NS_FATAL_ERROR("invalid bandwidth value " << (uint16_t)bw);
         break;
     }
 }
 
-uint16_t
+uint8_t
 LteFfrAlgorithm::GetDlBandwidth() const
 {
     NS_LOG_FUNCTION(this);
@@ -114,9 +115,9 @@ LteFfrAlgorithm::GetDlBandwidth() const
 }
 
 void
-LteFfrAlgorithm::SetDlBandwidth(uint16_t bw)
+LteFfrAlgorithm::SetDlBandwidth(uint8_t bw)
 {
-    NS_LOG_FUNCTION(this << bw);
+    NS_LOG_FUNCTION(this << uint16_t(bw));
     switch (bw)
     {
     case 6:
@@ -129,7 +130,7 @@ LteFfrAlgorithm::SetDlBandwidth(uint16_t bw)
         break;
 
     default:
-        NS_FATAL_ERROR("invalid bandwidth value " << bw);
+        NS_FATAL_ERROR("invalid bandwidth value " << (uint16_t)bw);
         break;
     }
 }
@@ -156,11 +157,11 @@ LteFfrAlgorithm::GetRbgSize(int dlbandwidth)
     {
         if (dlbandwidth < Type0AllocationRbg[i])
         {
-            return i + 1;
+            return (i + 1);
         }
     }
 
-    return -1;
+    return (-1);
 }
 
 void
@@ -171,7 +172,7 @@ LteFfrAlgorithm::DoSetCellId(uint16_t cellId)
 }
 
 void
-LteFfrAlgorithm::DoSetBandwidth(uint16_t ulBandwidth, uint16_t dlBandwidth)
+LteFfrAlgorithm::DoSetBandwidth(uint8_t ulBandwidth, uint8_t dlBandwidth)
 {
     NS_LOG_FUNCTION(this);
     SetDlBandwidth(dlBandwidth);

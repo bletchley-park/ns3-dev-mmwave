@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011,2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -42,7 +43,7 @@ class SpectrumPhy;
 class LteGlobalPathlossDatabase
 {
   public:
-    virtual ~LteGlobalPathlossDatabase();
+    virtual ~LteGlobalPathlossDatabase(void);
 
     /**
      * update the pathloss value
@@ -89,10 +90,10 @@ class DownlinkLteGlobalPathlossDatabase : public LteGlobalPathlossDatabase
 {
   public:
     // inherited from LteGlobalPathlossDatabase
-    void UpdatePathloss(std::string context,
-                        Ptr<const SpectrumPhy> txPhy,
-                        Ptr<const SpectrumPhy> rxPhy,
-                        double lossDb) override;
+    virtual void UpdatePathloss(std::string context,
+                                Ptr<const SpectrumPhy> txPhy,
+                                Ptr<const SpectrumPhy> rxPhy,
+                                double lossDb);
 };
 
 /**
@@ -103,10 +104,10 @@ class UplinkLteGlobalPathlossDatabase : public LteGlobalPathlossDatabase
 {
   public:
     // inherited from LteGlobalPathlossDatabase
-    void UpdatePathloss(std::string context,
-                        Ptr<const SpectrumPhy> txPhy,
-                        Ptr<const SpectrumPhy> rxPhy,
-                        double lossDb) override;
+    virtual void UpdatePathloss(std::string context,
+                                Ptr<const SpectrumPhy> txPhy,
+                                Ptr<const SpectrumPhy> rxPhy,
+                                double lossDb);
 };
 
 } // namespace ns3

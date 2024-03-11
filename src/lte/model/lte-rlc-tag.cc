@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 CTTC
  *
@@ -41,7 +42,7 @@ RlcTag::RlcTag(Time senderTimestamp)
 }
 
 TypeId
-RlcTag::GetTypeId()
+RlcTag::GetTypeId(void)
 {
     static TypeId tid =
         TypeId("ns3::RlcTag").SetParent<Tag>().SetGroupName("Lte").AddConstructor<RlcTag>();
@@ -49,13 +50,13 @@ RlcTag::GetTypeId()
 }
 
 TypeId
-RlcTag::GetInstanceTypeId() const
+RlcTag::GetInstanceTypeId(void) const
 {
     return GetTypeId();
 }
 
 uint32_t
-RlcTag::GetSerializedSize() const
+RlcTag::GetSerializedSize(void) const
 {
     return sizeof(Time);
 }

@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -22,16 +23,13 @@
 
 #include "ns3/simulator.h"
 #include "ns3/test.h"
-
-namespace ns3
-{
-class RadioBearerStatsCalculator;
-}
+#include <ns3/radio-bearer-stats-calculator.h>
 
 using namespace ns3;
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief This system test program creates different test cases with a
  * single eNB and single UE. The traffic is configured to be in saturation
@@ -53,10 +51,10 @@ class LenaMimoTestCase : public TestCase
                      std::vector<uint32_t> estThrDl,
                      std::string schedulerType,
                      bool useIdealRrc);
-    ~LenaMimoTestCase() override;
+    virtual ~LenaMimoTestCase();
 
   private:
-    void DoRun() override;
+    virtual void DoRun(void);
 
     /**
      * Get RLC buffer sample
@@ -84,6 +82,7 @@ class LenaMimoTestCase : public TestCase
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Lena Test Mimo Suite
  */

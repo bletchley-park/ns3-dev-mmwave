@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2013 Budiarto Herman
  *
@@ -66,40 +67,36 @@ LteCellSelectionTestSuite::LteCellSelectionTestSuite()
 
     // REAL RRC PROTOCOL
 
-    w = {
-        // x, y, csgMember, checkPoint, cell1, cell2
-        LteCellSelectionTestCase::UeSetup_t(0.0, 0.55, false, MilliSeconds(283), 1, 0),
-        LteCellSelectionTestCase::UeSetup_t(0.0, 0.45, false, MilliSeconds(283), 1, 0),
-        LteCellSelectionTestCase::UeSetup_t(0.5, 0.45, false, MilliSeconds(363), 1, 3),
-        LteCellSelectionTestCase::UeSetup_t(0.5, 0.0, true, MilliSeconds(283), 2, 4),
-        LteCellSelectionTestCase::UeSetup_t(1.0, 0.55, true, MilliSeconds(283), 3, 0),
-        LteCellSelectionTestCase::UeSetup_t(1.0, 0.45, true, MilliSeconds(283), 4, 0),
-    };
+    w.clear();
+    //                                                x     y    csgMember
+    //                                                checkPoint     cell1, cell2
+    w.push_back(LteCellSelectionTestCase::UeSetup_t(0.0, 0.55, false, MilliSeconds(283), 1, 0));
+    w.push_back(LteCellSelectionTestCase::UeSetup_t(0.0, 0.45, false, MilliSeconds(283), 1, 0));
+    w.push_back(LteCellSelectionTestCase::UeSetup_t(0.5, 0.45, false, MilliSeconds(363), 1, 3));
+    w.push_back(LteCellSelectionTestCase::UeSetup_t(0.5, 0.0, true, MilliSeconds(283), 2, 4));
+    w.push_back(LteCellSelectionTestCase::UeSetup_t(1.0, 0.55, true, MilliSeconds(283), 3, 0));
+    w.push_back(LteCellSelectionTestCase::UeSetup_t(1.0, 0.45, true, MilliSeconds(283), 4, 0));
 
     AddTestCase(new LteCellSelectionTestCase("EPC, real RRC", true, false, 60.0 /* isd */, w),
                 TestCase::QUICK);
 
     // IDEAL RRC PROTOCOL
 
-    w = {
-        // x, y, csgMember, checkPoint, cell1, cell2
-        LteCellSelectionTestCase::UeSetup_t(0.0, 0.55, false, MilliSeconds(266), 1, 0),
-        LteCellSelectionTestCase::UeSetup_t(0.0, 0.45, false, MilliSeconds(266), 1, 0),
-        LteCellSelectionTestCase::UeSetup_t(0.5, 0.45, false, MilliSeconds(346), 1, 3),
-        LteCellSelectionTestCase::UeSetup_t(0.5, 0.0, true, MilliSeconds(266), 2, 4),
-        LteCellSelectionTestCase::UeSetup_t(1.0, 0.55, true, MilliSeconds(266), 3, 0),
-        LteCellSelectionTestCase::UeSetup_t(1.0, 0.45, true, MilliSeconds(266), 4, 0),
-    };
+    w.clear();
+    //                                                x     y    csgMember
+    //                                                checkPoint     cell1, cell2
+    w.push_back(LteCellSelectionTestCase::UeSetup_t(0.0, 0.55, false, MilliSeconds(266), 1, 0));
+    w.push_back(LteCellSelectionTestCase::UeSetup_t(0.0, 0.45, false, MilliSeconds(266), 1, 0));
+    w.push_back(LteCellSelectionTestCase::UeSetup_t(0.5, 0.45, false, MilliSeconds(346), 1, 3));
+    w.push_back(LteCellSelectionTestCase::UeSetup_t(0.5, 0.0, true, MilliSeconds(266), 2, 4));
+    w.push_back(LteCellSelectionTestCase::UeSetup_t(1.0, 0.55, true, MilliSeconds(266), 3, 0));
+    w.push_back(LteCellSelectionTestCase::UeSetup_t(1.0, 0.45, true, MilliSeconds(266), 4, 0));
 
     AddTestCase(new LteCellSelectionTestCase("EPC, ideal RRC", true, true, 60.0 /* isd */, w),
                 TestCase::QUICK);
 
 } // end of LteCellSelectionTestSuite::LteCellSelectionTestSuite ()
 
-/**
- * \ingroup lte-test
- * Static variable for test initialization
- */
 static LteCellSelectionTestSuite g_lteCellSelectionTestSuite;
 
 /*
@@ -185,7 +182,7 @@ LteCellSelectionTestCase::DoRun()
     NodeContainer enbNodes;
     enbNodes.Create(4);
     NodeContainer ueNodes;
-    auto nUe = static_cast<uint16_t>(m_ueSetupList.size());
+    uint16_t nUe = static_cast<uint16_t>(m_ueSetupList.size());
     ueNodes.Create(nUe);
 
     // Assign nodes to position

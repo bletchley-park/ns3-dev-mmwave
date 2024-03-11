@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -19,7 +20,6 @@
  */
 
 #include "lte-test-interference.h"
-
 #include "ns3/boolean.h"
 #include "ns3/double.h"
 #include "ns3/ff-mac-scheduler.h"
@@ -34,6 +34,7 @@
 #include "ns3/string.h"
 #include <ns3/enum.h>
 #include <ns3/lte-chunk-processor.h>
+#include <ns3/lte-common.h>
 
 using namespace ns3;
 
@@ -187,10 +188,6 @@ LteInterferenceTestSuite::LteInterferenceTestSuite()
                 TestCase::QUICK);
 }
 
-/**
- * \ingroup lte-test
- * Static variable for test initialization
- */
 static LteInterferenceTestSuite lteLinkAdaptationWithInterferenceTestSuite;
 
 /**
@@ -221,7 +218,7 @@ LteInterferenceTestCase::~LteInterferenceTestCase()
 }
 
 void
-LteInterferenceTestCase::DoRun()
+LteInterferenceTestCase::DoRun(void)
 {
     NS_LOG_INFO(this << GetName());
 
@@ -270,6 +267,11 @@ LteInterferenceTestCase::DoRun()
     NetDeviceContainer ueDevs2;
     lteHelper->SetSchedulerType("ns3::RrFfMacScheduler");
     lteHelper->SetSchedulerAttribute("UlCqiFilter", EnumValue(FfMacScheduler::PUSCH_UL_CQI));
+
+    // set DL and UL bandwidth
+    lteHelper->SetEnbDeviceAttribute("DlBandwidth", UintegerValue(25));
+    lteHelper->SetEnbDeviceAttribute("UlBandwidth", UintegerValue(25));
+
     enbDevs = lteHelper->InstallEnbDevice(enbNodes);
     ueDevs1 = lteHelper->InstallUeDevice(ueNodes1);
     ueDevs2 = lteHelper->InstallUeDevice(ueNodes2);
@@ -278,7 +280,7 @@ LteInterferenceTestCase::DoRun()
     lteHelper->Attach(ueDevs2, enbDevs.Get(1));
 
     // Activate an EPS bearer
-    EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+    enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
     EpsBearer bearer(q);
     lteHelper->ActivateDataRadioBearer(ueDevs1, bearer);
     lteHelper->ActivateDataRadioBearer(ueDevs2, bearer);

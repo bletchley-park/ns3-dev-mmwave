@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -47,13 +48,13 @@ class LteStatsCalculator : public Object
     /**
      * Destructor
      */
-    ~LteStatsCalculator() override;
+    virtual ~LteStatsCalculator();
 
     /**
-     * Register this type.
-     * \return The object TypeId.
+     *  Register this type.
+     *  \return The object TypeId.
      */
-    static TypeId GetTypeId();
+    static TypeId GetTypeId(void);
 
     /**
      * Set the name of the file where the uplink statistics will be stored.
@@ -66,7 +67,7 @@ class LteStatsCalculator : public Object
      * Get the name of the file where the uplink statistics will be stored.
      * @return the name of the file where the uplink statistics will be stored
      */
-    std::string GetUlOutputFilename();
+    std::string GetUlOutputFilename(void);
 
     /**
      * Set the name of the file where the downlink statistics will be stored.
@@ -79,7 +80,7 @@ class LteStatsCalculator : public Object
      * Get the name of the file where the downlink statistics will be stored.
      * @return the name of the file where the downlink statistics will be stored
      */
-    std::string GetDlOutputFilename();
+    std::string GetDlOutputFilename(void);
 
     /**
      * Checks if there is an already stored IMSI for the given path

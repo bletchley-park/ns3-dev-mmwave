@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -18,9 +19,7 @@
  */
 
 #include "lte-test-rlc-um-transmitter.h"
-
 #include "lte-test-entities.h"
-
 #include "ns3/log.h"
 #include "ns3/lte-rlc-header.h"
 #include "ns3/lte-rlc-um.h"
@@ -49,10 +48,6 @@ LteRlcUmTransmitterTestSuite::LteRlcUmTransmitterTestSuite()
                 TestCase::QUICK);
 }
 
-/**
- * \ingroup lte-test
- * Static variable for test initialization
- */
 static LteRlcUmTransmitterTestSuite lteRlcUmTransmitterTestSuite;
 
 LteRlcUmTransmitterTestCase::LteRlcUmTransmitterTestCase(std::string name)
@@ -66,7 +61,7 @@ LteRlcUmTransmitterTestCase::~LteRlcUmTransmitterTestCase()
 }
 
 void
-LteRlcUmTransmitterTestCase::DoRun()
+LteRlcUmTransmitterTestCase::DoRun(void)
 {
     // LogLevel logLevel = (LogLevel)(LOG_PREFIX_FUNC | LOG_PREFIX_TIME | LOG_LEVEL_ALL);
     // LogComponentEnable ("LteRlcUmTransmitterTest", logLevel);
@@ -133,7 +128,7 @@ LteRlcUmTransmitterOneSduTestCase::~LteRlcUmTransmitterOneSduTestCase()
 }
 
 void
-LteRlcUmTransmitterOneSduTestCase::DoRun()
+LteRlcUmTransmitterOneSduTestCase::DoRun(void)
 {
     // Create topology
     LteRlcUmTransmitterTestCase::DoRun();
@@ -166,7 +161,7 @@ LteRlcUmTransmitterSegmentationTestCase::~LteRlcUmTransmitterSegmentationTestCas
 }
 
 void
-LteRlcUmTransmitterSegmentationTestCase::DoRun()
+LteRlcUmTransmitterSegmentationTestCase::DoRun(void)
 {
     // Create topology
     LteRlcUmTransmitterTestCase::DoRun();
@@ -208,7 +203,7 @@ LteRlcUmTransmitterConcatenationTestCase::~LteRlcUmTransmitterConcatenationTestC
 }
 
 void
-LteRlcUmTransmitterConcatenationTestCase::DoRun()
+LteRlcUmTransmitterConcatenationTestCase::DoRun(void)
 {
     // Create topology
     LteRlcUmTransmitterTestCase::DoRun();
@@ -244,7 +239,7 @@ LteRlcUmTransmitterReportBufferStatusTestCase::~LteRlcUmTransmitterReportBufferS
 }
 
 void
-LteRlcUmTransmitterReportBufferStatusTestCase::DoRun()
+LteRlcUmTransmitterReportBufferStatusTestCase::DoRun(void)
 {
     // Create topology
     LteRlcUmTransmitterTestCase::DoRun();

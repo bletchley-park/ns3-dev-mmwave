@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -20,9 +21,8 @@
 #ifndef LTE_RLC_HEADER_H
 #define LTE_RLC_HEADER_H
 
-#include "lte-rlc-sequence-number.h"
-
 #include "ns3/header.h"
+#include "ns3/lte-rlc-sequence-number.h"
 
 #include <list>
 
@@ -46,7 +46,7 @@ class LteRlcHeader : public Header
      * Creates a null header
      */
     LteRlcHeader();
-    ~LteRlcHeader() override;
+    ~LteRlcHeader();
 
     /**
      * Set framing info
@@ -92,40 +92,45 @@ class LteRlcHeader : public Header
      *
      * \returns the extension bit
      */
-    uint8_t PopExtensionBit();
+    uint8_t PopExtensionBit(void);
     /**
      * Pop length indicator
      *
      * \returns the length indicator
      */
-    uint16_t PopLengthIndicator();
+    uint16_t PopLengthIndicator(void);
 
     /// ExtensionBit_t typedef
-    enum ExtensionBit_t
+    typedef enum
     {
         DATA_FIELD_FOLLOWS = 0,
         E_LI_FIELDS_FOLLOWS = 1
-    };
+    } ExtensionBit_t; ///< ExtensionBit_t enumeration
 
-    /// FramingInfoByte_t typedef
-    enum FramingInfoByte_t
+    /// FramingInfoFirstByte_t typedef
+    typedef enum
     {
         FIRST_BYTE = 0x00,
-        NO_FIRST_BYTE = 0x02,
+        NO_FIRST_BYTE = 0x02
+    } FramingInfoFirstByte_t; ///< FramingInfoFirstByte_t enumeration
+
+    /// FramingInfoLastByte_t tyedef
+    typedef enum
+    {
         LAST_BYTE = 0x00,
         NO_LAST_BYTE = 0x01
-    };
+    } FramingInfoLastByte_t; ///< FramingInfoLastByte_t enumeration
 
     /**
      * \brief Get the type ID.
      * \return the object TypeId
      */
-    static TypeId GetTypeId();
-    TypeId GetInstanceTypeId() const override;
-    void Print(std::ostream& os) const override;
-    uint32_t GetSerializedSize() const override;
-    void Serialize(Buffer::Iterator start) const override;
-    uint32_t Deserialize(Buffer::Iterator start) override;
+    static TypeId GetTypeId(void);
+    virtual TypeId GetInstanceTypeId(void) const;
+    virtual void Print(std::ostream& os) const;
+    virtual uint32_t GetSerializedSize(void) const;
+    virtual void Serialize(Buffer::Iterator start) const;
+    virtual uint32_t Deserialize(Buffer::Iterator start);
 
   private:
     uint16_t m_headerLength;           ///< header length

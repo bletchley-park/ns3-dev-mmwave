@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011, 2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -211,10 +212,6 @@ LenaTestPfFfMacSchedulerSuite::LenaTestPfFfMacSchedulerSuite()
                 TestCase::QUICK);
 }
 
-/**
- * \ingroup lte-test
- * Static variable for test initialization
- */
 static LenaTestPfFfMacSchedulerSuite lenaTestPfFfMacSchedulerSuite;
 
 // --------------- T E S T - C A S E   # 1 ------------------------------
@@ -246,7 +243,7 @@ LenaPfFfMacSchedulerTestCase1::~LenaPfFfMacSchedulerTestCase1()
 }
 
 void
-LenaPfFfMacSchedulerTestCase1::DoRun()
+LenaPfFfMacSchedulerTestCase1::DoRun(void)
 {
     NS_LOG_FUNCTION(this << m_nUser << m_dist);
 
@@ -256,14 +253,7 @@ LenaPfFfMacSchedulerTestCase1::DoRun()
         Config::SetDefault("ns3::LteSpectrumPhy::DataErrorModelEnabled", BooleanValue(false));
     }
     Config::SetDefault("ns3::LteHelper::UseIdealRrc", BooleanValue(true));
-    Config::SetDefault("ns3::MacStatsCalculator::DlOutputFilename",
-                       StringValue(CreateTempDirFilename("DlMacStats.txt")));
-    Config::SetDefault("ns3::MacStatsCalculator::UlOutputFilename",
-                       StringValue(CreateTempDirFilename("UlMacStats.txt")));
-    Config::SetDefault("ns3::RadioBearerStatsCalculator::DlRlcOutputFilename",
-                       StringValue(CreateTempDirFilename("DlRlcStats.txt")));
-    Config::SetDefault("ns3::RadioBearerStatsCalculator::UlRlcOutputFilename",
-                       StringValue(CreateTempDirFilename("UlRlcStats.txt")));
+    Config::SetDefault("ns3::LteEnbRrc::SrsPeriodicity", UintegerValue(40));
 
     /**
      * Initialize Simulation Scenario: 1 eNB and m_nUser UEs
@@ -271,6 +261,10 @@ LenaPfFfMacSchedulerTestCase1::DoRun()
 
     Ptr<LteHelper> lteHelper = CreateObject<LteHelper>();
     lteHelper->SetAttribute("PathlossModel", StringValue("ns3::FriisSpectrumPropagationLossModel"));
+
+    // set DL and UL bandwidth
+    lteHelper->SetEnbDeviceAttribute("DlBandwidth", UintegerValue(25));
+    lteHelper->SetEnbDeviceAttribute("UlBandwidth", UintegerValue(25));
 
     // Create Nodes: eNodeB and UE
     NodeContainer enbNodes;
@@ -297,7 +291,7 @@ LenaPfFfMacSchedulerTestCase1::DoRun()
     lteHelper->Attach(ueDevs, enbDevs.Get(0));
 
     // Activate an EPS bearer
-    EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+    enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
     EpsBearer bearer(q);
     lteHelper->ActivateDataRadioBearer(ueDevs, bearer);
 
@@ -332,7 +326,7 @@ LenaPfFfMacSchedulerTestCase1::DoRun()
     Simulator::Run();
 
     /**
-     * Check that the downlink assignment is done in a "proportional fair" manner
+     * Check that the downlink assignation is done in a "proportional fair" manner
      */
     NS_LOG_INFO("DL - Test with " << m_nUser << " user(s) at distance " << m_dist);
     std::vector<uint64_t> dlDataRxed;
@@ -347,7 +341,7 @@ LenaPfFfMacSchedulerTestCase1::DoRun()
                               << m_thrRefDl);
     }
     /**
-     * Check that the assignment is done in a "proportional fair" manner among users
+     * Check that the assignation is done in a "proportional fair" manner among users
      * with equal SINRs: the bandwidth should be distributed according to the
      * ratio of the estimated throughput per TTI of each user; therefore equally
      * partitioning the whole bandwidth achievable from a single users in a TTI
@@ -361,7 +355,7 @@ LenaPfFfMacSchedulerTestCase1::DoRun()
     }
 
     /**
-     * Check that the uplink assignment is done in a "proportional fair" manner
+     * Check that the uplink assignation is done in a "proportional fair" manner
      */
     NS_LOG_INFO("UL - Test with " << m_nUser << " user(s) at distance " << m_dist);
     std::vector<uint64_t> ulDataRxed;
@@ -377,7 +371,7 @@ LenaPfFfMacSchedulerTestCase1::DoRun()
                               << m_thrRefUl);
     }
     /**
-     * Check that the assignment is done in a "proportional fair" manner among users
+     * Check that the assignation is done in a "proportional fair" manner among users
      * with equal SINRs: the bandwidth should be distributed according to the
      * ratio of the estimated throughput per TTI of each user; therefore equally
      * partitioning the whole bandwidth achievable from a single users in a TTI
@@ -399,7 +393,7 @@ LenaPfFfMacSchedulerTestCase2::BuildNameString(uint16_t nUser, std::vector<doubl
 {
     std::ostringstream oss;
     oss << "distances (m) = [ ";
-    for (auto it = dist.begin(); it != dist.end(); ++it)
+    for (std::vector<double>::iterator it = dist.begin(); it != dist.end(); ++it)
     {
         oss << *it << " ";
     }
@@ -425,7 +419,7 @@ LenaPfFfMacSchedulerTestCase2::~LenaPfFfMacSchedulerTestCase2()
 }
 
 void
-LenaPfFfMacSchedulerTestCase2::DoRun()
+LenaPfFfMacSchedulerTestCase2::DoRun(void)
 {
     NS_LOG_FUNCTION(this);
     if (!m_errorModelEnabled)
@@ -434,14 +428,6 @@ LenaPfFfMacSchedulerTestCase2::DoRun()
         Config::SetDefault("ns3::LteSpectrumPhy::DataErrorModelEnabled", BooleanValue(false));
     }
     Config::SetDefault("ns3::LteHelper::UseIdealRrc", BooleanValue(false));
-    Config::SetDefault("ns3::MacStatsCalculator::DlOutputFilename",
-                       StringValue(CreateTempDirFilename("DlMacStats.txt")));
-    Config::SetDefault("ns3::MacStatsCalculator::UlOutputFilename",
-                       StringValue(CreateTempDirFilename("UlMacStats.txt")));
-    Config::SetDefault("ns3::RadioBearerStatsCalculator::DlRlcOutputFilename",
-                       StringValue(CreateTempDirFilename("DlRlcStats.txt")));
-    Config::SetDefault("ns3::RadioBearerStatsCalculator::UlRlcOutputFilename",
-                       StringValue(CreateTempDirFilename("UlRlcStats.txt")));
 
     /**
      * Initialize Simulation Scenario: 1 eNB and m_nUser UEs
@@ -450,6 +436,10 @@ LenaPfFfMacSchedulerTestCase2::DoRun()
     Ptr<LteHelper> lteHelper = CreateObject<LteHelper>();
 
     lteHelper->SetAttribute("PathlossModel", StringValue("ns3::FriisSpectrumPropagationLossModel"));
+
+    // set DL and UL bandwidth
+    lteHelper->SetEnbDeviceAttribute("DlBandwidth", UintegerValue(25));
+    lteHelper->SetEnbDeviceAttribute("UlBandwidth", UintegerValue(25));
 
     // Create Nodes: eNodeB and UE
     NodeContainer enbNodes;
@@ -476,7 +466,7 @@ LenaPfFfMacSchedulerTestCase2::DoRun()
     lteHelper->Attach(ueDevs, enbDevs.Get(0));
 
     // Activate an EPS bearer
-    EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+    enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
     EpsBearer bearer(q);
     lteHelper->ActivateDataRadioBearer(ueDevs, bearer);
 
@@ -497,7 +487,7 @@ LenaPfFfMacSchedulerTestCase2::DoRun()
         uePhy->SetAttribute("NoiseFigure", DoubleValue(9.0));
     }
 
-    double statsStartTime = 0.300; // need to allow for RRC connection establishment + SRS
+    double statsStartTime = 0.600; // need to allow for RRC connection establishment + SRS
     double statsDuration = 0.4;
     double tolerance = 0.1;
     Simulator::Stop(Seconds(statsStartTime + statsDuration - 0.000001));
@@ -528,7 +518,7 @@ LenaPfFfMacSchedulerTestCase2::DoRun()
     }
 
     /**
-     * Check that the assignment is done in a "proportional fair" manner among users
+     * Check that the assignation is done in a "proportional fair" manner among users
      * with different SINRs: the bandwidth should be distributed according to the
      * ratio of the estimated throughput per TTI of each user.
      */
@@ -541,7 +531,7 @@ LenaPfFfMacSchedulerTestCase2::DoRun()
     }
 
     /**
-     * Check that the assignment in uplink is done in a round robin manner.
+     * Check that the assignation in uplink is done in a round robin manner.
      */
 
     NS_LOG_INFO("UL - Test with " << m_nUser);

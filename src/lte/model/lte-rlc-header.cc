@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -17,7 +18,7 @@
  * Author: Manuel Requena <manuel.requena@cttc.es>
  */
 
-#include "lte-rlc-header.h"
+#include "ns3/lte-rlc-header.h"
 
 #include "ns3/log.h"
 
@@ -91,7 +92,7 @@ LteRlcHeader::PushLengthIndicator(uint16_t lengthIndicator)
 }
 
 uint8_t
-LteRlcHeader::PopExtensionBit()
+LteRlcHeader::PopExtensionBit(void)
 {
     uint8_t extensionBit = m_extensionBits.front();
     m_extensionBits.pop_front();
@@ -100,7 +101,7 @@ LteRlcHeader::PopExtensionBit()
 }
 
 uint16_t
-LteRlcHeader::PopLengthIndicator()
+LteRlcHeader::PopLengthIndicator(void)
 {
     uint16_t lengthIndicator = m_lengthIndicators.front();
     m_lengthIndicators.pop_front();
@@ -109,7 +110,7 @@ LteRlcHeader::PopLengthIndicator()
 }
 
 TypeId
-LteRlcHeader::GetTypeId()
+LteRlcHeader::GetTypeId(void)
 {
     static TypeId tid = TypeId("ns3::LteRlcHeader")
                             .SetParent<Header>()
@@ -119,7 +120,7 @@ LteRlcHeader::GetTypeId()
 }
 
 TypeId
-LteRlcHeader::GetInstanceTypeId() const
+LteRlcHeader::GetInstanceTypeId(void) const
 {
     return GetTypeId();
 }
@@ -127,8 +128,8 @@ LteRlcHeader::GetInstanceTypeId() const
 void
 LteRlcHeader::Print(std::ostream& os) const
 {
-    auto it1 = m_extensionBits.begin();
-    auto it2 = m_lengthIndicators.begin();
+    std::list<uint8_t>::const_iterator it1 = m_extensionBits.begin();
+    std::list<uint16_t>::const_iterator it2 = m_lengthIndicators.begin();
 
     os << "Len=" << m_headerLength;
     os << " FI=" << (uint16_t)m_framingInfo;
@@ -158,7 +159,7 @@ LteRlcHeader::Print(std::ostream& os) const
 }
 
 uint32_t
-LteRlcHeader::GetSerializedSize() const
+LteRlcHeader::GetSerializedSize(void) const
 {
     return m_headerLength;
 }
@@ -168,8 +169,8 @@ LteRlcHeader::Serialize(Buffer::Iterator start) const
 {
     Buffer::Iterator i = start;
 
-    auto it1 = m_extensionBits.begin();
-    auto it2 = m_lengthIndicators.begin();
+    std::list<uint8_t>::const_iterator it1 = m_extensionBits.begin();
+    std::list<uint16_t>::const_iterator it2 = m_lengthIndicators.begin();
 
     i.WriteU8(((m_framingInfo << 3) & 0x18) | (((*it1) << 2) & 0x04) |
               ((m_sequenceNumber.GetValue() >> 8) & 0x0003));
@@ -178,10 +179,8 @@ LteRlcHeader::Serialize(Buffer::Iterator start) const
 
     while (it1 != m_extensionBits.end() && it2 != m_lengthIndicators.end())
     {
-        uint16_t oddLi;
-        uint16_t evenLi;
-        uint8_t oddE;
-        uint8_t evenE;
+        uint16_t oddLi, evenLi;
+        uint8_t oddE, evenE;
 
         oddE = *it1;
         oddLi = *it2;
@@ -204,7 +203,7 @@ LteRlcHeader::Serialize(Buffer::Iterator start) const
         else
         {
             i.WriteU8(((oddE << 7) & 0x80) | ((oddLi >> 4) & 0x007F));
-            i.WriteU8((oddLi << 4) & 0x00F0); // Padding is implicit
+            i.WriteU8(((oddLi << 4) & 0x00F0)); // Padding is implicit
         }
     }
 }
@@ -232,10 +231,8 @@ LteRlcHeader::Deserialize(Buffer::Iterator start)
         return GetSerializedSize();
     }
 
-    uint16_t oddLi;
-    uint16_t evenLi;
-    uint8_t oddE;
-    uint8_t evenE;
+    uint16_t oddLi, evenLi;
+    uint8_t oddE, evenE;
     bool moreLiFields = (extensionBit == E_LI_FIELDS_FOLLOWS);
 
     while (moreLiFields)

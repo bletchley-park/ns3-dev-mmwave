@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011, 2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  * Copyright (c) 2013 Budiarto Herman
@@ -16,20 +17,19 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * Original work authors (from lte-enb-rrc.cc):
- *   Nicola Baldo <nbaldo@cttc.es>
- *   Marco Miozzo <mmiozzo@cttc.es>
- *   Manuel Requena <manuel.requena@cttc.es>
+ * - Nicola Baldo <nbaldo@cttc.es>
+ * - Marco Miozzo <mmiozzo@cttc.es>
+ * - Manuel Requena <manuel.requena@cttc.es>
  *
  * Converted to ANR interface by:
- *   Budiarto Herman <budiarto.herman@magister.fi>
+ * - Budiarto Herman <budiarto.herman@magister.fi>
  */
 
 #ifndef LTE_ANR_H
 #define LTE_ANR_H
 
-#include "lte-anr-sap.h"
-#include "lte-rrc-sap.h"
-
+#include <ns3/lte-anr-sap.h>
+#include <ns3/lte-rrc-sap.h>
 #include <ns3/object.h>
 
 #include <map>
@@ -87,7 +87,7 @@ class LteAnr : public Object
      *                      instance is to be associated with
      */
     LteAnr(uint16_t servingCellId);
-    ~LteAnr() override;
+    virtual ~LteAnr();
 
     /**
      * \brief Get the type ID.
@@ -141,8 +141,8 @@ class LteAnr : public Object
 
   protected:
     // inherited from Object
-    void DoInitialize() override;
-    void DoDispose() override;
+    virtual void DoInitialize();
+    virtual void DoDispose();
 
   private:
     // ANR SAP PROVIDER IMPLEMENTATION

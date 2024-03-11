@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2014 Piotr Gawlowicz
  *
@@ -18,6 +19,7 @@
  *
  */
 
+#include "ns3/config-store.h"
 #include "ns3/core-module.h"
 #include "ns3/lte-module.h"
 #include "ns3/mobility-module.h"
@@ -34,13 +36,13 @@ void
 PrintGnuplottableUeListToFile(std::string filename)
 {
     std::ofstream outFile;
-    outFile.open(filename, std::ios_base::out | std::ios_base::trunc);
+    outFile.open(filename.c_str(), std::ios_base::out | std::ios_base::trunc);
     if (!outFile.is_open())
     {
         NS_LOG_ERROR("Can't open file " << filename);
         return;
     }
-    for (auto it = NodeList::Begin(); it != NodeList::End(); ++it)
+    for (NodeList::Iterator it = NodeList::Begin(); it != NodeList::End(); ++it)
     {
         Ptr<Node> node = *it;
         int nDevs = node->GetNDevices();
@@ -63,13 +65,13 @@ void
 PrintGnuplottableEnbListToFile(std::string filename)
 {
     std::ofstream outFile;
-    outFile.open(filename, std::ios_base::out | std::ios_base::trunc);
+    outFile.open(filename.c_str(), std::ios_base::out | std::ios_base::trunc);
     if (!outFile.is_open())
     {
         NS_LOG_ERROR("Can't open file " << filename);
         return;
     }
-    for (auto it = NodeList::Begin(); it != NodeList::End(); ++it)
+    for (NodeList::Iterator it = NodeList::Begin(); it != NodeList::End(); ++it)
     {
         Ptr<Node> node = *it;
         int nDevs = node->GetNDevices();
@@ -108,13 +110,13 @@ main(int argc, char* argv[])
     bool generateSpectrumTrace = false;
     bool generateRem = false;
     int32_t remRbId = -1;
-    uint16_t bandwidth = 25;
+    uint8_t bandwidth = 25;
     double distance = 1000;
     Box macroUeBox =
         Box(-distance * 0.5, distance * 1.5, -distance * 0.5, distance * 1.5, 1.5, 1.5);
 
     // Command line arguments
-    CommandLine cmd(__FILE__);
+    CommandLine cmd;
     cmd.AddValue("numberOfUes", "Number of random UEs", numberOfRandomUes);
     cmd.AddValue("simTime", "Total duration of the simulation (in seconds)", simTime);
     cmd.AddValue("generateSpectrumTrace",
@@ -324,7 +326,7 @@ main(int argc, char* argv[])
     lteHelper->AttachToClosestEnb(randomUeDevs, enbDevs);
 
     // Activate a data radio bearer
-    EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+    enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
     EpsBearer bearer(q);
     lteHelper->ActivateDataRadioBearer(edgeUeDevs, bearer);
     lteHelper->ActivateDataRadioBearer(centerUeDevs, bearer);
@@ -339,8 +341,8 @@ main(int argc, char* argv[])
     {
         Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator>();
         // position of Spectrum Analyzer
-        // positionAlloc->Add (Vector (0.0, 0.0, 0.0));                      // eNB1
-        // positionAlloc->Add (Vector (distance,  0.0, 0.0));                // eNB2
+        //    positionAlloc->Add (Vector (0.0, 0.0, 0.0));                              // eNB1
+        //    positionAlloc->Add (Vector (distance,  0.0, 0.0));                        // eNB2
         positionAlloc->Add(Vector(distance * 0.5, distance * 0.866, 0.0)); // eNB3
 
         MobilityHelper mobility;

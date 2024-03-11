@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -21,16 +22,15 @@
 
 #include "lte-test-tdtbfq-ff-mac-scheduler.h"
 
+#include "ns3/applications-module.h"
 #include "ns3/double.h"
 #include "ns3/internet-module.h"
 #include "ns3/ipv4-global-routing-helper.h"
 #include "ns3/network-module.h"
-#include "ns3/packet-sink-helper.h"
 #include "ns3/point-to-point-epc-helper.h"
 #include "ns3/point-to-point-helper.h"
 #include "ns3/radio-bearer-stats-calculator.h"
 #include "ns3/string.h"
-#include "ns3/udp-client-server-helper.h"
 #include <ns3/boolean.h>
 #include <ns3/constant-position-mobility-model.h>
 #include <ns3/enum.h>
@@ -82,7 +82,7 @@ LenaTestTdTbfqFfMacSchedulerSuite::LenaTestTdTbfqFfMacSchedulerSuite()
     //    UDP traffic: payload size = 200 bytes, interval = 1 ms
     //    UDP rate in scheduler: (payload + RLC header + PDCP header + IP header + UDP header) *
     //    1000 byte/sec -> 232000 byte/rate
-    //  Total bandwidth: 24 PRB at Itbs 26 -> 2196 -> 2196000 byte/sec
+    //  Totol bandwidth: 24 PRB at Itbs 26 -> 2196 -> 2196000 byte/sec
     //  1 user -> 232000 * 1 = 232000 < 2196000 -> throughput = 232000 byte/sec
     //  3 user -> 232000 * 3 = 696000 < 2196000 -> througphut = 232000 byte/sec
     //  6 user -> 232000 * 6 = 139200 < 2196000 -> throughput = 232000 byte/sec
@@ -106,7 +106,7 @@ LenaTestTdTbfqFfMacSchedulerSuite::LenaTestTdTbfqFfMacSchedulerSuite()
     //   UDP traffic: payload size = 200 bytes, interval = 1 ms
     //   UDP rate in scheduler: (payload + RLC header + PDCP header + IP header + UDP header) * 1000
     //   byte/sec -> 232000 byte/rate
-    // Total bandwidth: 24 PRB at Itbs 20 -> 1383 -> 1383000 byte/sec
+    // Totol bandwidth: 24 PRB at Itbs 20 -> 1383 -> 1383000 byte/sec
     // 1 user -> 903000 * 1 = 232000 < 1383000 -> throughput = 232000 byte/sec
     // 3 user -> 232000 * 3 = 696000 < 1383000 -> througphut = 232000 byte/sec
     // 6 user -> 232000 * 6 = 1392000 > 1383000 -> throughput = 1383000 / 6 = 230500 byte/sec
@@ -132,7 +132,7 @@ LenaTestTdTbfqFfMacSchedulerSuite::LenaTestTdTbfqFfMacSchedulerSuite()
     //   UDP traffic: payload size = 200 bytes, interval = 1 ms
     //   UDP rate in scheduler: (payload + RLC header + PDCP header + IP header + UDP header) * 1000
     //   byte/sec -> 232000 byte/rate
-    // Total bandwidth: 24 PRB at Itbs 18 -> 1191 -> 1191000 byte/sec
+    // Totol bandwidth: 24 PRB at Itbs 18 -> 1191 -> 1191000 byte/sec
     // 1 user -> 903000 * 1 = 232000 < 1191000 -> throughput = 232000 byte/sec
     // 3 user -> 232000 * 3 = 696000 < 1191000 -> througphut = 232000 byte/sec
     // 6 user -> 232000 * 6 = 1392000 > 1191000 -> throughput = 1191000 / 6 = 198500 byte/sec
@@ -159,7 +159,7 @@ LenaTestTdTbfqFfMacSchedulerSuite::LenaTestTdTbfqFfMacSchedulerSuite()
     //   UDP traffic: payload size = 200 bytes, interval = 1 ms
     //   UDP rate in scheduler: (payload + RLC header + PDCP header + IP header + UDP header) * 1000
     //   byte/sec -> 232000 byte/rate
-    // Total bandwidth: 24 PRB at Itbs 13 -> 775 -> 775000 byte/sec
+    // Totol bandwidth: 24 PRB at Itbs 13 -> 775 -> 775000 byte/sec
     // 1 user -> 903000 * 1 = 232000 < 775000 -> throughput = 232000 byte/sec
     // 3 user -> 232000 * 3 = 696000 < 775000 -> througphut = 232000 byte/sec
     // 6 user -> 232000 * 6 = 1392000 > 775000 -> throughput = 775000 / 6 = 129166 byte/sec
@@ -262,10 +262,6 @@ LenaTestTdTbfqFfMacSchedulerSuite::LenaTestTdTbfqFfMacSchedulerSuite()
         TestCase::QUICK);
 }
 
-/**
- * \ingroup lte-test
- * Static variable for test initialization
- */
 static LenaTestTdTbfqFfMacSchedulerSuite lenaTestTdTbfqFfMacSchedulerSuite;
 
 // --------------- T E S T - C A S E   # 1 ------------------------------
@@ -301,7 +297,7 @@ LenaTdTbfqFfMacSchedulerTestCase1::~LenaTdTbfqFfMacSchedulerTestCase1()
 }
 
 void
-LenaTdTbfqFfMacSchedulerTestCase1::DoRun()
+LenaTdTbfqFfMacSchedulerTestCase1::DoRun(void)
 {
     NS_LOG_FUNCTION(this << GetName());
 
@@ -311,15 +307,8 @@ LenaTdTbfqFfMacSchedulerTestCase1::DoRun()
         Config::SetDefault("ns3::LteSpectrumPhy::DataErrorModelEnabled", BooleanValue(false));
     }
 
+    Config::SetDefault("ns3::LteEnbRrc::SrsPeriodicity", UintegerValue(40));
     Config::SetDefault("ns3::LteHelper::UseIdealRrc", BooleanValue(true));
-    Config::SetDefault("ns3::MacStatsCalculator::DlOutputFilename",
-                       StringValue(CreateTempDirFilename("DlMacStats.txt")));
-    Config::SetDefault("ns3::MacStatsCalculator::UlOutputFilename",
-                       StringValue(CreateTempDirFilename("UlMacStats.txt")));
-    Config::SetDefault("ns3::RadioBearerStatsCalculator::DlRlcOutputFilename",
-                       StringValue(CreateTempDirFilename("DlRlcStats.txt")));
-    Config::SetDefault("ns3::RadioBearerStatsCalculator::UlRlcOutputFilename",
-                       StringValue(CreateTempDirFilename("UlRlcStats.txt")));
 
     Ptr<LteHelper> lteHelper = CreateObject<LteHelper>();
     Ptr<PointToPointEpcHelper> epcHelper = CreateObject<PointToPointEpcHelper>();
@@ -433,7 +422,7 @@ LenaTdTbfqFfMacSchedulerTestCase1::DoRun()
         qos.mbrDl = qos.gbrDl;
         qos.mbrUl = 0;
 
-        EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+        enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
         EpsBearer bearer(q, qos);
         lteHelper->ActivateDedicatedEpsBearer(ueDevice, bearer, EpcTft::Default());
     }
@@ -486,7 +475,7 @@ LenaTdTbfqFfMacSchedulerTestCase1::DoRun()
     Simulator::Run();
 
     /**
-     * Check that the downlink assignment is done in a "token bank fair queue" manner
+     * Check that the downlink assignation is done in a "token bank fair queue" manner
      */
 
     NS_LOG_INFO("DL - Test with " << m_nUser << " user(s) at distance " << m_dist);
@@ -513,7 +502,7 @@ LenaTdTbfqFfMacSchedulerTestCase1::DoRun()
     }
 
     /**
-     * Check that the uplink assignment is done in a "round robin" manner
+     * Check that the uplink assignation is done in a "round robin" manner
      */
 
     NS_LOG_INFO("UL - Test with " << m_nUser << " user(s) at distance " << m_dist);
@@ -547,7 +536,7 @@ LenaTdTbfqFfMacSchedulerTestCase2::BuildNameString(uint16_t nUser, std::vector<d
 {
     std::ostringstream oss;
     oss << "distances (m) = [ ";
-    for (auto it = dist.begin(); it != dist.end(); ++it)
+    for (std::vector<double>::iterator it = dist.begin(); it != dist.end(); ++it)
     {
         oss << *it << " ";
     }
@@ -576,7 +565,7 @@ LenaTdTbfqFfMacSchedulerTestCase2::~LenaTdTbfqFfMacSchedulerTestCase2()
 }
 
 void
-LenaTdTbfqFfMacSchedulerTestCase2::DoRun()
+LenaTdTbfqFfMacSchedulerTestCase2::DoRun(void)
 {
     if (!m_errorModelEnabled)
     {
@@ -585,14 +574,6 @@ LenaTdTbfqFfMacSchedulerTestCase2::DoRun()
     }
 
     Config::SetDefault("ns3::LteHelper::UseIdealRrc", BooleanValue(true));
-    Config::SetDefault("ns3::MacStatsCalculator::DlOutputFilename",
-                       StringValue(CreateTempDirFilename("DlMacStats.txt")));
-    Config::SetDefault("ns3::MacStatsCalculator::UlOutputFilename",
-                       StringValue(CreateTempDirFilename("UlMacStats.txt")));
-    Config::SetDefault("ns3::RadioBearerStatsCalculator::DlRlcOutputFilename",
-                       StringValue(CreateTempDirFilename("DlRlcStats.txt")));
-    Config::SetDefault("ns3::RadioBearerStatsCalculator::UlRlcOutputFilename",
-                       StringValue(CreateTempDirFilename("UlRlcStats.txt")));
 
     Ptr<LteHelper> lteHelper = CreateObject<LteHelper>();
     Ptr<PointToPointEpcHelper> epcHelper = CreateObject<PointToPointEpcHelper>();
@@ -703,7 +684,7 @@ LenaTdTbfqFfMacSchedulerTestCase2::DoRun()
         qos.mbrDl = qos.gbrDl;
         qos.mbrUl = 0;
 
-        EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+        enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
         EpsBearer bearer(q, qos);
         lteHelper->ActivateDedicatedEpsBearer(ueDevice, bearer, EpcTft::Default());
     }
@@ -755,7 +736,7 @@ LenaTdTbfqFfMacSchedulerTestCase2::DoRun()
     Simulator::Run();
 
     /**
-     * Check that the downlink assignment is done in a "token bank fair queue" manner
+     * Check that the downlink assignation is done in a "token bank fair queue" manner
      */
 
     NS_LOG_INFO("DL - Test with " << m_nUser << " user(s)");

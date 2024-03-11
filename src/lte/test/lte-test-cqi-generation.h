@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2014 Piotr Gawlowicz
  *
@@ -21,13 +22,14 @@
 #ifndef LTE_TEST_CQI_GENERATION_H
 #define LTE_TEST_CQI_GENERATION_H
 
-#include "ns3/lte-common.h"
 #include "ns3/test.h"
+#include <ns3/lte-common.h>
 
 using namespace ns3;
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Lte Cqi Generation Test Suite
  */
@@ -40,6 +42,7 @@ class LteCqiGenerationTestSuite : public TestSuite
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief This is the test case for testing different configuration of CQI generation.
  *  The topology consists of the two UEs and two eNbs. UEs have the same position,
@@ -52,7 +55,7 @@ class LteCqiGenerationTestCase : public TestCase
 {
   public:
     /**
-     * Constructor
+     * \Constructor
      *
      * \param name reference name
      * \param usePdcchForCqiGeneration use PDCCH for CQI generation
@@ -63,7 +66,7 @@ class LteCqiGenerationTestCase : public TestCase
                              bool usePdcchForCqiGeneration,
                              uint16_t dlMcs,
                              uint16_t ulMcs);
-    ~LteCqiGenerationTestCase() override;
+    virtual ~LteCqiGenerationTestCase();
 
     /**
      * \brief DL Scheduling function
@@ -86,7 +89,7 @@ class LteCqiGenerationTestCase : public TestCase
                       uint16_t sizeTb);
 
   private:
-    void DoRun() override;
+    virtual void DoRun(void);
 
     bool m_usePdschForCqiGeneration; ///< use PDCCH for CQI generation
     uint16_t m_dlMcs;                ///< the DL MCS
@@ -95,6 +98,7 @@ class LteCqiGenerationTestCase : public TestCase
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief This test is very similar to LteCqiGenerationTestCase. The difference is that in this
  * test is enabled the downlink power control.
@@ -117,7 +121,7 @@ class LteCqiGenerationDlPowerControlTestCase : public TestCase
                                            uint8_t cell1Pa,
                                            uint16_t dlMcs,
                                            uint16_t ulMcs);
-    ~LteCqiGenerationDlPowerControlTestCase() override;
+    virtual ~LteCqiGenerationDlPowerControlTestCase();
 
     /**
      * \brief DL Scheduling function
@@ -140,7 +144,7 @@ class LteCqiGenerationDlPowerControlTestCase : public TestCase
                       uint16_t sizeTb);
 
   private:
-    void DoRun() override;
+    virtual void DoRun(void);
 
     uint8_t m_cell0Pa; ///< cell #0 PA
     uint8_t m_cell1Pa; ///< cell #1 PA

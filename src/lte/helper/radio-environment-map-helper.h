@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -45,15 +46,15 @@ class RadioEnvironmentMapHelper : public Object
 {
   public:
     RadioEnvironmentMapHelper();
-    ~RadioEnvironmentMapHelper() override;
+    virtual ~RadioEnvironmentMapHelper();
 
     // inherited from Object
-    void DoDispose() override;
+    virtual void DoDispose(void);
     /**
-     * Register this type.
-     * \return The object TypeId.
+     *  Register this type.
+     *  \return The object TypeId.
      */
-    static TypeId GetTypeId();
+    static TypeId GetTypeId(void);
 
     /**
      * \return the bandwidth (in num of RBs) over which SINR is calculated
@@ -133,23 +134,12 @@ class RadioEnvironmentMapHelper : public Object
 
     double m_z; ///< The `Z` attribute.
 
-    /**
-     * The `ChannelPath` attribute. If `Channel` attribute is not set, then
-     * `ChannelPath` will be used to determine the DL channel object for which
-     * the REM will be created.
-     */
-    std::string m_channelPath;
-
-    std::string m_outputFile; ///< The `OutputFile` attribute.
+    std::string m_channelPath; ///< The `ChannelPath` attribute.
+    std::string m_outputFile;  ///< The `OutputFile` attribute.
 
     bool m_stopWhenDone; ///< The `StopWhenDone` attribute.
 
-    /**
-     * The `Channel` attribute, which is a direct pointer to the DL channel
-     * object for which will be created the REM. Alternatively, `ChannelPath`
-     * attribute can be used. If `ChannelPath` attribute is being used then the
-     * m_channel object is configured by using the `ChannelPath` attribute value.
-     */
+    /// The channel object taken from the `ChannelPath` attribute.
     Ptr<SpectrumChannel> m_channel;
 
     double m_noisePower; ///< The `NoisePower` attribute.

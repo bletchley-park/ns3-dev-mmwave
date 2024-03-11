@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -17,12 +18,13 @@
  * Author: Lluis Parcerisa <lparcerisa@cttc.cat>
  */
 
-#include "lte-asn1-header.h"
+#include "ns3/lte-asn1-header.h"
 
 #include "ns3/log.h"
 
 #include <cmath>
 #include <sstream>
+#include <stdio.h>
 
 namespace ns3
 {
@@ -32,14 +34,14 @@ NS_LOG_COMPONENT_DEFINE("Asn1Header");
 NS_OBJECT_ENSURE_REGISTERED(Asn1Header);
 
 TypeId
-Asn1Header::GetTypeId()
+Asn1Header::GetTypeId(void)
 {
     static TypeId tid = TypeId("ns3::Asn1Header").SetParent<Header>().SetGroupName("Lte");
     return tid;
 }
 
 TypeId
-Asn1Header::GetInstanceTypeId() const
+Asn1Header::GetInstanceTypeId(void) const
 {
     return GetTypeId();
 }
@@ -56,7 +58,7 @@ Asn1Header::~Asn1Header()
 }
 
 uint32_t
-Asn1Header::GetSerializedSize() const
+Asn1Header::GetSerializedSize(void) const
 {
     if (!m_isDataSerialized)
     {
@@ -164,7 +166,7 @@ Asn1Header::SerializeBitset(std::bitset<N> data) const
     // Clause 16.11 ITU-T X.691
     else
     {
-        NS_LOG_DEBUG("Fragmentation needed!");
+        printf("FRAGMENTATION NEEDED!\n");
     }
 }
 
@@ -357,15 +359,13 @@ Asn1Header::SerializeChoice(int numOptions, int selectedOption, bool isExtension
 void
 Asn1Header::SerializeInteger(int n, int nmin, int nmax) const
 {
-    // The following is equivalent to:
-    //  NS_ASSERT_MSG (nmin <= n && n <= nmax,
-    //               "Integer " << n << " is outside range [" << nmin << ", " << nmax << "]");
-    // This is a workaround to gcc-7 aggressive optimization, see #346, and can be dropped
-    // once gcc-7 will not be anymore supported.
-    long int nComp = nmin;
-    nComp -= n;
-    NS_ASSERT_MSG(nComp <= 0 && n <= nmax,
-                  "Integer " << n << " is outside range [" << nmin << ", " << nmax << "]");
+    // Misusage check: Ensure nmax>nmin ...
+    if (nmin > nmax)
+    {
+        int aux = nmin;
+        nmin = nmax;
+        nmax = aux;
+    }
 
     // Clause 11.5.3 ITU-T X.691
     int range = nmax - nmin + 1;
@@ -454,6 +454,7 @@ void
 Asn1Header::SerializeNull() const
 {
     // Clause 18 ITU-T X.691
+    return;
 }
 
 void
@@ -580,7 +581,7 @@ Asn1Header::DeserializeBoolean(bool* value, Buffer::Iterator bIterator)
 {
     std::bitset<1> readBit;
     bIterator = DeserializeBitset<1>(&readBit, bIterator);
-    *value = (readBit[0] == 1);
+    *value = (readBit[0] == 1) ? true : false;
     return bIterator;
 }
 

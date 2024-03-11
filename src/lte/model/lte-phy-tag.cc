@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -29,7 +30,7 @@ namespace ns3
 NS_OBJECT_ENSURE_REGISTERED(LtePhyTag);
 
 TypeId
-LtePhyTag::GetTypeId()
+LtePhyTag::GetTypeId(void)
 {
     static TypeId tid =
         TypeId("ns3::LtePhyTag").SetParent<Tag>().SetGroupName("Lte").AddConstructor<LtePhyTag>();
@@ -37,7 +38,7 @@ LtePhyTag::GetTypeId()
 }
 
 TypeId
-LtePhyTag::GetInstanceTypeId() const
+LtePhyTag::GetInstanceTypeId(void) const
 {
     return GetTypeId();
 }
@@ -56,7 +57,7 @@ LtePhyTag::~LtePhyTag()
 }
 
 uint32_t
-LtePhyTag::GetSerializedSize() const
+LtePhyTag::GetSerializedSize(void) const
 {
     return 2;
 }

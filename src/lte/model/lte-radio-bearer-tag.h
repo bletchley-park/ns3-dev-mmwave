@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -27,7 +28,7 @@ namespace ns3
 class Tag;
 
 /**
- * Tag used to define the RNTI and LC id for each MAC packet transmitted
+ * Tag used to define the RNTI and LC id for each MAC packet trasmitted
  */
 
 class LteRadioBearerTag : public Tag
@@ -37,8 +38,8 @@ class LteRadioBearerTag : public Tag
      * \brief Get the type ID.
      * \return the object TypeId
      */
-    static TypeId GetTypeId();
-    TypeId GetInstanceTypeId() const override;
+    static TypeId GetTypeId(void);
+    virtual TypeId GetInstanceTypeId(void) const;
 
     /**
      * Create an empty LteRadioBearerTag
@@ -81,29 +82,29 @@ class LteRadioBearerTag : public Tag
      */
     void SetLayer(uint8_t layer);
 
-    void Serialize(TagBuffer i) const override;
-    void Deserialize(TagBuffer i) override;
-    uint32_t GetSerializedSize() const override;
-    void Print(std::ostream& os) const override;
+    virtual void Serialize(TagBuffer i) const;
+    virtual void Deserialize(TagBuffer i);
+    virtual uint32_t GetSerializedSize() const;
+    virtual void Print(std::ostream& os) const;
 
     /**
      * Get RNTI function
      *
      * \returns RNTI
      */
-    uint16_t GetRnti() const;
+    uint16_t GetRnti(void) const;
     /**
      * Get LCID function
      *
      * \returns LCID
      */
-    uint8_t GetLcid() const;
+    uint8_t GetLcid(void) const;
     /**
      * Get layer function
      *
      * \returns layer
      */
-    uint8_t GetLayer() const;
+    uint8_t GetLayer(void) const;
 
   private:
     uint16_t m_rnti; ///< RNTI

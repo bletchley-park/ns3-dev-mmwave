@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011, 2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -24,6 +25,7 @@
 #include "ns3/radio-bearer-stats-calculator.h"
 #include "ns3/string.h"
 #include <ns3/boolean.h>
+#include <ns3/config-store-module.h>
 #include <ns3/constant-position-mobility-model.h>
 #include <ns3/enum.h>
 #include <ns3/eps-bearer.h>
@@ -169,20 +171,12 @@ LenaTestRrFfMacSchedulerSuite::LenaTestRrFfMacSchedulerSuite()
                 TestCase::EXTENSIVE);
     AddTestCase(new LenaRrFfMacSchedulerTestCase(15, 20000, 25600, 9600, errorModel),
                 TestCase::EXTENSIVE);
-
-    // DOWNLINK - DISTANCE 100000 -> CQI == 0 -> out of range -> 0 bytes/sec
-    // UPLINK - DISTANCE 100000 -> CQI == 0 -> out of range -> 0 bytes/sec
-    AddTestCase(new LenaRrFfMacSchedulerTestCase(1, 100000, 0, 0, errorModel), TestCase::QUICK);
 }
 
-/**
- * \ingroup lte-test
- * Static variable for test initialization
- */
 static LenaTestRrFfMacSchedulerSuite lenaTestRrFfMacSchedulerSuite;
 
 std::string
-LenaRrFfMacSchedulerTestCase::BuildNameString(uint16_t nUser, double dist)
+LenaRrFfMacSchedulerTestCase::BuildNameString(uint16_t nUser, uint16_t dist)
 {
     std::ostringstream oss;
     oss << nUser << " UEs, distance " << dist << " m";
@@ -190,7 +184,7 @@ LenaRrFfMacSchedulerTestCase::BuildNameString(uint16_t nUser, double dist)
 }
 
 LenaRrFfMacSchedulerTestCase::LenaRrFfMacSchedulerTestCase(uint16_t nUser,
-                                                           double dist,
+                                                           uint16_t dist,
                                                            double thrRefDl,
                                                            double thrRefUl,
                                                            bool errorModelEnabled)
@@ -208,7 +202,7 @@ LenaRrFfMacSchedulerTestCase::~LenaRrFfMacSchedulerTestCase()
 }
 
 void
-LenaRrFfMacSchedulerTestCase::DoRun()
+LenaRrFfMacSchedulerTestCase::DoRun(void)
 {
     NS_LOG_FUNCTION(this << m_nUser << m_dist);
     if (!m_errorModelEnabled)
@@ -217,14 +211,6 @@ LenaRrFfMacSchedulerTestCase::DoRun()
         Config::SetDefault("ns3::LteSpectrumPhy::DataErrorModelEnabled", BooleanValue(false));
     }
     Config::SetDefault("ns3::LteHelper::UseIdealRrc", BooleanValue(false));
-    Config::SetDefault("ns3::MacStatsCalculator::DlOutputFilename",
-                       StringValue(CreateTempDirFilename("DlMacStats.txt")));
-    Config::SetDefault("ns3::MacStatsCalculator::UlOutputFilename",
-                       StringValue(CreateTempDirFilename("UlMacStats.txt")));
-    Config::SetDefault("ns3::RadioBearerStatsCalculator::DlRlcOutputFilename",
-                       StringValue(CreateTempDirFilename("DlRlcStats.txt")));
-    Config::SetDefault("ns3::RadioBearerStatsCalculator::UlRlcOutputFilename",
-                       StringValue(CreateTempDirFilename("UlRlcStats.txt")));
 
     // This is needed as the RR scheduler does not allocate resources properly for retransmission
     Config::SetDefault("ns3::LteRlcAm::TxOpportunityForRetxAlwaysBigEnough", BooleanValue(true));
@@ -239,6 +225,10 @@ LenaRrFfMacSchedulerTestCase::DoRun()
     Ptr<LteHelper> lteHelper = CreateObject<LteHelper>();
 
     lteHelper->SetAttribute("PathlossModel", StringValue("ns3::FriisSpectrumPropagationLossModel"));
+
+    // set DL and UL bandwidth
+    lteHelper->SetEnbDeviceAttribute("DlBandwidth", UintegerValue(25));
+    lteHelper->SetEnbDeviceAttribute("UlBandwidth", UintegerValue(25));
 
     // Create Nodes: eNodeB and UE
     NodeContainer enbNodes;
@@ -265,7 +255,7 @@ LenaRrFfMacSchedulerTestCase::DoRun()
     lteHelper->Attach(ueDevs, enbDevs.Get(0));
 
     // Activate an EPS bearer
-    EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+    enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
     EpsBearer bearer(q);
     lteHelper->ActivateDataRadioBearer(ueDevs, bearer);
 
@@ -299,13 +289,13 @@ LenaRrFfMacSchedulerTestCase::DoRun()
     Simulator::Run();
 
     /**
-     * Check that the assignment is done in a RR fashion
+     * Check that the assignation is done in a RR fashion
      */
     NS_LOG_INFO("DL - Test with " << m_nUser << " user(s) at distance " << m_dist);
     std::vector<uint64_t> dlDataRxed;
     if (m_errorModelEnabled)
     {
-        m_thrRefDl *= 0.95; // for counting the Vienna AMC behavior: BLER between 0% and 10%
+        m_thrRefDl *= 0.95; // for couting the Vienna AMC behavior: BLER between 0% and 10%
     }
     for (int i = 0; i < m_nUser; i++)
     {
@@ -326,7 +316,7 @@ LenaRrFfMacSchedulerTestCase::DoRun()
     std::vector<uint64_t> ulDataRxed;
     if (m_errorModelEnabled)
     {
-        m_thrRefUl *= 0.95; // for counting the Vienna AMC behavior: BLER between 0% and 10%
+        m_thrRefUl *= 0.95; // for couting the Vienna AMC behavior: BLER between 0% and 10%
     }
     for (int i = 0; i < m_nUser; i++)
     {

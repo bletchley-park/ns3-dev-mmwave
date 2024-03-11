@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -29,6 +30,7 @@ using namespace ns3;
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief This system test program creates different test cases with a single eNB and
  * several UEs, all having the same Radio Bearer specification. In each test
@@ -55,7 +57,7 @@ class LenaFdMtFfMacSchedulerTestCase : public TestCase
                                    double thrRefDl,
                                    double thrRefUl,
                                    bool errorModelEnabled);
-    ~LenaFdMtFfMacSchedulerTestCase() override;
+    virtual ~LenaFdMtFfMacSchedulerTestCase();
 
   private:
     /**
@@ -66,7 +68,7 @@ class LenaFdMtFfMacSchedulerTestCase : public TestCase
      * \returns name string
      */
     static std::string BuildNameString(uint16_t nUser, double dist);
-    void DoRun() override;
+    virtual void DoRun(void);
     uint16_t m_nUser;         ///< number of UE nodes
     double m_dist;            ///< distance between the nodes
     double m_thrRefDl;        ///< DL throughput reference
@@ -76,6 +78,7 @@ class LenaFdMtFfMacSchedulerTestCase : public TestCase
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Test suite for LenaFdMtFfMacSchedulerTestCase test case.
  */

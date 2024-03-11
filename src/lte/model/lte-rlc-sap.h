@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -88,22 +89,25 @@ class LteRlcSpecificLteRlcSapProvider : public LteRlcSapProvider
      */
     LteRlcSpecificLteRlcSapProvider(C* rlc);
 
-    // Delete default constructor to avoid misuse
-    LteRlcSpecificLteRlcSapProvider() = delete;
-
     /**
      * Interface implemented from LteRlcSapProvider
      * \param params the TransmitPdcpPduParameters
      */
-    void TransmitPdcpPdu(TransmitPdcpPduParameters params) override;
+    virtual void TransmitPdcpPdu(TransmitPdcpPduParameters params);
 
   private:
+    LteRlcSpecificLteRlcSapProvider();
     C* m_rlc; ///< the RLC
 };
 
 template <class C>
 LteRlcSpecificLteRlcSapProvider<C>::LteRlcSpecificLteRlcSapProvider(C* rlc)
     : m_rlc(rlc)
+{
+}
+
+template <class C>
+LteRlcSpecificLteRlcSapProvider<C>::LteRlcSpecificLteRlcSapProvider()
 {
 }
 
@@ -126,19 +130,22 @@ class LteRlcSpecificLteRlcSapUser : public LteRlcSapUser
      */
     LteRlcSpecificLteRlcSapUser(C* pdcp);
 
-    // Delete default constructor to avoid misuse
-    LteRlcSpecificLteRlcSapUser() = delete;
-
     // Interface implemented from LteRlcSapUser
-    void ReceivePdcpPdu(Ptr<Packet> p) override;
+    virtual void ReceivePdcpPdu(Ptr<Packet> p);
 
   private:
+    LteRlcSpecificLteRlcSapUser();
     C* m_pdcp; ///< the PDCP
 };
 
 template <class C>
 LteRlcSpecificLteRlcSapUser<C>::LteRlcSpecificLteRlcSapUser(C* pdcp)
     : m_pdcp(pdcp)
+{
+}
+
+template <class C>
+LteRlcSpecificLteRlcSapUser<C>::LteRlcSpecificLteRlcSapUser()
 {
 }
 

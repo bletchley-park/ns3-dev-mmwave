@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -29,6 +30,7 @@ using namespace ns3;
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief This system test program creates different test cases with a single eNB and
  * several UEs, all having the same Radio Bearer specification. In each test
@@ -51,23 +53,23 @@ class LenaTtaFfMacSchedulerTestCase : public TestCase
      * \param errorModelEnabled if true the error model is enabled
      */
     LenaTtaFfMacSchedulerTestCase(uint16_t nUser,
-                                  double dist,
+                                  uint16_t dist,
                                   double thrRefDl,
                                   double thrRefUl,
                                   bool errorModelEnabled);
-    ~LenaTtaFfMacSchedulerTestCase() override;
+    virtual ~LenaTtaFfMacSchedulerTestCase();
 
   private:
     /**
      * Build name string
      * \param nUser the number of UE nodes
-     * \param dist the distance between nodes
+     * \param dist the distnace between nodes
      * \returns the name string
      */
-    static std::string BuildNameString(uint16_t nUser, double dist);
-    void DoRun() override;
+    static std::string BuildNameString(uint16_t nUser, uint16_t dist);
+    virtual void DoRun(void);
     uint16_t m_nUser;         ///< number of UE nodes
-    double m_dist;            ///< the distance between nodes
+    uint16_t m_dist;          ///< the distance between nodes
     double m_thrRefDl;        ///< the DL throughput reference
     double m_thrRefUl;        ///< the UL throughput reference
     bool m_errorModelEnabled; ///< is error model enabled?
@@ -75,6 +77,7 @@ class LenaTtaFfMacSchedulerTestCase : public TestCase
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Lena Test Tta Ff Mac Scheduler Suite
  */

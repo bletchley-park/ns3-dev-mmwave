@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -26,25 +27,25 @@
 #include <ns3/string.h>
 
 #include <fstream>
-// #include "ns3/gtk-config-store.h"
+//#include "ns3/gtk-config-store.h"
 
 using namespace ns3;
 
 int
 main(int argc, char* argv[])
 {
-    CommandLine cmd(__FILE__);
+    CommandLine cmd;
     cmd.Parse(argc, argv);
 
     // to save a template default attribute file run it like this:
-    // ./ns3 run src/lte/examples/lena-first-sim --command-template="%s
-    // --ns3::ConfigStore::Filename=input-defaults.txt --ns3::ConfigStore::Mode=Save
-    // --ns3::ConfigStore::FileFormat=RawText"
+    // ./waf --command-template="%s --ns3::ConfigStore::Filename=input-defaults.txt
+    // --ns3::ConfigStore::Mode=Save --ns3::ConfigStore::FileFormat=RawText" --run
+    // src/lte/examples/lena-first-sim
     //
     // to load a previously created default attribute file
-    // ./ns3 run src/lte/examples/lena-first-sim --command-template="%s
-    // --ns3::ConfigStore::Filename=input-defaults.txt --ns3::ConfigStore::Mode=Load
-    // --ns3::ConfigStore::FileFormat=RawText"
+    // ./waf --command-template="%s --ns3::ConfigStore::Filename=input-defaults.txt
+    // --ns3::ConfigStore::Mode=Load --ns3::ConfigStore::FileFormat=RawText" --run
+    // src/lte/examples/lena-first-sim
 
     // ConfigStore inputConfig;
     // inputConfig.ConfigureDefaults ();
@@ -76,7 +77,7 @@ main(int argc, char* argv[])
             StringValue("src/lte/model/fading-traces/fading_trace_EPA_3kmph.fad"));
     }
 
-    // these parameters have to be set only in case of the trace format
+    // these parameters have to set only in case of the trace format
     // differs from the standard one, that is
     // - 10 seconds length trace
     // - 10,000 samples
@@ -112,7 +113,7 @@ main(int argc, char* argv[])
     lteHelper->Attach(ueDevs, enbDevs.Get(0));
 
     // Activate an EPS bearer
-    EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+    enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
     EpsBearer bearer(q);
     lteHelper->ActivateDataRadioBearer(ueDevs, bearer);
 

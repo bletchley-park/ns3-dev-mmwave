@@ -1,3 +1,4 @@
+/* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2017 Jadavpur University, India
  *
@@ -17,6 +18,7 @@
  * Author: Manoj Kumar Rana <manoj24.rana@gmail.com>
  */
 
+#include "ns3/applications-module.h"
 #include "ns3/config-store.h"
 #include "ns3/core-module.h"
 #include "ns3/epc-helper.h"
@@ -28,7 +30,6 @@
 #include "ns3/mobility-module.h"
 #include "ns3/network-module.h"
 #include "ns3/point-to-point-helper.h"
-#include "ns3/udp-echo-helper.h"
 
 #include <algorithm>
 
@@ -49,16 +50,11 @@ the followed route for a packet
 
 using namespace ns3;
 
-/**
- * \ingroup lte-test
- *
- * \brief Lte Ipv6 routing test case.
- */
 class LteIpv6RoutingTestCase : public TestCase
 {
   public:
     LteIpv6RoutingTestCase();
-    ~LteIpv6RoutingTestCase() override;
+    virtual ~LteIpv6RoutingTestCase();
 
     /**
      * \brief Initialize testing parameters.
@@ -67,34 +63,34 @@ class LteIpv6RoutingTestCase : public TestCase
 
     /**
      * \brief sent Packets from client's IPv6 interface.
-     * \param p packet
-     * \param ipv6 Ipv6 object
-     * \param interface Ipv6interface from which the packet is transmitted
+     * \param: p packet
+     * \param: ipv6 Ipv6 object
+     * \param: interface Ipv6interface from which the packet is transmitted
      */
     void SentAtClient(Ptr<const Packet> p, Ptr<Ipv6> ipv6, uint32_t interface);
 
     /**
      * \brief Received Packets at client's IPv6 interface.
-     * \param p packet
-     * \param ipv6 Ipv6 object
-     * \param interface Ipv6interface at which the packet is received
+     * \param: p packet
+     * \param: ipv6 Ipv6 object
+     * \param: interface Ipv6interface at which the packet is received
      */
     void ReceivedAtClient(Ptr<const Packet> p, Ptr<Ipv6> ipv6, uint32_t interface);
 
     /**
      * \brief Received Packet at pgw from enb.
-     * \param p packet
+     * \param: p packet
      */
     void EnbToPgw(Ptr<Packet> p);
 
     /**
      * \brief Received Packet at pgw from enb.
-     * \param p packet
+     * \param: p packet
      */
     void TunToPgw(Ptr<Packet> p);
 
   private:
-    void DoRun() override;
+    virtual void DoRun(void);
     Ipv6InterfaceContainer m_ueIpIface;   //!< IPv6 interface container for ue
     Ipv6Address m_remoteHostAddr;         //!< remote host address
     std::list<uint64_t> m_pgwUidRxFrmEnb; //!< list of uids of packets received at pgw from enb
@@ -164,7 +160,8 @@ LteIpv6RoutingTestCase::Checker()
     bool b = false;
     bool check = true;
     // Extract each received reply packet of the client
-    for (auto it1 = m_clientRxPkts.begin(); it1 != m_clientRxPkts.end(); it1++)
+    for (std::list<Ptr<Packet>>::iterator it1 = m_clientRxPkts.begin(); it1 != m_clientRxPkts.end();
+         it1++)
     {
         Ipv6Header ipv6header1;
         UdpHeader udpHeader1;
@@ -173,12 +170,14 @@ LteIpv6RoutingTestCase::Checker()
         uint64_t uid = p1->GetUid();
         p1->RemoveHeader(udpHeader1);
         // Search each packet in list of sent request packet of the client
-        for (auto it2 = m_clientTxPkts.begin(); it2 != m_clientTxPkts.end(); it2++)
+        for (std::list<Ptr<Packet>>::iterator it2 = m_clientTxPkts.begin();
+             it2 != m_clientTxPkts.end();
+             it2++)
         {
             Ptr<Packet> p2 = (*it2)->Copy();
             Ipv6Header ipv6header2;
             p2->RemoveHeader(ipv6header2);
-            Ipv6Address sourceAddress = ipv6header2.GetSource();
+            Ipv6Address sorceAddress = ipv6header2.GetSource();
             Ipv6Address destinationAddress = ipv6header2.GetDestination();
             UdpHeader udpHeader2;
             p2->RemoveHeader(udpHeader2);
@@ -187,7 +186,7 @@ LteIpv6RoutingTestCase::Checker()
             sourcePort = udpHeader2.GetSourcePort();
             destinationPort = udpHeader2.GetDestinationPort();
             // Check whether the uids, addresses and ports match
-            if ((p2->GetUid() == p1->GetUid()) && sourceAddress == ipv6header1.GetDestination() &&
+            if ((p2->GetUid() == p1->GetUid()) && sorceAddress == ipv6header1.GetDestination() &&
                 destinationAddress == ipv6header1.GetSource() &&
                 sourcePort == udpHeader1.GetDestinationPort() &&
                 destinationPort == udpHeader1.GetSourcePort())
@@ -221,7 +220,7 @@ LteIpv6RoutingTestCase::Checker()
 }
 
 void
-LteIpv6RoutingTestCase::DoRun()
+LteIpv6RoutingTestCase::DoRun(void)
 {
     double distance = 60.0;
 
@@ -233,6 +232,7 @@ LteIpv6RoutingTestCase::DoRun()
     inputConfig.ConfigureDefaults();
 
     Ptr<Node> pgw = epcHelper->GetPgwNode();
+    epcHelper->SetAttribute("S1apLinkDelay", TimeValue(Seconds(0)));
 
     // Create a single RemoteHost
     NodeContainer remoteHostContainer;
@@ -392,8 +392,4 @@ LteIpv6RoutingTestSuite::LteIpv6RoutingTestSuite()
     AddTestCase(new LteIpv6RoutingTestCase, TestCase::QUICK);
 }
 
-/**
- * \ingroup lte-test
- * Static variable for test initialization
- */
-static LteIpv6RoutingTestSuite g_lteipv6testsuite;
+static LteIpv6RoutingTestSuite lteipv6testsuite;

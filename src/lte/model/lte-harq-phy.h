@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -35,7 +36,7 @@ namespace ns3
 struct HarqProcessInfoElement_t
 {
     double m_mi;         ///< Mutual information
-    uint8_t m_rv;        ///< Redundancy version
+    uint8_t m_rv;        ///< Redundancy Version
     uint16_t m_infoBits; ///< info bits
     uint16_t m_codeBits; ///< code bits
 };
@@ -139,13 +140,6 @@ class LteHarqPhy : public SimpleRefCount<LteHarqPhy>
      * \param id the HARQ proc id
      */
     void ResetUlHarqProcessStatus(uint16_t rnti, uint8_t id);
-
-    /**
-     * \brief Clear the downlink HARQ buffer
-     *
-     * \param rnti the RNTI of the UE
-     */
-    void ClearDlHarqBuffer(uint16_t rnti);
 
   private:
     std::vector<std::vector<HarqProcessInfoList_t>>

@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -29,6 +30,7 @@ using namespace ns3;
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Test 1.2 SINR calculation in uplink
  */
@@ -40,6 +42,7 @@ class LteUplinkSinrTestSuite : public TestSuite
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Test generation of SINR in the uplink. Test schedules the signal and the interference
  * signals and it evaluates if the obtained value for SINR corresponds to the theoretical value
@@ -60,10 +63,10 @@ class LteUplinkDataSinrTestCase : public TestCase
                               Ptr<SpectrumValue> sv2,
                               Ptr<SpectrumValue> sinr,
                               std::string name);
-    ~LteUplinkDataSinrTestCase() override;
+    virtual ~LteUplinkDataSinrTestCase();
 
   private:
-    void DoRun() override;
+    virtual void DoRun(void);
 
     Ptr<SpectrumValue> m_sv1;          ///< the spectrum value #1
     Ptr<SpectrumValue> m_sv2;          ///< the spectrum value #2
@@ -73,6 +76,7 @@ class LteUplinkDataSinrTestCase : public TestCase
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief  In this test one signal will be of interest, i.e., the
  *  SRS of the first signal will have the same CellId of the
@@ -96,7 +100,7 @@ class LteUplinkSrsSinrTestCase : public TestCase
                              Ptr<SpectrumValue> sv2,
                              Ptr<SpectrumValue> sinr,
                              std::string name);
-    ~LteUplinkSrsSinrTestCase() override;
+    virtual ~LteUplinkSrsSinrTestCase();
 
     /**
      * Callback to be connected to an LteChunkProcessor to collect the reported SINR
@@ -106,7 +110,7 @@ class LteUplinkSrsSinrTestCase : public TestCase
     void ReportSinr(const SpectrumValue& sinr);
 
   private:
-    void DoRun() override;
+    virtual void DoRun(void);
 
     Ptr<SpectrumValue> m_sv1;      ///< the spectrum value #1
     Ptr<SpectrumValue> m_sv2;      ///< the spectrum value #2

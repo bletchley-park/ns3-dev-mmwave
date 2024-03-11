@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2013 Budiarto Herman
  *
@@ -21,7 +22,7 @@
 #ifndef LTE_HANDOVER_MANAGEMENT_SAP_H
 #define LTE_HANDOVER_MANAGEMENT_SAP_H
 
-#include "lte-rrc-sap.h"
+#include <ns3/lte-rrc-sap.h>
 
 namespace ns3
 {
@@ -70,7 +71,7 @@ class LteHandoverManagementSapUser
      * \brief Request a certain reporting configuration to be fulfilled by the UEs
      *        attached to the eNodeB entity.
      * \param reportConfig the UE measurement reporting configuration
-     * \return the measurement identities associated with this newly added
+     * \return the measurement identity associated with this newly added
      *         reporting configuration
      *
      * The eNodeB RRC entity is expected to configure the same reporting
@@ -82,8 +83,7 @@ class LteHandoverManagementSapUser
      *
      * \note This function is only valid before the simulation begins.
      */
-    virtual std::vector<uint8_t> AddUeMeasReportConfigForHandover(
-        LteRrcSap::ReportConfigEutra reportConfig) = 0;
+    virtual uint8_t AddUeMeasReportConfigForHandover(LteRrcSap::ReportConfigEutra reportConfig) = 0;
 
     /**
      * \brief Instruct the eNodeB RRC entity to prepare a handover.
@@ -118,13 +118,11 @@ class MemberLteHandoverManagementSapProvider : public LteHandoverManagementSapPr
      */
     MemberLteHandoverManagementSapProvider(C* owner);
 
-    // Delete default constructor to avoid misuse
-    MemberLteHandoverManagementSapProvider() = delete;
-
-    // inherited from LteHandoverManagementSapProvider
-    void ReportUeMeas(uint16_t rnti, LteRrcSap::MeasResults measResults) override;
+    // inherited from LteHandoverManagemenrSapProvider
+    virtual void ReportUeMeas(uint16_t rnti, LteRrcSap::MeasResults measResults);
 
   private:
+    MemberLteHandoverManagementSapProvider();
     C* m_owner; ///< the owner class
 
 }; // end of class MemberLteHandoverManagementSapProvider
@@ -159,15 +157,12 @@ class MemberLteHandoverManagementSapUser : public LteHandoverManagementSapUser
      */
     MemberLteHandoverManagementSapUser(C* owner);
 
-    // Delete default constructor to avoid misuse
-    MemberLteHandoverManagementSapUser() = delete;
-
     // inherited from LteHandoverManagementSapUser
-    std::vector<uint8_t> AddUeMeasReportConfigForHandover(
-        LteRrcSap::ReportConfigEutra reportConfig) override;
-    void TriggerHandover(uint16_t rnti, uint16_t targetCellId) override;
+    virtual uint8_t AddUeMeasReportConfigForHandover(LteRrcSap::ReportConfigEutra reportConfig);
+    virtual void TriggerHandover(uint16_t rnti, uint16_t targetCellId);
 
   private:
+    MemberLteHandoverManagementSapUser();
     C* m_owner; ///< the owner class
 
 }; // end of class MemberLteAnrSapUser
@@ -179,7 +174,7 @@ MemberLteHandoverManagementSapUser<C>::MemberLteHandoverManagementSapUser(C* own
 }
 
 template <class C>
-std::vector<uint8_t>
+uint8_t
 MemberLteHandoverManagementSapUser<C>::AddUeMeasReportConfigForHandover(
     LteRrcSap::ReportConfigEutra reportConfig)
 {

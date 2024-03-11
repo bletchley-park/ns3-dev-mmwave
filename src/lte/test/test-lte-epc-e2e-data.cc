@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -44,6 +45,7 @@ NS_LOG_COMPONENT_DEFINE("LteEpcE2eData");
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  */
 
 /// BearerTestData structure
@@ -90,6 +92,7 @@ struct EnbTestData
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Test that e2e packet flow is correct. Compares the data send and the
  * data received. Test uses mostly the PDCP stats to check the performance.
@@ -105,10 +108,10 @@ class LteEpcE2eDataTestCase : public TestCase
      * \param v the ENB test data
      */
     LteEpcE2eDataTestCase(std::string name, std::vector<EnbTestData> v);
-    ~LteEpcE2eDataTestCase() override;
+    virtual ~LteEpcE2eDataTestCase();
 
   private:
-    void DoRun() override;
+    virtual void DoRun(void);
     std::vector<EnbTestData> m_enbTestData; ///< the ENB test data
 };
 
@@ -131,12 +134,6 @@ LteEpcE2eDataTestCase::DoRun()
     Config::SetDefault("ns3::LteSpectrumPhy::CtrlErrorModelEnabled", BooleanValue(false));
     Config::SetDefault("ns3::LteSpectrumPhy::DataErrorModelEnabled", BooleanValue(false));
     Config::SetDefault("ns3::LteHelper::UseIdealRrc", BooleanValue(true));
-
-    Config::SetDefault("ns3::RadioBearerStatsCalculator::DlPdcpOutputFilename",
-                       StringValue(CreateTempDirFilename("DlPdcpStats.txt")));
-    Config::SetDefault("ns3::RadioBearerStatsCalculator::UlPdcpOutputFilename",
-                       StringValue(CreateTempDirFilename("UlPdcpStats.txt")));
-
     Ptr<LteHelper> lteHelper = CreateObject<LteHelper>();
     Ptr<PointToPointEpcHelper> epcHelper = CreateObject<PointToPointEpcHelper>();
     lteHelper->SetEpcHelper(epcHelper);
@@ -195,11 +192,13 @@ LteEpcE2eDataTestCase::DoRun()
                                      StringValue("RowFirst"));
     enbMobility.Install(enbs);
     NetDeviceContainer enbLteDevs = lteHelper->InstallEnbDevice(enbs);
-    auto enbLteDevIt = enbLteDevs.Begin();
+    NetDeviceContainer::Iterator enbLteDevIt = enbLteDevs.Begin();
 
     uint16_t ulPort = 1000;
 
-    for (auto enbit = m_enbTestData.begin(); enbit < m_enbTestData.end(); ++enbit, ++enbLteDevIt)
+    for (std::vector<EnbTestData>::iterator enbit = m_enbTestData.begin();
+         enbit < m_enbTestData.end();
+         ++enbit, ++enbLteDevIt)
     {
         NS_ABORT_IF(enbLteDevIt == enbLteDevs.End());
 
@@ -315,9 +314,12 @@ LteEpcE2eDataTestCase::DoRun()
 
     uint64_t imsiCounter = 0;
 
-    for (auto enbit = m_enbTestData.begin(); enbit < m_enbTestData.end(); ++enbit)
+    for (std::vector<EnbTestData>::iterator enbit = m_enbTestData.begin();
+         enbit < m_enbTestData.end();
+         ++enbit)
     {
-        for (auto ueit = enbit->ues.begin(); ueit < enbit->ues.end(); ++ueit)
+        for (std::vector<UeTestData>::iterator ueit = enbit->ues.begin(); ueit < enbit->ues.end();
+             ++ueit)
         {
             uint64_t imsi = ++imsiCounter;
             for (uint32_t b = 0; b < ueit->bearers.size(); ++b)
@@ -369,6 +371,7 @@ LteEpcE2eDataTestCase::DoRun()
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Test that the S1-U interface implementation works correctly
  */

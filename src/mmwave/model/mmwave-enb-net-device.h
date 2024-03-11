@@ -46,7 +46,7 @@
 #include <map>
 #include <vector>
 
-#include <ns3/oran-interface.h>
+#include "ns3/oran-interface.h"
 #include "ns3/mmwave-bearer-stats-calculator.h"
 #include <ns3/mmwave-phy-trace.h>
 

@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -14,8 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Author: Manuel Requena <manuel.requena@cttc.es>
- * (Based on lte-helper.h)
+ * Author: Manuel Requena <manuel.requena@cttc.es> (Based on lte-helper.h)
  */
 
 #ifndef LTE_SIMPLE_HELPER_H
@@ -38,6 +38,7 @@ class LteTestMac;
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief A simplified version of LteHelper, that
  * is used for creation and configuration of LTE entities for testing purposes
@@ -47,15 +48,15 @@ class LteTestMac;
 class LteSimpleHelper : public Object
 {
   public:
-    LteSimpleHelper();
-    ~LteSimpleHelper() override;
+    LteSimpleHelper(void);
+    virtual ~LteSimpleHelper(void);
 
     /**
      * \brief Get the type ID.
      * \return the object TypeId
      */
-    static TypeId GetTypeId();
-    void DoDispose() override;
+    static TypeId GetTypeId(void);
+    virtual void DoDispose(void);
 
     /**
      * create a set of eNB devices
@@ -79,46 +80,46 @@ class LteSimpleHelper : public Object
      * Enables logging for all components of the LENA architecture
      *
      */
-    void EnableLogComponents();
+    void EnableLogComponents(void);
 
     /**
      * Enables trace sinks for MAC, RLC and PDCP
      */
-    void EnableTraces();
+    void EnableTraces(void);
 
     /**
      * Enable trace sinks for RLC layer
      */
-    void EnableRlcTraces();
+    void EnableRlcTraces(void);
 
     /**
      * Enable trace sinks for DL RLC layer
      */
-    void EnableDlRlcTraces();
+    void EnableDlRlcTraces(void);
 
     /**
      * Enable trace sinks for UL RLC layer
      */
-    void EnableUlRlcTraces();
+    void EnableUlRlcTraces(void);
 
     /**
      * Enable trace sinks for PDCP layer
      */
-    void EnablePdcpTraces();
+    void EnablePdcpTraces(void);
 
     /**
      * Enable trace sinks for DL PDCP layer
      */
-    void EnableDlPdcpTraces();
+    void EnableDlPdcpTraces(void);
 
     /**
      * Enable trace sinks for UL PDCP layer
      */
-    void EnableUlPdcpTraces();
+    void EnableUlPdcpTraces(void);
 
   protected:
     // inherited from Object
-    void DoInitialize() override;
+    virtual void DoInitialize(void);
 
   private:
     /**

@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011, 2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -28,14 +29,13 @@
 #include "ns3/string.h"
 #include "ns3/test.h"
 
-#include <iomanip>
-
 using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE("Asn1EncodingTest");
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Contains ASN encoding test utility functions.
  */
@@ -51,13 +51,13 @@ class TestUtils
     {
         uint32_t psize = pkt->GetSize();
         uint8_t buffer[psize];
-        std::ostringstream oss(std::ostringstream::out);
+        char sbuffer[psize * 3];
         pkt->CopyData(buffer, psize);
         for (uint32_t i = 0; i < psize; i++)
         {
-            oss << std::setfill('0') << std::setw(2) << std::hex << +(buffer[i]) << " ";
+            sprintf(&sbuffer[i * 3], "%02x ", buffer[i]);
         }
-        return std::string(oss.str() + "\n");
+        return std::string(sbuffer);
     }
 
     /**
@@ -107,6 +107,7 @@ class TestUtils
 // --------------------------- CLASS RrcHeaderTestCase -----------------------------
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief This class provides common functions to be inherited
  * by the children TestCases
@@ -119,7 +120,7 @@ class RrcHeaderTestCase : public TestCase
      * \param s the reference name
      */
     RrcHeaderTestCase(std::string s);
-    void DoRun() override = 0;
+    virtual void DoRun(void) = 0;
     /**
      * \brief Create radio resource config dedicated
      * \returns LteRrcSap::RadioResourceConfigDedicated
@@ -207,9 +208,9 @@ RrcHeaderTestCase::AssertEqualRadioResourceConfigDedicated(
                           "SrbToAddModList different sizes");
 
     std::list<LteRrcSap::SrbToAddMod> srcSrbToAddModList = rrcd1.srbToAddModList;
-    auto it1 = srcSrbToAddModList.begin();
+    std::list<LteRrcSap::SrbToAddMod>::iterator it1 = srcSrbToAddModList.begin();
     std::list<LteRrcSap::SrbToAddMod> dstSrbToAddModList = rrcd2.srbToAddModList;
-    auto it2 = dstSrbToAddModList.begin();
+    std::list<LteRrcSap::SrbToAddMod>::iterator it2 = dstSrbToAddModList.begin();
 
     for (; it1 != srcSrbToAddModList.end(); it1++, it2++)
     {
@@ -233,9 +234,9 @@ RrcHeaderTestCase::AssertEqualRadioResourceConfigDedicated(
                           "DrbToAddModList different sizes");
 
     std::list<LteRrcSap::DrbToAddMod> srcDrbToAddModList = rrcd1.drbToAddModList;
-    auto it3 = srcDrbToAddModList.begin();
+    std::list<LteRrcSap::DrbToAddMod>::iterator it3 = srcDrbToAddModList.begin();
     std::list<LteRrcSap::DrbToAddMod> dstDrbToAddModList = rrcd2.drbToAddModList;
-    auto it4 = dstDrbToAddModList.begin();
+    std::list<LteRrcSap::DrbToAddMod>::iterator it4 = dstDrbToAddModList.begin();
 
     for (; it3 != srcDrbToAddModList.end(); it3++, it4++)
     {
@@ -267,8 +268,8 @@ RrcHeaderTestCase::AssertEqualRadioResourceConfigDedicated(
 
     std::list<uint8_t> srcDrbToReleaseList = rrcd1.drbToReleaseList;
     std::list<uint8_t> dstDrbToReleaseList = rrcd2.drbToReleaseList;
-    auto it5 = srcDrbToReleaseList.begin();
-    auto it6 = dstDrbToReleaseList.begin();
+    std::list<uint8_t>::iterator it5 = srcDrbToReleaseList.begin();
+    std::list<uint8_t>::iterator it6 = dstDrbToReleaseList.begin();
 
     for (; it5 != srcDrbToReleaseList.end(); it5++, it6++)
     {
@@ -324,6 +325,7 @@ RrcHeaderTestCase::AssertEqualRadioResourceConfigDedicated(
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Rrc Connection Request Test Case
  */
@@ -331,7 +333,7 @@ class RrcConnectionRequestTestCase : public RrcHeaderTestCase
 {
   public:
     RrcConnectionRequestTestCase();
-    void DoRun() override;
+    virtual void DoRun(void);
 };
 
 RrcConnectionRequestTestCase::RrcConnectionRequestTestCase()
@@ -340,7 +342,7 @@ RrcConnectionRequestTestCase::RrcConnectionRequestTestCase()
 }
 
 void
-RrcConnectionRequestTestCase::DoRun()
+RrcConnectionRequestTestCase::DoRun(void)
 {
     packet = Create<Packet>();
     NS_LOG_DEBUG("============= RrcConnectionRequestTestCase ===========");
@@ -371,11 +373,12 @@ RrcConnectionRequestTestCase::DoRun()
     NS_TEST_ASSERT_MSG_EQ(source.GetMmec(), destination.GetMmec(), "Different m_mmec!");
     NS_TEST_ASSERT_MSG_EQ(source.GetMtmsi(), destination.GetMtmsi(), "Different m_mTmsi!");
 
-    packet = nullptr;
+    packet = 0;
 }
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Rrc Connection Setup Test Case
  */
@@ -383,7 +386,7 @@ class RrcConnectionSetupTestCase : public RrcHeaderTestCase
 {
   public:
     RrcConnectionSetupTestCase();
-    void DoRun() override;
+    virtual void DoRun(void);
 };
 
 RrcConnectionSetupTestCase::RrcConnectionSetupTestCase()
@@ -392,7 +395,7 @@ RrcConnectionSetupTestCase::RrcConnectionSetupTestCase()
 }
 
 void
-RrcConnectionSetupTestCase::DoRun()
+RrcConnectionSetupTestCase::DoRun(void)
 {
     packet = Create<Packet>();
     NS_LOG_DEBUG("============= RrcConnectionSetupTestCase ===========");
@@ -428,11 +431,12 @@ RrcConnectionSetupTestCase::DoRun()
     AssertEqualRadioResourceConfigDedicated(source.GetRadioResourceConfigDedicated(),
                                             destination.GetRadioResourceConfigDedicated());
 
-    packet = nullptr;
+    packet = 0;
 }
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Rrc Connection Setup Complete Test Case
  */
@@ -440,7 +444,7 @@ class RrcConnectionSetupCompleteTestCase : public RrcHeaderTestCase
 {
   public:
     RrcConnectionSetupCompleteTestCase();
-    void DoRun() override;
+    virtual void DoRun(void);
 };
 
 RrcConnectionSetupCompleteTestCase::RrcConnectionSetupCompleteTestCase()
@@ -449,7 +453,7 @@ RrcConnectionSetupCompleteTestCase::RrcConnectionSetupCompleteTestCase()
 }
 
 void
-RrcConnectionSetupCompleteTestCase::DoRun()
+RrcConnectionSetupCompleteTestCase::DoRun(void)
 {
     packet = Create<Packet>();
     NS_LOG_DEBUG("============= RrcConnectionSetupCompleteTestCase ===========");
@@ -481,11 +485,12 @@ RrcConnectionSetupCompleteTestCase::DoRun()
                           destination.GetRrcTransactionIdentifier(),
                           "RrcTransactionIdentifier");
 
-    packet = nullptr;
+    packet = 0;
 }
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Rrc Connection Reconfiguration Complete Test Case
  */
@@ -493,7 +498,7 @@ class RrcConnectionReconfigurationCompleteTestCase : public RrcHeaderTestCase
 {
   public:
     RrcConnectionReconfigurationCompleteTestCase();
-    void DoRun() override;
+    virtual void DoRun(void);
 };
 
 RrcConnectionReconfigurationCompleteTestCase::RrcConnectionReconfigurationCompleteTestCase()
@@ -502,7 +507,7 @@ RrcConnectionReconfigurationCompleteTestCase::RrcConnectionReconfigurationComple
 }
 
 void
-RrcConnectionReconfigurationCompleteTestCase::DoRun()
+RrcConnectionReconfigurationCompleteTestCase::DoRun(void)
 {
     packet = Create<Packet>();
     NS_LOG_DEBUG("============= RrcConnectionReconfigurationCompleteTestCase ===========");
@@ -535,11 +540,12 @@ RrcConnectionReconfigurationCompleteTestCase::DoRun()
                           destination.GetRrcTransactionIdentifier(),
                           "RrcTransactionIdentifier");
 
-    packet = nullptr;
+    packet = 0;
 }
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Rrc Connection Reconfiguration Test Case
  */
@@ -547,7 +553,7 @@ class RrcConnectionReconfigurationTestCase : public RrcHeaderTestCase
 {
   public:
     RrcConnectionReconfigurationTestCase();
-    void DoRun() override;
+    virtual void DoRun(void);
 };
 
 RrcConnectionReconfigurationTestCase::RrcConnectionReconfigurationTestCase()
@@ -556,7 +562,7 @@ RrcConnectionReconfigurationTestCase::RrcConnectionReconfigurationTestCase()
 }
 
 void
-RrcConnectionReconfigurationTestCase::DoRun()
+RrcConnectionReconfigurationTestCase::DoRun(void)
 {
     packet = Create<Packet>();
     NS_LOG_DEBUG("============= RrcConnectionReconfigurationTestCase ===========");
@@ -648,8 +654,7 @@ RrcConnectionReconfigurationTestCase::DoRun()
     msg.measConfig.reportConfigToAddModList.push_back(reportConfigToAddMod);
 
     // Set measIdToAddModList
-    LteRrcSap::MeasIdToAddMod measIdToAddMod;
-    LteRrcSap::MeasIdToAddMod measIdToAddMod2;
+    LteRrcSap::MeasIdToAddMod measIdToAddMod, measIdToAddMod2;
     measIdToAddMod.measId = 7;
     measIdToAddMod.measObjectId = 6;
     measIdToAddMod.reportConfigId = 5;
@@ -773,11 +778,12 @@ RrcConnectionReconfigurationTestCase::DoRun()
                                                 destination.GetRadioResourceConfigDedicated());
     }
 
-    packet = nullptr;
+    packet = 0;
 }
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Handover Preparation Info Test Case
  */
@@ -785,7 +791,7 @@ class HandoverPreparationInfoTestCase : public RrcHeaderTestCase
 {
   public:
     HandoverPreparationInfoTestCase();
-    void DoRun() override;
+    virtual void DoRun(void);
 };
 
 HandoverPreparationInfoTestCase::HandoverPreparationInfoTestCase()
@@ -794,7 +800,7 @@ HandoverPreparationInfoTestCase::HandoverPreparationInfoTestCase()
 }
 
 void
-HandoverPreparationInfoTestCase::DoRun()
+HandoverPreparationInfoTestCase::DoRun(void)
 {
     packet = Create<Packet>();
     NS_LOG_DEBUG("============= HandoverPreparationInfoTestCase ===========");
@@ -882,11 +888,12 @@ HandoverPreparationInfoTestCase::DoRun()
                           destination.GetAsConfig().sourceDlCarrierFreq,
                           "sourceDlCarrierFreq");
 
-    packet = nullptr;
+    packet = 0;
 }
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Rrc Connection Reestablishment Request Test Case
  */
@@ -894,7 +901,7 @@ class RrcConnectionReestablishmentRequestTestCase : public RrcHeaderTestCase
 {
   public:
     RrcConnectionReestablishmentRequestTestCase();
-    void DoRun() override;
+    virtual void DoRun(void);
 };
 
 RrcConnectionReestablishmentRequestTestCase::RrcConnectionReestablishmentRequestTestCase()
@@ -903,7 +910,7 @@ RrcConnectionReestablishmentRequestTestCase::RrcConnectionReestablishmentRequest
 }
 
 void
-RrcConnectionReestablishmentRequestTestCase::DoRun()
+RrcConnectionReestablishmentRequestTestCase::DoRun(void)
 {
     packet = Create<Packet>();
     NS_LOG_DEBUG("============= RrcConnectionReestablishmentRequestTestCase ===========");
@@ -941,11 +948,12 @@ RrcConnectionReestablishmentRequestTestCase::DoRun()
                           destination.GetReestablishmentCause(),
                           "ReestablishmentCause");
 
-    packet = nullptr;
+    packet = 0;
 }
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Rrc Connection Reestablishment Test Case
  */
@@ -953,7 +961,7 @@ class RrcConnectionReestablishmentTestCase : public RrcHeaderTestCase
 {
   public:
     RrcConnectionReestablishmentTestCase();
-    void DoRun() override;
+    virtual void DoRun(void);
 };
 
 RrcConnectionReestablishmentTestCase::RrcConnectionReestablishmentTestCase()
@@ -962,7 +970,7 @@ RrcConnectionReestablishmentTestCase::RrcConnectionReestablishmentTestCase()
 }
 
 void
-RrcConnectionReestablishmentTestCase::DoRun()
+RrcConnectionReestablishmentTestCase::DoRun(void)
 {
     packet = Create<Packet>();
     NS_LOG_DEBUG("============= RrcConnectionReestablishmentTestCase ===========");
@@ -997,11 +1005,12 @@ RrcConnectionReestablishmentTestCase::DoRun()
     AssertEqualRadioResourceConfigDedicated(source.GetRadioResourceConfigDedicated(),
                                             destination.GetRadioResourceConfigDedicated());
 
-    packet = nullptr;
+    packet = 0;
 }
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Rrc Connection Reestablishment Complete Test Case
  */
@@ -1009,7 +1018,7 @@ class RrcConnectionReestablishmentCompleteTestCase : public RrcHeaderTestCase
 {
   public:
     RrcConnectionReestablishmentCompleteTestCase();
-    void DoRun() override;
+    virtual void DoRun(void);
 };
 
 RrcConnectionReestablishmentCompleteTestCase::RrcConnectionReestablishmentCompleteTestCase()
@@ -1018,7 +1027,7 @@ RrcConnectionReestablishmentCompleteTestCase::RrcConnectionReestablishmentComple
 }
 
 void
-RrcConnectionReestablishmentCompleteTestCase::DoRun()
+RrcConnectionReestablishmentCompleteTestCase::DoRun(void)
 {
     packet = Create<Packet>();
     NS_LOG_DEBUG("============= RrcConnectionReestablishmentCompleteTestCase ===========");
@@ -1051,11 +1060,12 @@ RrcConnectionReestablishmentCompleteTestCase::DoRun()
                           destination.GetRrcTransactionIdentifier(),
                           "rrcTransactionIdentifier");
 
-    packet = nullptr;
+    packet = 0;
 }
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Rrc Connection Reject Test Case
  */
@@ -1063,7 +1073,7 @@ class RrcConnectionRejectTestCase : public RrcHeaderTestCase
 {
   public:
     RrcConnectionRejectTestCase();
-    void DoRun() override;
+    virtual void DoRun(void);
 };
 
 RrcConnectionRejectTestCase::RrcConnectionRejectTestCase()
@@ -1072,7 +1082,7 @@ RrcConnectionRejectTestCase::RrcConnectionRejectTestCase()
 }
 
 void
-RrcConnectionRejectTestCase::DoRun()
+RrcConnectionRejectTestCase::DoRun(void)
 {
     packet = Create<Packet>();
     NS_LOG_DEBUG("============= RrcConnectionRejectTestCase ===========");
@@ -1104,11 +1114,12 @@ RrcConnectionRejectTestCase::DoRun()
                           destination.GetMessage().waitTime,
                           "Different waitTime!");
 
-    packet = nullptr;
+    packet = 0;
 }
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Measurement Report Test Case
  */
@@ -1116,7 +1127,7 @@ class MeasurementReportTestCase : public RrcHeaderTestCase
 {
   public:
     MeasurementReportTestCase();
-    void DoRun() override;
+    virtual void DoRun(void);
 };
 
 MeasurementReportTestCase::MeasurementReportTestCase()
@@ -1125,15 +1136,15 @@ MeasurementReportTestCase::MeasurementReportTestCase()
 }
 
 void
-MeasurementReportTestCase::DoRun()
+MeasurementReportTestCase::DoRun(void)
 {
     packet = Create<Packet>();
     NS_LOG_DEBUG("============= MeasurementReportTestCase ===========");
 
     LteRrcSap::MeasurementReport msg;
     msg.measResults.measId = 5;
-    msg.measResults.measResultPCell.rsrpResult = 18;
-    msg.measResults.measResultPCell.rsrqResult = 21;
+    msg.measResults.rsrpResult = 18;
+    msg.measResults.rsrqResult = 21;
     msg.measResults.haveMeasResultNeighCells = true;
 
     LteRrcSap::MeasResultEutra mResEutra;
@@ -1148,7 +1159,7 @@ MeasurementReportTestCase::DoRun()
     mResEutra.cgiInfo.trackingAreaCode = 5;
     msg.measResults.measResultListEutra.push_back(mResEutra);
 
-    msg.measResults.haveMeasResultServFreqList = false;
+    msg.measResults.haveScellsMeas = false;
 
     MeasurementReportHeader source;
     source.SetMessage(msg);
@@ -1174,20 +1185,16 @@ MeasurementReportTestCase::DoRun()
     LteRrcSap::MeasResults dstMeas = destination.GetMessage().measResults;
 
     NS_TEST_ASSERT_MSG_EQ(srcMeas.measId, dstMeas.measId, "Different measId!");
-    NS_TEST_ASSERT_MSG_EQ(srcMeas.measResultPCell.rsrpResult,
-                          dstMeas.measResultPCell.rsrpResult,
-                          "Different rsrpResult!");
-    NS_TEST_ASSERT_MSG_EQ(srcMeas.measResultPCell.rsrqResult,
-                          dstMeas.measResultPCell.rsrqResult,
-                          "Different rsrqResult!");
+    NS_TEST_ASSERT_MSG_EQ(srcMeas.rsrpResult, dstMeas.rsrpResult, "Different rsrpResult!");
+    NS_TEST_ASSERT_MSG_EQ(srcMeas.rsrqResult, dstMeas.rsrqResult, "Different rsrqResult!");
     NS_TEST_ASSERT_MSG_EQ(srcMeas.haveMeasResultNeighCells,
                           dstMeas.haveMeasResultNeighCells,
                           "Different haveMeasResultNeighCells!");
 
     if (srcMeas.haveMeasResultNeighCells)
     {
-        auto itsrc = srcMeas.measResultListEutra.begin();
-        auto itdst = dstMeas.measResultListEutra.begin();
+        std::list<LteRrcSap::MeasResultEutra>::iterator itsrc = srcMeas.measResultListEutra.begin();
+        std::list<LteRrcSap::MeasResultEutra>::iterator itdst = dstMeas.measResultListEutra.begin();
         for (; itsrc != srcMeas.measResultListEutra.end(); itsrc++, itdst++)
         {
             NS_TEST_ASSERT_MSG_EQ(itsrc->physCellId, itdst->physCellId, "Different physCellId!");
@@ -1210,8 +1217,8 @@ MeasurementReportTestCase::DoRun()
 
                 if (!itsrc->cgiInfo.plmnIdentityList.empty())
                 {
-                    auto itsrc2 = itsrc->cgiInfo.plmnIdentityList.begin();
-                    auto itdst2 = itdst->cgiInfo.plmnIdentityList.begin();
+                    std::list<uint32_t>::iterator itsrc2 = itsrc->cgiInfo.plmnIdentityList.begin();
+                    std::list<uint32_t>::iterator itdst2 = itdst->cgiInfo.plmnIdentityList.begin();
                     for (; itsrc2 != itsrc->cgiInfo.plmnIdentityList.begin(); itsrc2++, itdst2++)
                     {
                         NS_TEST_ASSERT_MSG_EQ(*itsrc2, *itdst2, "Different plmnId elements!");
@@ -1241,11 +1248,12 @@ MeasurementReportTestCase::DoRun()
         }
     }
 
-    packet = nullptr;
+    packet = 0;
 }
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Asn1Encoding Test Suite
  */
@@ -1272,8 +1280,4 @@ Asn1EncodingSuite::Asn1EncodingSuite()
     AddTestCase(new MeasurementReportTestCase(), TestCase::QUICK);
 }
 
-/**
- * \ingroup lte-test
- * Static variable for test initialization
- */
-Asn1EncodingSuite g_asn1EncodingSuite;
+Asn1EncodingSuite asn1EncodingSuite;

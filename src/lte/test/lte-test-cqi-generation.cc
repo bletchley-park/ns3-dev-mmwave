@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2014 Piotr Gawlowicz
  *
@@ -144,10 +145,6 @@ LteCqiGenerationTestSuite::LteCqiGenerationTestSuite()
                 TestCase::QUICK);
 }
 
-/**
- * \ingroup lte-test
- * Static variable for test initialization
- */
 static LteCqiGenerationTestSuite lteCqiGenerationTestSuite;
 
 LteCqiGenerationTestCase::LteCqiGenerationTestCase(std::string name,
@@ -172,8 +169,8 @@ LteCqiGenerationTestCase::DlScheduling(DlSchedulingCallbackInfo dlInfo)
     // need to allow for RRC connection establishment + CQI feedback reception
     if (Simulator::Now() > MilliSeconds(35))
     {
-        // NS_LOG_UNCOND("DL MSC: " << (uint32_t)mcsTb1 << " expected DL MCS: " <<
-        // (uint32_t)m_dlMcs);
+        //    NS_LOG_UNCOND("DL MSC: " << (uint32_t)mcsTb1 << " expected DL MCS: " <<
+        //(uint32_t)m_dlMcs);
         NS_TEST_ASSERT_MSG_EQ((uint32_t)dlInfo.mcsTb1, (uint32_t)m_dlMcs, "Wrong DL MCS ");
     }
 }
@@ -188,14 +185,14 @@ LteCqiGenerationTestCase::UlScheduling(uint32_t frameNo,
     // need to allow for RRC connection establishment + SRS transmission
     if (Simulator::Now() > MilliSeconds(50))
     {
-        // NS_LOG_UNCOND("UL MSC: " << (uint32_t)mcs << " expected UL MCS: " <<
-        // (uint32_t)m_ulMcs);
+        //    NS_LOG_UNCOND("UL MSC: " << (uint32_t)mcs << " expected UL MCS: " <<
+        //    (uint32_t)m_ulMcs);
         NS_TEST_ASSERT_MSG_EQ((uint32_t)mcs, (uint32_t)m_ulMcs, "Wrong UL MCS");
     }
 }
 
 void
-LteCqiGenerationTestCase::DoRun()
+LteCqiGenerationTestCase::DoRun(void)
 {
     NS_LOG_DEBUG("LteCqiGenerationTestCase");
 
@@ -267,7 +264,7 @@ LteCqiGenerationTestCase::DoRun()
     lteHelper->Attach(ueDevs2, enbDevs.Get(1));
 
     // Activate an EPS bearer
-    EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+    enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
     EpsBearer bearer(q);
     lteHelper->ActivateDataRadioBearer(ueDevs1, bearer);
     lteHelper->ActivateDataRadioBearer(ueDevs2, bearer);
@@ -314,8 +311,8 @@ LteCqiGenerationDlPowerControlTestCase::DlScheduling(DlSchedulingCallbackInfo dl
     // need to allow for RRC connection establishment + CQI feedback reception
     if (Simulator::Now() > MilliSeconds(500))
     {
-        // NS_LOG_UNCOND("DL MSC: " << (uint32_t)mcsTb1 << " expected DL MCS: " <<
-        // (uint32_t)m_dlMcs);
+        //    NS_LOG_UNCOND("DL MSC: " << (uint32_t)mcsTb1 << " expected DL MCS: " <<
+        //(uint32_t)m_dlMcs);
         NS_TEST_ASSERT_MSG_EQ((uint32_t)dlInfo.mcsTb1, (uint32_t)m_dlMcs, "Wrong DL MCS ");
     }
 }
@@ -330,14 +327,14 @@ LteCqiGenerationDlPowerControlTestCase::UlScheduling(uint32_t frameNo,
     // need to allow for RRC connection establishment + SRS transmission
     if (Simulator::Now() > MilliSeconds(500))
     {
-        // NS_LOG_UNCOND("UL MSC: " << (uint32_t)mcs << " expected UL MCS: " <<
-        // (uint32_t)m_ulMcs);
+        //    NS_LOG_UNCOND("UL MSC: " << (uint32_t)mcs << " expected UL MCS: " <<
+        //(uint32_t)m_ulMcs);
         NS_TEST_ASSERT_MSG_EQ((uint32_t)mcs, (uint32_t)m_ulMcs, "Wrong UL MCS");
     }
 }
 
 void
-LteCqiGenerationDlPowerControlTestCase::DoRun()
+LteCqiGenerationDlPowerControlTestCase::DoRun(void)
 {
     NS_LOG_DEBUG("LteCqiGenerationTestCase");
 
@@ -417,7 +414,7 @@ LteCqiGenerationDlPowerControlTestCase::DoRun()
     lteHelper->Attach(ueDevs2, enbDevs.Get(1));
 
     // Activate an EPS bearer
-    EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+    enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
     EpsBearer bearer(q);
     lteHelper->ActivateDataRadioBearer(ueDevs1, bearer);
     lteHelper->ActivateDataRadioBearer(ueDevs2, bearer);

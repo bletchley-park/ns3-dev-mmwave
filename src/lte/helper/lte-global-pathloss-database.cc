@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011,2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -30,7 +31,7 @@ namespace ns3
 
 NS_LOG_COMPONENT_DEFINE("LteGlobalPathlossDatabase");
 
-LteGlobalPathlossDatabase::~LteGlobalPathlossDatabase()
+LteGlobalPathlossDatabase::~LteGlobalPathlossDatabase(void)
 {
 }
 
@@ -38,9 +39,14 @@ void
 LteGlobalPathlossDatabase::Print()
 {
     NS_LOG_FUNCTION(this);
-    for (auto cellIdIt = m_pathlossMap.begin(); cellIdIt != m_pathlossMap.end(); ++cellIdIt)
+    for (std::map<uint16_t, std::map<uint64_t, double>>::const_iterator cellIdIt =
+             m_pathlossMap.begin();
+         cellIdIt != m_pathlossMap.end();
+         ++cellIdIt)
     {
-        for (auto imsiIt = cellIdIt->second.begin(); imsiIt != cellIdIt->second.end(); ++imsiIt)
+        for (std::map<uint64_t, double>::const_iterator imsiIt = cellIdIt->second.begin();
+             imsiIt != cellIdIt->second.end();
+             ++imsiIt)
         {
             std::cout << "CellId: " << cellIdIt->first << " IMSI: " << imsiIt->first
                       << " pathloss: " << imsiIt->second << " dB" << std::endl;
@@ -52,12 +58,12 @@ double
 LteGlobalPathlossDatabase::GetPathloss(uint16_t cellId, uint64_t imsi)
 {
     NS_LOG_FUNCTION(this);
-    auto cellIt = m_pathlossMap.find(cellId);
+    std::map<uint16_t, std::map<uint64_t, double>>::iterator cellIt = m_pathlossMap.find(cellId);
     if (cellIt == m_pathlossMap.end())
     {
         return std::numeric_limits<double>::infinity();
     }
-    auto ueIt = cellIt->second.find(imsi);
+    std::map<uint64_t, double>::iterator ueIt = cellIt->second.find(imsi);
     if (ueIt == cellIt->second.end())
     {
         return std::numeric_limits<double>::infinity();

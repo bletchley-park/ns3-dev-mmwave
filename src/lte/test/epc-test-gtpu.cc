@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -55,9 +56,9 @@ EpsGtpuHeaderTestCase::~EpsGtpuHeaderTestCase()
 }
 
 void
-EpsGtpuHeaderTestCase::DoRun()
+EpsGtpuHeaderTestCase::DoRun(void)
 {
-    auto logLevel = (LogLevel)(LOG_PREFIX_FUNC | LOG_PREFIX_TIME | LOG_LEVEL_ALL);
+    LogLevel logLevel = (LogLevel)(LOG_PREFIX_FUNC | LOG_PREFIX_TIME | LOG_LEVEL_ALL);
 
     LogComponentEnable("EpcGtpuTest", logLevel);
     GtpuHeader h1;

@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -47,6 +48,7 @@
 #include <ns3/spectrum-interference.h>
 #include <ns3/string.h>
 #include <ns3/test.h>
+#include <ns3/unused.h>
 
 #include <cmath>
 #include <iostream>
@@ -73,10 +75,6 @@ LenaTestHarqSuite::LenaTestHarqSuite()
     AddTestCase(new LenaHarqTestCase(1, 770, 472, 0.06, 209964), TestCase::QUICK);
 }
 
-/**
- * \ingroup lte-test
- * Static variable for test initialization
- */
 static LenaTestHarqSuite lenaTestHarqSuite;
 
 std::string
@@ -105,22 +103,13 @@ LenaHarqTestCase::~LenaHarqTestCase()
 }
 
 void
-LenaHarqTestCase::DoRun()
+LenaHarqTestCase::DoRun(void)
 {
     Config::SetDefault("ns3::LteAmc::Ber", DoubleValue(m_amcBer));
     Config::SetDefault("ns3::LteAmc::AmcModel", EnumValue(LteAmc::PiroEW2010));
     Config::SetDefault("ns3::LteSpectrumPhy::CtrlErrorModelEnabled", BooleanValue(false));
     Config::SetDefault("ns3::LteSpectrumPhy::DataErrorModelEnabled", BooleanValue(true));
     Config::SetDefault("ns3::LteHelper::UseIdealRrc", BooleanValue(true));
-    Config::SetDefault("ns3::MacStatsCalculator::DlOutputFilename",
-                       StringValue(CreateTempDirFilename("DlMacStats.txt")));
-    Config::SetDefault("ns3::MacStatsCalculator::UlOutputFilename",
-                       StringValue(CreateTempDirFilename("UlMacStats.txt")));
-    Config::SetDefault("ns3::RadioBearerStatsCalculator::DlRlcOutputFilename",
-                       StringValue(CreateTempDirFilename("DlRlcStats.txt")));
-    Config::SetDefault("ns3::RadioBearerStatsCalculator::UlRlcOutputFilename",
-                       StringValue(CreateTempDirFilename("UlRlcStats.txt")));
-
     // Disable Uplink Power Control
     Config::SetDefault("ns3::LteUePhy::EnableUplinkPowerControl", BooleanValue(false));
 
@@ -202,6 +191,9 @@ LenaHarqTestCase::DoRun()
     lena->SetSchedulerType("ns3::RrFfMacScheduler");
     lena->SetSchedulerAttribute("UlCqiFilter", EnumValue(FfMacScheduler::PUSCH_UL_CQI));
 
+    // set DL bandwidth.
+    lena->SetEnbDeviceAttribute("DlBandwidth", UintegerValue(25));
+
     enbDevs = lena->InstallEnbDevice(enbNodes);
     ueDevs = lena->InstallUeDevice(ueNodes);
 
@@ -209,7 +201,7 @@ LenaHarqTestCase::DoRun()
     lena->Attach(ueDevs, enbDevs.Get(0));
 
     // Activate an EPS bearer
-    EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+    enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
     EpsBearer bearer(q);
     lena->ActivateDataRadioBearer(ueDevs, bearer);
 
@@ -247,7 +239,7 @@ LenaHarqTestCase::DoRun()
     Simulator::Run();
 
     /**
-     * Check that the assignment is done in a RR fashion
+     * Check that the assignation is done in a RR fashion
      */
     NS_LOG_INFO("\tTest on downlink data shared channels (PDSCH)");
     NS_LOG_INFO("Test with " << m_nUser << " user(s) at distance " << m_dist << " expected Thr "

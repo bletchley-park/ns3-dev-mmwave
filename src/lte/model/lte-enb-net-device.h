@@ -1,3 +1,4 @@
+/* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2010 TELEMATICS LAB, DEE - Politecnico di Bari
  *
@@ -23,16 +24,19 @@
 #ifndef LTE_ENB_NET_DEVICE_H
 #define LTE_ENB_NET_DEVICE_H
 
-#include "component-carrier.h"
-#include "lte-net-device.h"
-
+#include "ns3/component-carrier-enb.h"
 #include "ns3/event-id.h"
+#include "ns3/lte-net-device.h"
+#include "ns3/lte-phy.h"
 #include "ns3/mac48-address.h"
 #include "ns3/nstime.h"
 #include "ns3/traced-callback.h"
 
 #include <map>
 #include <vector>
+
+#include "ns3/oran-interface.h"
+#include "ns3/mmwave-bearer-stats-calculator.h"
 
 namespace ns3
 {
@@ -62,37 +66,37 @@ class LteEnbNetDevice : public LteNetDevice
      * \brief Get the type ID.
      * \return the object TypeId
      */
-    static TypeId GetTypeId();
+    static TypeId GetTypeId(void);
 
     LteEnbNetDevice();
 
-    ~LteEnbNetDevice() override;
-    void DoDispose() override;
+    virtual ~LteEnbNetDevice(void);
+    virtual void DoDispose(void);
 
     // inherited from NetDevice
-    bool Send(Ptr<Packet> packet, const Address& dest, uint16_t protocolNumber) override;
+    virtual bool Send(Ptr<Packet> packet, const Address& dest, uint16_t protocolNumber);
 
     /**
      * \return a pointer to the MAC of the PCC.
      */
-    Ptr<LteEnbMac> GetMac() const;
+    Ptr<LteEnbMac> GetMac(void) const;
 
     /**
      * \param index CC index
      * \return a pointer to the MAC of the CC addressed by index.
      */
-    Ptr<LteEnbMac> GetMac(uint8_t index) const;
+    Ptr<LteEnbMac> GetMac(uint8_t index);
 
     /**
      * \return a pointer to the physical layer of the PCC.
      */
-    Ptr<LteEnbPhy> GetPhy() const;
+    Ptr<LteEnbPhy> GetPhy(void) const;
 
     /**
      * \param index SCC index
      * \return a pointer to the physical layer of the SCC addressed by index.
      */
-    Ptr<LteEnbPhy> GetPhy(uint8_t index) const;
+    Ptr<LteEnbPhy> GetPhy(uint8_t index);
 
     /**
      * \return a pointer to the Radio Resource Control instance of the eNB
@@ -110,11 +114,6 @@ class LteEnbNetDevice : public LteNetDevice
     uint16_t GetCellId() const;
 
     /**
-     * \return the identifiers of cells served by this eNB
-     */
-    std::vector<uint16_t> GetCellIds() const;
-
-    /**
      * \param cellId cell ID
      * \return true if cellId is served by this eNB
      */
@@ -123,22 +122,22 @@ class LteEnbNetDevice : public LteNetDevice
     /**
      * \return the uplink bandwidth in RBs
      */
-    uint16_t GetUlBandwidth() const;
+    uint8_t GetUlBandwidth() const;
 
     /**
      * \param bw the uplink bandwidth in RBs
      */
-    void SetUlBandwidth(uint16_t bw);
+    void SetUlBandwidth(uint8_t bw);
 
     /**
      * \return the downlink bandwidth in RBs
      */
-    uint16_t GetDlBandwidth() const;
+    uint8_t GetDlBandwidth() const;
 
     /**
      * \param bw the downlink bandwidth in RBs
      */
-    void SetDlBandwidth(uint16_t bw);
+    void SetDlBandwidth(uint8_t bw);
 
     /**
      * \return the downlink carrier frequency (EARFCN)
@@ -211,18 +210,29 @@ class LteEnbNetDevice : public LteNetDevice
      *
      */
 
-    void SetCcMap(std::map<uint8_t, Ptr<ComponentCarrierBaseStation>> ccm);
+    void SetCcMap(std::map<uint8_t, Ptr<ComponentCarrierEnb>> ccm);
 
     /**
      * \returns  The Component Carrier Map of the Enb.
      *
      */
 
-    std::map<uint8_t, Ptr<ComponentCarrierBaseStation>> GetCcMap() const;
+    std::map<uint8_t, Ptr<ComponentCarrierEnb>> GetCcMap(void);
+
+    void SetE2Termination (Ptr<E2Termination> e2term);
+
+    Ptr<E2Termination> GetE2Termination() const;
+
+    void BuildAndSendReportMessage(E2Termination::RicSubscriptionRequest_rval_s params);
+
+    void KpmSubscriptionCallback (E2AP_PDU_t* sub_req_pdu);
+    void ControlMessageReceivedCallback (E2AP_PDU_t* sub_req_pdu);
+
+    void SetStartTime (uint64_t);
 
   protected:
     // inherited from Object
-    void DoInitialize() override;
+    virtual void DoInitialize(void);
 
   private:
     bool m_isConstructed; ///< is constructed?
@@ -240,6 +250,12 @@ class LteEnbNetDevice : public LteNetDevice
      */
     void UpdateConfig();
 
+    Ptr<KpmIndicationHeader> BuildRicIndicationHeader(std::string plmId, std::string gnbId, uint16_t nrCellId);
+    Ptr<KpmIndicationMessage> BuildRicIndicationMessageCuUp(std::string plmId);
+    Ptr<KpmIndicationMessage> BuildRicIndicationMessageCuCp(std::string plmId);
+    std::string GetImsiString(uint64_t imsi);
+    void ReadControlFile ();
+
     Ptr<LteEnbRrc> m_rrc; ///< the RRC
 
     Ptr<LteHandoverAlgorithm> m_handoverAlgorithm; ///< the handover algorithm
@@ -251,10 +267,10 @@ class LteEnbNetDevice : public LteNetDevice
 
     uint16_t m_cellId; /**< Cell Identifier. Part of the CGI, see TS 29.274, section 8.21.1  */
 
-    uint16_t m_dlBandwidth; /**<DEPRECATE - It is maintained for backward compatibility after adding
-                               CA feature- downlink bandwidth in RBs */
-    uint16_t m_ulBandwidth; /**<DEPRECATE - It is maintained for backward compatibility after adding
-                               CA feature- uplink bandwidth in RBs */
+    uint8_t m_dlBandwidth; /**<DEPRECATE - It is maintained for backward compatibility after adding
+                              CA feature- downlink bandwidth in RBs */
+    uint8_t m_ulBandwidth; /**<DEPRECATE - It is maintained for backward compatibility after adding
+                              CA feature- uplink bandwidth in RBs */
 
     uint32_t m_dlEarfcn; /**<DEPRECATE - It is maintained for backward compatibility after adding CA
                             feature- downlink carrier frequency */
@@ -264,10 +280,30 @@ class LteEnbNetDevice : public LteNetDevice
     uint16_t m_csgId;     ///< CSG ID
     bool m_csgIndication; ///< CSG indication
 
-    std::map<uint8_t, Ptr<ComponentCarrierBaseStation>> m_ccMap; /**< ComponentCarrier map */
+    std::map<uint8_t, Ptr<ComponentCarrierEnb>> m_ccMap; /**< ComponentCarrier map */
 
     Ptr<LteEnbComponentCarrierManager>
         m_componentCarrierManager; ///< the component carrier manager of this eNb
+
+    Ptr<E2Termination> m_e2term;
+    Ptr<mmwave::MmWaveBearerStatsCalculator> m_e2PdcpStatsCalculator;
+    Ptr<mmwave::MmWaveBearerStatsCalculator> m_e2RlcStatsCalculator;
+
+    double m_e2Periodicity;
+
+    bool m_sendCuUp;
+    bool m_sendCuCp;
+    uint64_t m_startTime;
+    bool m_isReportingEnabled; //! true is KPM reporting cycle is active, false otherwise
+
+    bool m_reducedPmValues; //< if true use a reduced subset of pmvalues
+    bool m_forceE2FileLogging; //< if true log PMs to files
+
+    std::string m_cuUpFileName;
+    std::string m_cuCpFileName;
+
+    std::string m_controlFilename;
+    int m_lastValidTimestamp {0};
 
 }; // end of class LteEnbNetDevice
 

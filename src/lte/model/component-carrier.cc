@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2015 Danilo Abrignani
  *
@@ -22,6 +23,9 @@
 #include <ns3/abort.h>
 #include <ns3/boolean.h>
 #include <ns3/log.h>
+#include <ns3/lte-enb-phy.h>
+#include <ns3/pointer.h>
+#include <ns3/simulator.h>
 #include <ns3/uinteger.h>
 
 namespace ns3
@@ -32,7 +36,7 @@ NS_LOG_COMPONENT_DEFINE("ComponentCarrier");
 NS_OBJECT_ENSURE_REGISTERED(ComponentCarrier);
 
 TypeId
-ComponentCarrier::GetTypeId()
+ComponentCarrier::GetTypeId(void)
 {
     static TypeId tid =
         TypeId("ns3::ComponentCarrier")
@@ -54,17 +58,15 @@ ComponentCarrier::GetTypeId()
                 MakeUintegerChecker<uint8_t>())
             .AddAttribute("DlEarfcn",
                           "Downlink E-UTRA Absolute Radio Frequency Channel Number (EARFCN) "
-                          "as per 3GPP 36.101 Section 5.7.3.",
+                          "as per 3GPP 36.101 Section 5.7.3. ",
                           UintegerValue(100),
-                          MakeUintegerAccessor(&ComponentCarrier::SetDlEarfcn,
-                                               &ComponentCarrier::GetDlEarfcn),
+                          MakeUintegerAccessor(&ComponentCarrier::m_dlEarfcn),
                           MakeUintegerChecker<uint32_t>(0, 262143))
             .AddAttribute("UlEarfcn",
                           "Uplink E-UTRA Absolute Radio Frequency Channel Number (EARFCN) "
-                          "as per 3GPP 36.101 Section 5.7.3.",
+                          "as per 3GPP 36.101 Section 5.7.3. ",
                           UintegerValue(18100),
-                          MakeUintegerAccessor(&ComponentCarrier::SetUlEarfcn,
-                                               &ComponentCarrier::GetUlEarfcn),
+                          MakeUintegerAccessor(&ComponentCarrier::m_ulEarfcn),
                           MakeUintegerChecker<uint32_t>(18000, 262143))
             .AddAttribute(
                 "CsgId",
@@ -92,12 +94,12 @@ ComponentCarrier::GetTypeId()
 }
 
 ComponentCarrier::ComponentCarrier()
-    : Object()
+    : m_isConstructed(false)
 {
     NS_LOG_FUNCTION(this);
 }
 
-ComponentCarrier::~ComponentCarrier()
+ComponentCarrier::~ComponentCarrier(void)
 {
     NS_LOG_FUNCTION(this);
 }
@@ -109,16 +111,16 @@ ComponentCarrier::DoDispose()
     Object::DoDispose();
 }
 
-uint16_t
+uint8_t
 ComponentCarrier::GetUlBandwidth() const
 {
     return m_ulBandwidth;
 }
 
 void
-ComponentCarrier::SetUlBandwidth(uint16_t bw)
+ComponentCarrier::SetUlBandwidth(uint8_t bw)
 {
-    NS_LOG_FUNCTION(this << bw);
+    NS_LOG_FUNCTION(this << uint16_t(bw));
     switch (bw)
     {
     case 6:
@@ -131,21 +133,21 @@ ComponentCarrier::SetUlBandwidth(uint16_t bw)
         break;
 
     default:
-        NS_FATAL_ERROR("Invalid bandwidth value " << bw);
+        NS_FATAL_ERROR("Invalid bandwidth value " << (uint16_t)bw);
         break;
     }
 }
 
-uint16_t
+uint8_t
 ComponentCarrier::GetDlBandwidth() const
 {
     return m_dlBandwidth;
 }
 
 void
-ComponentCarrier::SetDlBandwidth(uint16_t bw)
+ComponentCarrier::SetDlBandwidth(uint8_t bw)
 {
-    NS_LOG_FUNCTION(this << bw);
+    NS_LOG_FUNCTION(this << uint16_t(bw));
     switch (bw)
     {
     case 6:
@@ -158,7 +160,7 @@ ComponentCarrier::SetDlBandwidth(uint16_t bw)
         break;
 
     default:
-        NS_FATAL_ERROR("Invalid bandwidth value " << bw);
+        NS_FATAL_ERROR("Invalid bandwidth value " << (uint16_t)bw);
         break;
     }
 }
@@ -228,41 +230,11 @@ ComponentCarrier::SetAsPrimary(bool primaryCarrier)
     m_primaryCarrier = primaryCarrier;
 }
 
-//====================================================
-
-NS_OBJECT_ENSURE_REGISTERED(ComponentCarrierBaseStation);
-
-TypeId
-ComponentCarrierBaseStation::GetTypeId()
-{
-    static TypeId tid = TypeId("ns3::ComponentCarrierBaseStation")
-                            .SetParent<ComponentCarrier>()
-                            .AddConstructor<ComponentCarrierBaseStation>();
-    return tid;
-}
-
-ComponentCarrierBaseStation::ComponentCarrierBaseStation()
-    : ComponentCarrier()
-{
-    NS_LOG_FUNCTION(this);
-}
-
-ComponentCarrierBaseStation::~ComponentCarrierBaseStation()
-{
-    NS_LOG_FUNCTION(this);
-}
-
-uint16_t
-ComponentCarrierBaseStation::GetCellId() const
-{
-    return m_cellId;
-}
-
 void
-ComponentCarrierBaseStation::SetCellId(uint16_t cellId)
+ComponentCarrier::DoInitialize(void)
 {
-    NS_LOG_FUNCTION(this << cellId);
-    m_cellId = cellId;
+    NS_LOG_FUNCTION(this);
+    m_isConstructed = true;
 }
 
 } // namespace ns3

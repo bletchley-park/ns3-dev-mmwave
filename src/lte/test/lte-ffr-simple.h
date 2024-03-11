@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2014 Piotr Gawlowicz
  *
@@ -34,6 +35,7 @@ namespace ns3
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Simple Frequency Reuse algorithm implementation which uses only 1 sub-band.
  *                Used to test Downlink Power Allocation. When Simple FR receives UE measurements
@@ -48,7 +50,7 @@ class LteFfrSimple : public LteFfrAlgorithm
      */
     LteFfrSimple();
 
-    ~LteFfrSimple() override;
+    virtual ~LteFfrSimple();
 
     /**
      * \brief Get the type ID.
@@ -71,16 +73,16 @@ class LteFfrSimple : public LteFfrAlgorithm
      * \brief Set transmission power control
      * \param tpc TPC
      * \param num number of TPC configurations in the test case
-     * \param accumulatedMode whether TPC accumulated mode is used
+     * \param acculumatedMode whether TPC accumulated mode is used
      */
-    void SetTpc(uint32_t tpc, uint32_t num, bool accumulatedMode);
+    void SetTpc(uint32_t tpc, uint32_t num, bool acculumatedMode);
 
     // inherited from LteFfrAlgorithm
-    void SetLteFfrSapUser(LteFfrSapUser* s) override;
-    LteFfrSapProvider* GetLteFfrSapProvider() override;
+    virtual void SetLteFfrSapUser(LteFfrSapUser* s);
+    virtual LteFfrSapProvider* GetLteFfrSapProvider();
 
-    void SetLteFfrRrcSapUser(LteFfrRrcSapUser* s) override;
-    LteFfrRrcSapProvider* GetLteFfrRrcSapProvider() override;
+    virtual void SetLteFfrRrcSapUser(LteFfrRrcSapUser* s);
+    virtual LteFfrRrcSapProvider* GetLteFfrRrcSapProvider();
 
     /// let the forwarder class access the protected and private members
     friend class MemberLteFfrSapProvider<LteFfrSimple>;
@@ -97,27 +99,27 @@ class LteFfrSimple : public LteFfrAlgorithm
 
   protected:
     // inherited from Object
-    void DoInitialize() override;
-    void DoDispose() override;
+    virtual void DoInitialize();
+    virtual void DoDispose();
 
-    void Reconfigure() override;
+    virtual void Reconfigure();
 
     // FFR SAP PROVIDER IMPLEMENTATION
-    std::vector<bool> DoGetAvailableDlRbg() override;
-    bool DoIsDlRbgAvailableForUe(int i, uint16_t rnti) override;
-    std::vector<bool> DoGetAvailableUlRbg() override;
-    bool DoIsUlRbgAvailableForUe(int i, uint16_t rnti) override;
-    void DoReportDlCqiInfo(
-        const FfMacSchedSapProvider::SchedDlCqiInfoReqParameters& params) override;
-    void DoReportUlCqiInfo(
-        const FfMacSchedSapProvider::SchedUlCqiInfoReqParameters& params) override;
-    void DoReportUlCqiInfo(std::map<uint16_t, std::vector<double>> ulCqiMap) override;
-    uint8_t DoGetTpc(uint16_t rnti) override;
-    uint16_t DoGetMinContinuousUlBandwidth() override;
+    virtual std::vector<bool> DoGetAvailableDlRbg();
+    virtual bool DoIsDlRbgAvailableForUe(int i, uint16_t rnti);
+    virtual std::vector<bool> DoGetAvailableUlRbg();
+    virtual bool DoIsUlRbgAvailableForUe(int i, uint16_t rnti);
+    virtual void DoReportDlCqiInfo(
+        const struct FfMacSchedSapProvider::SchedDlCqiInfoReqParameters& params);
+    virtual void DoReportUlCqiInfo(
+        const struct FfMacSchedSapProvider::SchedUlCqiInfoReqParameters& params);
+    virtual void DoReportUlCqiInfo(std::map<uint16_t, std::vector<double>> ulCqiMap);
+    virtual uint8_t DoGetTpc(uint16_t rnti);
+    virtual uint8_t DoGetMinContinuousUlBandwidth();
 
     // FFR SAP RRC PROVIDER IMPLEMENTATION
-    void DoReportUeMeas(uint16_t rnti, LteRrcSap::MeasResults measResults) override;
-    void DoRecvLoadInformation(EpcX2Sap::LoadInformationParams params) override;
+    virtual void DoReportUeMeas(uint16_t rnti, LteRrcSap::MeasResults measResults);
+    virtual void DoRecvLoadInformation(EpcX2Sap::LoadInformationParams params);
 
   private:
     /// Update PDSCH config dedicated function

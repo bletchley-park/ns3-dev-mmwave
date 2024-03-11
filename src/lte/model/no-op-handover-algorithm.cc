@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2013 Budiarto Herman
  *
@@ -30,7 +31,7 @@ NS_LOG_COMPONENT_DEFINE("NoOpHandoverAlgorithm");
 NS_OBJECT_ENSURE_REGISTERED(NoOpHandoverAlgorithm);
 
 NoOpHandoverAlgorithm::NoOpHandoverAlgorithm()
-    : m_handoverManagementSapUser(nullptr)
+    : m_handoverManagementSapUser(0)
 {
     NS_LOG_FUNCTION(this);
     m_handoverManagementSapProvider =

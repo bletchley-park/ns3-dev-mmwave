@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -122,10 +123,6 @@ LteUplinkSinrTestSuite::LteUplinkSinrTestSuite()
                 TestCase::QUICK);
 }
 
-/**
- * \ingroup lte-test
- * Static variable for test initialization
- */
 static LteUplinkSinrTestSuite lteUplinkSinrTestSuite;
 
 /**
@@ -150,7 +147,7 @@ LteUplinkDataSinrTestCase::~LteUplinkDataSinrTestCase()
 }
 
 void
-LteUplinkDataSinrTestCase::DoRun()
+LteUplinkDataSinrTestCase::DoRun(void)
 {
     /**
      * Instantiate a single receiving LteSpectrumPhy
@@ -263,7 +260,7 @@ LteUplinkDataSinrTestCase::DoRun()
     // 2 UEs send data to the eNB through 2 subcarriers
     Ptr<LteSpectrumSignalParametersDataFrame> sp1 = Create<LteSpectrumSignalParametersDataFrame>();
     sp1->psd = m_sv1;
-    sp1->txPhy = nullptr;
+    sp1->txPhy = 0;
     sp1->duration = ds;
     sp1->packetBurst = packetBursts[0];
     sp1->cellId = pbCellId[0];
@@ -271,7 +268,7 @@ LteUplinkDataSinrTestCase::DoRun()
 
     Ptr<LteSpectrumSignalParametersDataFrame> sp2 = Create<LteSpectrumSignalParametersDataFrame>();
     sp2->psd = m_sv2;
-    sp2->txPhy = nullptr;
+    sp2->txPhy = 0;
     sp2->duration = ds;
     sp2->packetBurst = packetBursts[1];
     sp2->cellId = pbCellId[1];
@@ -279,7 +276,7 @@ LteUplinkDataSinrTestCase::DoRun()
 
     Ptr<LteSpectrumSignalParametersDataFrame> ip1 = Create<LteSpectrumSignalParametersDataFrame>();
     ip1->psd = i1;
-    ip1->txPhy = nullptr;
+    ip1->txPhy = 0;
     ip1->duration = di1;
     ip1->packetBurst = packetBursts[2];
     ip1->cellId = pbCellId[2];
@@ -287,7 +284,7 @@ LteUplinkDataSinrTestCase::DoRun()
 
     Ptr<LteSpectrumSignalParametersDataFrame> ip2 = Create<LteSpectrumSignalParametersDataFrame>();
     ip2->psd = i2;
-    ip2->txPhy = nullptr;
+    ip2->txPhy = 0;
     ip2->duration = di2;
     ip2->packetBurst = packetBursts[3];
     ip2->cellId = pbCellId[3];
@@ -295,7 +292,7 @@ LteUplinkDataSinrTestCase::DoRun()
 
     Ptr<LteSpectrumSignalParametersDataFrame> ip3 = Create<LteSpectrumSignalParametersDataFrame>();
     ip3->psd = i3;
-    ip3->txPhy = nullptr;
+    ip3->txPhy = 0;
     ip3->duration = di3;
     ip3->packetBurst = packetBursts[4];
     ip3->cellId = pbCellId[4];
@@ -303,7 +300,7 @@ LteUplinkDataSinrTestCase::DoRun()
 
     Ptr<LteSpectrumSignalParametersDataFrame> ip4 = Create<LteSpectrumSignalParametersDataFrame>();
     ip4->psd = i4;
-    ip4->txPhy = nullptr;
+    ip4->txPhy = 0;
     ip4->duration = di4;
     ip4->packetBurst = packetBursts[5];
     ip4->cellId = pbCellId[5];
@@ -353,7 +350,7 @@ LteUplinkSrsSinrTestCase::ReportSinr(const SpectrumValue& sinr)
 }
 
 void
-LteUplinkSrsSinrTestCase::DoRun()
+LteUplinkSrsSinrTestCase::DoRun(void)
 {
     /**
      * Instantiate a single receiving LteSpectrumPhy
@@ -440,7 +437,7 @@ LteUplinkSrsSinrTestCase::DoRun()
     Ptr<LteSpectrumSignalParametersUlSrsFrame> sp1 =
         Create<LteSpectrumSignalParametersUlSrsFrame>();
     sp1->psd = m_sv1;
-    sp1->txPhy = nullptr;
+    sp1->txPhy = 0;
     sp1->duration = ds;
     sp1->cellId = pbCellId[0];
     Simulator::Schedule(ts, &LteSpectrumPhy::StartRx, ulPhy, sp1);
@@ -448,7 +445,7 @@ LteUplinkSrsSinrTestCase::DoRun()
     Ptr<LteSpectrumSignalParametersUlSrsFrame> sp2 =
         Create<LteSpectrumSignalParametersUlSrsFrame>();
     sp2->psd = m_sv2;
-    sp2->txPhy = nullptr;
+    sp2->txPhy = 0;
     sp2->duration = ds;
     sp2->cellId = pbCellId[1];
     Simulator::Schedule(ts, &LteSpectrumPhy::StartRx, ulPhy, sp2);
@@ -456,7 +453,7 @@ LteUplinkSrsSinrTestCase::DoRun()
     Ptr<LteSpectrumSignalParametersUlSrsFrame> ip1 =
         Create<LteSpectrumSignalParametersUlSrsFrame>();
     ip1->psd = i1;
-    ip1->txPhy = nullptr;
+    ip1->txPhy = 0;
     ip1->duration = di1;
     ip1->cellId = pbCellId[2];
     Simulator::Schedule(ti1, &LteSpectrumPhy::StartRx, ulPhy, ip1);
@@ -464,7 +461,7 @@ LteUplinkSrsSinrTestCase::DoRun()
     Ptr<LteSpectrumSignalParametersUlSrsFrame> ip2 =
         Create<LteSpectrumSignalParametersUlSrsFrame>();
     ip2->psd = i2;
-    ip2->txPhy = nullptr;
+    ip2->txPhy = 0;
     ip2->duration = di2;
     ip2->cellId = pbCellId[3];
     Simulator::Schedule(ti2, &LteSpectrumPhy::StartRx, ulPhy, ip2);
@@ -472,7 +469,7 @@ LteUplinkSrsSinrTestCase::DoRun()
     Ptr<LteSpectrumSignalParametersUlSrsFrame> ip3 =
         Create<LteSpectrumSignalParametersUlSrsFrame>();
     ip3->psd = i3;
-    ip3->txPhy = nullptr;
+    ip3->txPhy = 0;
     ip3->duration = di3;
     ip3->cellId = pbCellId[4];
     Simulator::Schedule(ti3, &LteSpectrumPhy::StartRx, ulPhy, ip3);
@@ -480,7 +477,7 @@ LteUplinkSrsSinrTestCase::DoRun()
     Ptr<LteSpectrumSignalParametersUlSrsFrame> ip4 =
         Create<LteSpectrumSignalParametersUlSrsFrame>();
     ip4->psd = i4;
-    ip4->txPhy = nullptr;
+    ip4->txPhy = 0;
     ip4->duration = di4;
     ip4->cellId = pbCellId[5];
     Simulator::Schedule(ti4, &LteSpectrumPhy::StartRx, ulPhy, ip4);

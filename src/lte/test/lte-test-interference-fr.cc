@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2014 Piotr Gawlowicz
  *
@@ -15,9 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * Author: Piotr Gawlowicz <gawlowicz.p@gmail.com>
- * Based on lte-test-interference.{h,cc} by:
- *   Manuel Requena <manuel.requena@cttc.es>
- *   Nicola Baldo <nbaldo@cttc.es>
+ * Based on lte-test-interference.{h,cc} by Manuel Requena <manuel.requena@cttc.es>
+ *                                                                              Nicola Baldo
+ * <nbaldo@cttc.es>
  */
 
 #include "lte-test-interference-fr.h"
@@ -119,10 +120,6 @@ LteInterferenceFrTestSuite::LteInterferenceFrTestSuite()
                 TestCase::QUICK);
 }
 
-/**
- * \ingroup lte-test
- * Static variable for test initialization
- */
 static LteInterferenceFrTestSuite LteInterferenceFrTestSuite;
 
 /**
@@ -137,6 +134,7 @@ LteInterferenceHardFrTestCase::LteInterferenceHardFrTestCase(std::string name,
       m_d1(d1),
       m_d2(d2),
       m_expectedDlSinrDb(10 * std::log10(dlSinr))
+// m_expectedUlSinrDb (10 * std::log10 (ulSinr))
 {
     NS_LOG_INFO("Creating LteInterferenceFrTestCase");
 }
@@ -146,7 +144,7 @@ LteInterferenceHardFrTestCase::~LteInterferenceHardFrTestCase()
 }
 
 void
-LteInterferenceHardFrTestCase::DoRun()
+LteInterferenceHardFrTestCase::DoRun(void)
 {
     NS_LOG_INFO(this << GetName());
     NS_LOG_DEBUG("LteInterferenceHardFrTestCase");
@@ -163,6 +161,10 @@ LteInterferenceHardFrTestCase::DoRun()
     lteHelper->SetFfrAlgorithmType("ns3::LteFrHardAlgorithm");
 
     lteHelper->SetAttribute("PathlossModel", StringValue("ns3::FriisSpectrumPropagationLossModel"));
+
+    // set DL and UL bandwidth
+    lteHelper->SetEnbDeviceAttribute("DlBandwidth", UintegerValue(25));
+    lteHelper->SetEnbDeviceAttribute("UlBandwidth", UintegerValue(25));
 
     // Create Nodes: eNodeB and UE
     NodeContainer enbNodes;
@@ -217,7 +219,7 @@ LteInterferenceHardFrTestCase::DoRun()
     lteHelper->Attach(ueDevs2, enbDevs.Get(1));
 
     // Activate an EPS bearer
-    EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+    enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
     EpsBearer bearer(q);
     lteHelper->ActivateDataRadioBearer(ueDevs1, bearer);
     lteHelper->ActivateDataRadioBearer(ueDevs2, bearer);
@@ -310,7 +312,9 @@ LteInterferenceStrictFrTestCase::LteInterferenceStrictFrTestCase(std::string nam
       m_d1(d1),
       m_d2(d2),
       m_commonDlSinrDb(10 * std::log10(commonDlSinr)),
+      // m_commonUlSinrDb (10 * std::log10 (commonUlSinr)),
       m_edgeDlSinrDb(10 * std::log10(edgeDlSinr)),
+      // m_edgeUlSinrDb (10 * std::log10 (edgeUlSinr)),
       m_rspqThreshold(rspqThreshold)
 {
     NS_LOG_INFO("Creating LteInterferenceFrTestCase");
@@ -321,7 +325,7 @@ LteInterferenceStrictFrTestCase::~LteInterferenceStrictFrTestCase()
 }
 
 void
-LteInterferenceStrictFrTestCase::DoRun()
+LteInterferenceStrictFrTestCase::DoRun(void)
 {
     NS_LOG_INFO(this << GetName());
     NS_LOG_DEBUG("LteInterferenceStrictFrTestCase");
@@ -343,6 +347,10 @@ LteInterferenceStrictFrTestCase::DoRun()
                                         UintegerValue(LteRrcSap::PdschConfigDedicated::dB0));
 
     lteHelper->SetAttribute("PathlossModel", StringValue("ns3::FriisSpectrumPropagationLossModel"));
+
+    // set DL and UL bandwidth
+    lteHelper->SetEnbDeviceAttribute("DlBandwidth", UintegerValue(25));
+    lteHelper->SetEnbDeviceAttribute("UlBandwidth", UintegerValue(25));
 
     // Create Nodes: eNodeB and UE
     NodeContainer enbNodes;
@@ -383,6 +391,10 @@ LteInterferenceStrictFrTestCase::DoRun()
     lteHelper->SetSchedulerType("ns3::PfFfMacScheduler");
     lteHelper->SetSchedulerAttribute("UlCqiFilter", EnumValue(FfMacScheduler::PUSCH_UL_CQI));
 
+    // set DL and UL bandwidth
+    lteHelper->SetEnbDeviceAttribute("DlBandwidth", UintegerValue(25));
+    lteHelper->SetEnbDeviceAttribute("UlBandwidth", UintegerValue(25));
+
     lteHelper->SetFfrAlgorithmAttribute("DlCommonSubBandwidth", UintegerValue(12));
     lteHelper->SetFfrAlgorithmAttribute("DlEdgeSubBandOffset", UintegerValue(0));
     lteHelper->SetFfrAlgorithmAttribute("DlEdgeSubBandwidth", UintegerValue(6));
@@ -404,7 +416,7 @@ LteInterferenceStrictFrTestCase::DoRun()
     lteHelper->Attach(ueDevs2, enbDevs.Get(1));
 
     // Activate an EPS bearer
-    EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+    enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
     EpsBearer bearer(q);
     lteHelper->ActivateDataRadioBearer(ueDevs1, bearer);
     lteHelper->ActivateDataRadioBearer(ueDevs2, bearer);

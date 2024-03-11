@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -34,7 +35,7 @@ NS_LOG_COMPONENT_DEFINE("GtpuHeader");
 NS_OBJECT_ENSURE_REGISTERED(GtpuHeader);
 
 TypeId
-GtpuHeader::GetTypeId()
+GtpuHeader::GetTypeId(void)
 {
     static TypeId tid = TypeId("ns3::GtpuHeader")
                             .SetParent<Header>()
@@ -63,13 +64,13 @@ GtpuHeader::~GtpuHeader()
 }
 
 TypeId
-GtpuHeader::GetInstanceTypeId() const
+GtpuHeader::GetInstanceTypeId(void) const
 {
     return GetTypeId();
 }
 
 uint32_t
-GtpuHeader::GetSerializedSize() const
+GtpuHeader::GetSerializedSize(void) const
 {
     return 12;
 }
@@ -270,12 +271,16 @@ GtpuHeader::SetVersion(uint8_t m_version)
 bool
 GtpuHeader::operator==(const GtpuHeader& b) const
 {
-    return m_version == b.m_version && m_protocolType == b.m_protocolType &&
-           m_extensionHeaderFlag == b.m_extensionHeaderFlag &&
-           m_sequenceNumberFlag == b.m_sequenceNumberFlag &&
-           m_nPduNumberFlag == b.m_nPduNumberFlag && m_messageType == b.m_messageType &&
-           m_length == b.m_length && m_teid == b.m_teid && m_sequenceNumber == b.m_sequenceNumber &&
-           m_nPduNumber == b.m_nPduNumber && m_nextExtensionType == b.m_nextExtensionType;
+    if (m_version == b.m_version && m_protocolType == b.m_protocolType &&
+        m_extensionHeaderFlag == b.m_extensionHeaderFlag &&
+        m_sequenceNumberFlag == b.m_sequenceNumberFlag && m_nPduNumberFlag == b.m_nPduNumberFlag &&
+        m_messageType == b.m_messageType && m_length == b.m_length && m_teid == b.m_teid &&
+        m_sequenceNumber == b.m_sequenceNumber && m_nPduNumber == b.m_nPduNumber &&
+        m_nextExtensionType == b.m_nextExtensionType)
+    {
+        return true;
+    }
+    return false;
 }
 
 } // namespace ns3

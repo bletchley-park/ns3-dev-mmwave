@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 CTTC
  *
@@ -39,8 +40,8 @@ class RlcTag : public Tag
      * \brief Get the type ID.
      * \return the object TypeId
      */
-    static TypeId GetTypeId();
-    TypeId GetInstanceTypeId() const override;
+    static TypeId GetTypeId(void);
+    virtual TypeId GetInstanceTypeId(void) const;
 
     /**
      * Create an empty RLC tag
@@ -52,16 +53,16 @@ class RlcTag : public Tag
      */
     RlcTag(Time senderTimestamp);
 
-    void Serialize(TagBuffer i) const override;
-    void Deserialize(TagBuffer i) override;
-    uint32_t GetSerializedSize() const override;
-    void Print(std::ostream& os) const override;
+    virtual void Serialize(TagBuffer i) const;
+    virtual void Deserialize(TagBuffer i);
+    virtual uint32_t GetSerializedSize() const;
+    virtual void Print(std::ostream& os) const;
 
     /**
      * Get the instant when the RLC delivers the PDU to the MAC SAP provider
      * @return the sender timestamp
      */
-    Time GetSenderTimestamp() const
+    Time GetSenderTimestamp(void) const
     {
         return m_senderTimestamp;
     }

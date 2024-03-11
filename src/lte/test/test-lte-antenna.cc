@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011, 2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -41,6 +42,7 @@ NS_LOG_COMPONENT_DEFINE("LteAntennaTest");
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Tests that the propagation model and the antenna parameters are
  * generate the correct values. Different test cases are created by specifying different
@@ -77,10 +79,10 @@ class LteEnbAntennaTestCase : public TestCase
                           double y,
                           double antennaGainDb);
     LteEnbAntennaTestCase();
-    ~LteEnbAntennaTestCase() override;
+    virtual ~LteEnbAntennaTestCase();
 
   private:
-    void DoRun() override;
+    virtual void DoRun(void);
 
     double m_orientationDegrees; ///< antenna orientation in degrees
     double m_beamwidthDegrees;   ///< antenna beamwidth in degrees
@@ -120,7 +122,7 @@ LteEnbAntennaTestCase::~LteEnbAntennaTestCase()
 }
 
 void
-LteEnbAntennaTestCase::DoRun()
+LteEnbAntennaTestCase::DoRun(void)
 {
     Config::Reset();
     Config::SetDefault("ns3::LteSpectrumPhy::CtrlErrorModelEnabled", BooleanValue(false));
@@ -174,7 +176,7 @@ LteEnbAntennaTestCase::DoRun()
     lteHelper->Attach(ueDevs, enbDevs.Get(0));
 
     // Activate the default EPS bearer
-    EpsBearer::Qci q = EpsBearer::NGBR_VIDEO_TCP_DEFAULT;
+    enum EpsBearer::Qci q = EpsBearer::NGBR_VIDEO_TCP_DEFAULT;
     EpsBearer bearer(q);
     lteHelper->ActivateDataRadioBearer(ueDevs, bearer);
 
@@ -263,6 +265,7 @@ LteEnbAntennaTestCase::DoRun()
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Lte Enb Antenna Test Suite
  */
@@ -308,8 +311,4 @@ LteAntennaTestSuite::LteAntennaTestSuite()
     AddTestCase(new LteEnbAntennaTestCase(-120.0, 120.0, 1, -0.1, -12.754), TestCase::QUICK);
 }
 
-/**
- * \ingroup lte-test
- * Static variable for test initialization
- */
-static LteAntennaTestSuite g_lteAntennaTestSuite;
+static LteAntennaTestSuite lteAntennaTestSuite;

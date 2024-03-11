@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011, 2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -19,16 +20,15 @@
 
 #include "lte-test-deactivate-bearer.h"
 
+#include "ns3/applications-module.h"
 #include "ns3/double.h"
 #include "ns3/internet-module.h"
 #include "ns3/ipv4-global-routing-helper.h"
 #include "ns3/network-module.h"
-#include "ns3/packet-sink-helper.h"
 #include "ns3/point-to-point-epc-helper.h"
 #include "ns3/point-to-point-helper.h"
 #include "ns3/radio-bearer-stats-calculator.h"
 #include "ns3/string.h"
-#include "ns3/udp-client-server-helper.h"
 #include <ns3/boolean.h>
 #include <ns3/constant-position-mobility-model.h>
 #include <ns3/enum.h>
@@ -98,18 +98,14 @@ LenaTestBearerDeactivateSuite::LenaTestBearerDeactivateSuite()
         TestCase::QUICK);
 }
 
-/**
- * \ingroup lte-test
- * Static variable for test initialization
- */
-static LenaTestBearerDeactivateSuite lenaTestBearerDeactivateSuite;
+static LenaTestBearerDeactivateSuite lenaTestBearerDeactivateSuite; ///< the test suite
 
 std::string
 LenaDeactivateBearerTestCase::BuildNameString(uint16_t nUser, std::vector<uint16_t> dist)
 {
     std::ostringstream oss;
     oss << "distances (m) = [ ";
-    for (auto it = dist.begin(); it != dist.end(); ++it)
+    for (std::vector<uint16_t>::iterator it = dist.begin(); it != dist.end(); ++it)
     {
         oss << *it << " ";
     }
@@ -138,7 +134,7 @@ LenaDeactivateBearerTestCase::~LenaDeactivateBearerTestCase()
 }
 
 void
-LenaDeactivateBearerTestCase::DoRun()
+LenaDeactivateBearerTestCase::DoRun(void)
 {
     uint32_t originalSeed = RngSeedManager::GetSeed();
     uint32_t originalRun = RngSeedManager::GetRun();
@@ -193,9 +189,8 @@ LenaDeactivateBearerTestCase::DoRun()
     // LogComponentEnable ("LteHelper", logLevel);
     // LogComponentEnable ("EpcHelper", logLevel);
     // LogComponentEnable ("EpcEnbApplication", logLevel);
-    // LogComponentEnable ("EpcMmeApplication", logLevel);
-    // LogComponentEnable ("EpcPgwApplication", logLevel);
-    // LogComponentEnable ("EpcSgwApplication", logLevel);
+    // LogComponentEnable ("EpcSgwPgwApplication", logLevel);
+    // LogComponentEnable ("EpcMme", logLevel);
     // LogComponentEnable ("LteEnbRrc", logLevel);
 
     lteHelper->SetAttribute("PathlossModel", StringValue("ns3::FriisSpectrumPropagationLossModel"));
@@ -272,7 +267,7 @@ LenaDeactivateBearerTestCase::DoRun()
         qos.mbrDl = qos.gbrDl;
         qos.mbrUl = qos.gbrUl;
 
-        EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+        enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
         EpsBearer bearer(q, qos);
         bearer.arp.priorityLevel = 15 - (u + 1);
         bearer.arp.preemptionCapability = true;

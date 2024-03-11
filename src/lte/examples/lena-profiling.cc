@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -27,7 +28,7 @@
 #include <iomanip>
 #include <string>
 #include <vector>
-// #include "ns3/gtk-config-store.h"
+//#include "ns3/gtk-config-store.h"
 
 using namespace ns3;
 
@@ -38,7 +39,7 @@ main(int argc, char* argv[])
     uint32_t nUe = 1;
     uint32_t nFloors = 0;
     double simTime = 1.0;
-    CommandLine cmd(__FILE__);
+    CommandLine cmd;
 
     cmd.AddValue("nEnb", "Number of eNodeBs per floor", nEnbPerFloor);
     cmd.AddValue("nUe", "Number of UEs", nUe);
@@ -184,7 +185,7 @@ main(int argc, char* argv[])
         NetDeviceContainer ueDev = lteHelper->InstallUeDevice(ueNodes.at(i));
         ueDevs.push_back(ueDev);
         lteHelper->Attach(ueDev, enbDevs.Get(i));
-        EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+        enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
         EpsBearer bearer(q);
         lteHelper->ActivateDataRadioBearer(ueDev, bearer);
     }

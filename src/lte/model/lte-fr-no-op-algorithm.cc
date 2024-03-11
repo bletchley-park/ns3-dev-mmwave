@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2014 Piotr Gawlowicz
  *
@@ -30,8 +31,8 @@ NS_LOG_COMPONENT_DEFINE("LteFrNoOpAlgorithm");
 NS_OBJECT_ENSURE_REGISTERED(LteFrNoOpAlgorithm);
 
 LteFrNoOpAlgorithm::LteFrNoOpAlgorithm()
-    : m_ffrSapUser(nullptr),
-      m_ffrRrcSapUser(nullptr)
+    : m_ffrSapUser(0),
+      m_ffrRrcSapUser(0)
 {
     NS_LOG_FUNCTION(this);
     m_ffrSapProvider = new MemberLteFfrSapProvider<LteFrNoOpAlgorithm>(this);
@@ -137,7 +138,7 @@ LteFrNoOpAlgorithm::DoIsUlRbgAvailableForUe(int i, uint16_t rnti)
 
 void
 LteFrNoOpAlgorithm::DoReportDlCqiInfo(
-    const FfMacSchedSapProvider::SchedDlCqiInfoReqParameters& params)
+    const struct FfMacSchedSapProvider::SchedDlCqiInfoReqParameters& params)
 {
     NS_LOG_FUNCTION(this);
     NS_LOG_WARN("Method should not be called, because it is empty");
@@ -145,7 +146,7 @@ LteFrNoOpAlgorithm::DoReportDlCqiInfo(
 
 void
 LteFrNoOpAlgorithm::DoReportUlCqiInfo(
-    const FfMacSchedSapProvider::SchedUlCqiInfoReqParameters& params)
+    const struct FfMacSchedSapProvider::SchedUlCqiInfoReqParameters& params)
 {
     NS_LOG_FUNCTION(this);
     NS_LOG_WARN("Method should not be called, because it is empty");
@@ -166,7 +167,7 @@ LteFrNoOpAlgorithm::DoGetTpc(uint16_t rnti)
               // Table 5.1.1.1-2
 }
 
-uint16_t
+uint8_t
 LteFrNoOpAlgorithm::DoGetMinContinuousUlBandwidth()
 {
     NS_LOG_FUNCTION(this);

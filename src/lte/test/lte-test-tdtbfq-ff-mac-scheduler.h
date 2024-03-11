@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -29,6 +30,7 @@ using namespace ns3;
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief This system test program creates different test cases with a single eNB and
  * several UEs, all having the same Radio Bearer specification. In each test
@@ -59,17 +61,17 @@ class LenaTdTbfqFfMacSchedulerTestCase1 : public TestCase
                                       uint16_t packetSize,
                                       uint16_t interval,
                                       bool errorModelEnabled);
-    ~LenaTdTbfqFfMacSchedulerTestCase1() override;
+    virtual ~LenaTdTbfqFfMacSchedulerTestCase1();
 
   private:
     /**
      * Builds the test name string based on provided parameter values
      * \param nUser the number of UE nodes
-     * \param dist the distance between UE nodes and eNodeB
+     * \param dist the distnace between UE nodes and eNodeB
      * \returns the name string
      */
     static std::string BuildNameString(uint16_t nUser, double dist);
-    void DoRun() override;
+    virtual void DoRun(void);
     uint16_t m_nUser;         ///< number of UE nodes
     double m_dist;            ///< the distance between nodes
     uint16_t m_packetSize;    ///< the packet size in bytes
@@ -81,6 +83,7 @@ class LenaTdTbfqFfMacSchedulerTestCase1 : public TestCase
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Lena TdTbfq Ff Mac Scheduler Test Case 2
  */
@@ -101,17 +104,17 @@ class LenaTdTbfqFfMacSchedulerTestCase2 : public TestCase
                                       std::vector<uint16_t> packetSize,
                                       uint16_t interval,
                                       bool errorModelEnabled);
-    ~LenaTdTbfqFfMacSchedulerTestCase2() override;
+    virtual ~LenaTdTbfqFfMacSchedulerTestCase2();
 
   private:
     /**
      * Builds the test name string based on provided parameter values
      * \param nUser the number of UE nodes
-     * \param dist the distance between nodes
+     * \param dist the distnace between nodes
      * \returns the name string
      */
     static std::string BuildNameString(uint16_t nUser, std::vector<double> dist);
-    void DoRun() override;
+    virtual void DoRun(void);
     uint16_t m_nUser;                       ///< number of UE nodes
     std::vector<double> m_dist;             ///< the distance between nodes
     std::vector<uint16_t> m_packetSize;     ///< the packet size in bytes
@@ -122,6 +125,7 @@ class LenaTdTbfqFfMacSchedulerTestCase2 : public TestCase
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Test suite for TdTbfqFfMacScheduler test.
  */

@@ -1,3 +1,4 @@
+/* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2017 Jadavpur University, India
  *
@@ -18,6 +19,7 @@
  */
 
 #include "ns3/applications-module.h"
+#include "ns3/config-store.h"
 #include "ns3/core-module.h"
 #include "ns3/epc-helper.h"
 #include "ns3/internet-module.h"
@@ -41,7 +43,7 @@ NS_LOG_COMPONENT_DEFINE("EpcFirstExampleForIpv6");
 int
 main(int argc, char* argv[])
 {
-    CommandLine cmd(__FILE__);
+    CommandLine cmd;
     cmd.Parse(argc, argv);
 
     Ptr<LteHelper> lteHelper = CreateObject<LteHelper>();

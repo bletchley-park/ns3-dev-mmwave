@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2014 Piotr Gawlowicz
  *
@@ -386,10 +387,6 @@ LteDownlinkPowerControlTestSuite::CalculateRbTxPower(double txPower, uint8_t pa)
     return rbTxpower;
 }
 
-/**
- * \ingroup lte-test
- * Static variable for test initialization
- */
 static LteDownlinkPowerControlTestSuite lteDownlinkPowerControlTestSuite;
 
 /**
@@ -399,7 +396,7 @@ static LteDownlinkPowerControlTestSuite lteDownlinkPowerControlTestSuite;
 LteDownlinkPowerControlSpectrumValueTestCase::LteDownlinkPowerControlSpectrumValueTestCase(
     std::string name,
     uint16_t earfcn,
-    uint16_t bw,
+    uint8_t bw,
     double powerTx,
     std::map<int, double> powerTxMap,
     std::vector<int> activeRbs,
@@ -420,7 +417,7 @@ LteDownlinkPowerControlSpectrumValueTestCase::~LteDownlinkPowerControlSpectrumVa
 }
 
 void
-LteDownlinkPowerControlSpectrumValueTestCase::DoRun()
+LteDownlinkPowerControlSpectrumValueTestCase::DoRun(void)
 {
     NS_LOG_INFO("Creating LteDownlinkPowerControlSpectrumValueTestCase");
     NS_TEST_ASSERT_MSG_EQ(m_actual->GetSpectrumModelUid(),
@@ -448,7 +445,7 @@ LteDownlinkPowerControlTestCase::~LteDownlinkPowerControlTestCase()
 }
 
 void
-LteDownlinkPowerControlTestCase::DoRun()
+LteDownlinkPowerControlTestCase::DoRun(void)
 {
     Config::Reset();
     Config::SetDefault("ns3::LteHelper::UseIdealRrc", BooleanValue(false));
@@ -489,7 +486,7 @@ LteDownlinkPowerControlTestCase::DoRun()
     simpleFfrAlgorithm->SetPdschConfigDedicated(m_pdschConfigDedicated);
 
     // Activate the default EPS bearer
-    EpsBearer::Qci q = EpsBearer::NGBR_VIDEO_TCP_DEFAULT;
+    enum EpsBearer::Qci q = EpsBearer::NGBR_VIDEO_TCP_DEFAULT;
     EpsBearer bearer(q);
     lteHelper->ActivateDataRadioBearer(ueDevs, bearer);
 
@@ -616,7 +613,7 @@ LteDownlinkPowerControlRrcConnectionReconfigurationTestCase::ChangePdschConfigDe
 }
 
 void
-LteDownlinkPowerControlRrcConnectionReconfigurationTestCase::DoRun()
+LteDownlinkPowerControlRrcConnectionReconfigurationTestCase::DoRun(void)
 {
     Config::Reset();
     Config::SetDefault("ns3::LteHelper::UseIdealRrc", BooleanValue(m_useIdealRrc));
@@ -659,7 +656,7 @@ LteDownlinkPowerControlRrcConnectionReconfigurationTestCase::DoRun()
     simpleFfrAlgorithm->SetPdschConfigDedicated(pdschConfigDedicated);
 
     // Activate the default EPS bearer
-    EpsBearer::Qci q = EpsBearer::NGBR_VIDEO_TCP_DEFAULT;
+    enum EpsBearer::Qci q = EpsBearer::NGBR_VIDEO_TCP_DEFAULT;
     EpsBearer bearer(q);
     lteHelper->ActivateDataRadioBearer(ueDevs, bearer);
 

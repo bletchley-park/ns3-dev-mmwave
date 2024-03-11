@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -21,16 +22,13 @@
 #ifndef LTE_UE_MAC_ENTITY_H
 #define LTE_UE_MAC_ENTITY_H
 
-#include "ff-mac-common.h"
-#include "lte-mac-sap.h"
-#include "lte-ue-cmac-sap.h"
-#include "lte-ue-phy-sap.h"
-
 #include <ns3/event-id.h>
+#include <ns3/lte-mac-sap.h>
+#include <ns3/lte-ue-cmac-sap.h>
+#include <ns3/lte-ue-phy-sap.h>
 #include <ns3/nstime.h>
 #include <ns3/packet-burst.h>
 #include <ns3/packet.h>
-#include <ns3/traced-callback.h>
 
 #include <map>
 #include <vector>
@@ -54,32 +52,17 @@ class LteUeMac : public Object
      * \brief Get the type ID.
      * \return the object TypeId
      */
-    static TypeId GetTypeId();
+    static TypeId GetTypeId(void);
 
     LteUeMac();
-    ~LteUeMac() override;
-    void DoDispose() override;
-
-    /**
-     * \brief TracedCallback signature for RA response timeout events
-     * exporting IMSI, contention flag, preamble transmission counter
-     * and the max limit of preamble transmission
-     *
-     * \param [in] imsi
-     * \param [in] contention
-     * \param [in] preambleTxCounter
-     * \param [in] maxPreambleTxLimit
-     */
-    typedef void (*RaResponseTimeoutTracedCallback)(uint64_t imsi,
-                                                    bool contention,
-                                                    uint8_t preambleTxCounter,
-                                                    uint8_t maxPreambleTxLimit);
+    virtual ~LteUeMac();
+    virtual void DoDispose(void);
 
     /**
      * \brief Get the LTE MAC SAP provider
      * \return a pointer to the LTE MAC SAP provider
      */
-    LteMacSapProvider* GetLteMacSapProvider();
+    LteMacSapProvider* GetLteMacSapProvider(void);
     /**
      * \brief Set the LTE UE CMAC SAP user
      * \param s the LTE UE CMAC SAP User
@@ -89,7 +72,7 @@ class LteUeMac : public Object
      * \brief Get the LTE CMAC SAP provider
      * \return a pointer to the LTE CMAC SAP provider
      */
-    LteUeCmacSapProvider* GetLteUeCmacSapProvider();
+    LteUeCmacSapProvider* GetLteUeCmacSapProvider(void);
 
     /**
      * \brief Set the component carried ID
@@ -185,21 +168,8 @@ class LteUeMac : public Object
      * \param lcId the LCID
      */
     void DoRemoveLc(uint8_t lcId);
-    /**
-     * \brief Reset function
-     */
+    /// Reset function
     void DoReset();
-    /**
-     * \brief Notify MAC about the successful RRC connection
-     * establishment.
-     */
-    void DoNotifyConnectionSuccessful();
-    /**
-     * Set IMSI
-     *
-     * \param imsi the IMSI of the UE
-     */
-    void DoSetImsi(uint64_t imsi);
 
     // forwarded from PHY SAP
     /**
@@ -216,7 +186,7 @@ class LteUeMac : public Object
     void DoReceiveLteControlMessage(Ptr<LteControlMessage> msg);
 
     // internal methods
-    /// Randomly select and send RA preamble function
+    /// Randomly sleect and send RA preamble function
     void RandomlySelectAndSendRaPreamble();
     /**
      * Send RA preamble function
@@ -239,9 +209,9 @@ class LteUeMac : public Object
      */
     void RaResponseTimeout(bool contention);
     /// Send report buffer status
-    void SendReportBufferStatus();
+    void SendReportBufferStatus(void);
     /// Refresh HARQ processes packet buffer function
-    void RefreshHarqProcessesPacketBuffer();
+    void RefreshHarqProcessesPacketBuffer(void);
 
     /// component carrier Id --> used to address sap
     uint8_t m_componentCarrierId;
@@ -278,7 +248,6 @@ class LteUeMac : public Object
     std::vector<uint8_t> m_miUlHarqProcessesPacketTimer; ///< timer for packet life in the buffer
 
     uint16_t m_rnti; ///< RNTI
-    uint16_t m_imsi; ///< IMSI
 
     bool m_rachConfigured;                                  ///< is RACH configured?
     LteUeCmacSapProvider::RachConfig m_rachConfig;          ///< RACH configuration
@@ -292,13 +261,6 @@ class LteUeMac : public Object
     uint32_t m_subframeNo;       ///< subframe number
     uint8_t m_raRnti;            ///< RA RNTI
     bool m_waitingForRaResponse; ///< waiting for RA response
-
-    /**
-     * \brief The `RaResponseTimeout` trace source. Fired RA response timeout.
-     * Exporting IMSI, contention flag, preamble transmission counter
-     * and the max limit of preamble transmission.
-     */
-    TracedCallback<uint64_t, bool, uint8_t, uint8_t> m_raResponseTimeoutTrace;
 };
 
 } // namespace ns3

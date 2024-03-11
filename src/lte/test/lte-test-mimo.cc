@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -81,10 +82,6 @@ LenaTestMimoSuite::LenaTestMimoSuite()
                 TestCase::QUICK);
 }
 
-/**
- * \ingroup lte-test
- * Static variable for test initialization
- */
 static LenaTestMimoSuite lenaTestMimoSuite;
 
 std::string
@@ -121,20 +118,12 @@ LenaMimoTestCase::~LenaMimoTestCase()
 }
 
 void
-LenaMimoTestCase::DoRun()
+LenaMimoTestCase::DoRun(void)
 {
     NS_LOG_FUNCTION(this << GetName());
     Config::SetDefault("ns3::LteSpectrumPhy::DataErrorModelEnabled", BooleanValue(false));
     Config::SetDefault("ns3::LteAmc::AmcModel", EnumValue(LteAmc::PiroEW2010));
     Config::SetDefault("ns3::LteHelper::UseIdealRrc", BooleanValue(m_useIdealRrc));
-    Config::SetDefault("ns3::MacStatsCalculator::DlOutputFilename",
-                       StringValue(CreateTempDirFilename("DlMacStats.txt")));
-    Config::SetDefault("ns3::MacStatsCalculator::UlOutputFilename",
-                       StringValue(CreateTempDirFilename("UlMacStats.txt")));
-    Config::SetDefault("ns3::RadioBearerStatsCalculator::DlRlcOutputFilename",
-                       StringValue(CreateTempDirFilename("DlRlcStats.txt")));
-    Config::SetDefault("ns3::RadioBearerStatsCalculator::UlRlcOutputFilename",
-                       StringValue(CreateTempDirFilename("UlRlcStats.txt")));
 
     // Disable Uplink Power Control
     Config::SetDefault("ns3::LteUePhy::EnableUplinkPowerControl", BooleanValue(false));
@@ -154,6 +143,10 @@ LenaMimoTestCase::DoRun()
     lteHelper->SetPathlossModelAttribute("ShadowSigmaOutdoor", DoubleValue(0.0));
     lteHelper->SetPathlossModelAttribute("ShadowSigmaIndoor", DoubleValue(0.0));
     lteHelper->SetPathlossModelAttribute("ShadowSigmaExtWalls", DoubleValue(0.0));
+
+    // set DL and UL bandwidth
+    lteHelper->SetEnbDeviceAttribute("DlBandwidth", UintegerValue(25));
+    lteHelper->SetEnbDeviceAttribute("UlBandwidth", UintegerValue(25));
 
     //   lteHelper->EnableLogComponents ();
 
@@ -183,7 +176,7 @@ LenaMimoTestCase::DoRun()
     lteHelper->Attach(ueDevs, enbDevs.Get(0));
 
     // Activate an EPS bearer
-    EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+    enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
     EpsBearer bearer(q);
     lteHelper->ActivateDataRadioBearer(ueDevs, bearer);
 
@@ -215,7 +208,7 @@ LenaMimoTestCase::DoRun()
     enbNetDev->GetCcMap()[0]->GetAttribute("FfMacScheduler", ptrval);
     Ptr<PfFfMacScheduler> pfsched;
     Ptr<RrFfMacScheduler> rrsched;
-    if (m_schedulerType == "ns3::RrFfMacScheduler")
+    if (m_schedulerType.compare("ns3::RrFfMacScheduler") == 0)
     {
         rrsched = ptrval.Get<RrFfMacScheduler>();
         if (!rrsched)
@@ -233,7 +226,7 @@ LenaMimoTestCase::DoRun()
                             rnti,
                             2);
     }
-    else if (m_schedulerType == "ns3::PfFfMacScheduler")
+    else if (m_schedulerType.compare("ns3::PfFfMacScheduler") == 0)
     {
         pfsched = ptrval.Get<PfFfMacScheduler>();
         if (!pfsched)
@@ -262,7 +255,7 @@ LenaMimoTestCase::DoRun()
 
     NS_LOG_INFO(m_schedulerType << " MIMO test:");
     double sampleTime = 0.199999; // at 0.2 RlcStats are reset
-    for (std::size_t j = 0; j < m_estThrDl.size(); j++)
+    for (uint8_t j = 0; j < m_estThrDl.size(); j++)
     {
         NS_LOG_INFO("\t test with user at distance " << m_dist << " time " << sampleTime);
         // get the imsi
@@ -277,7 +270,7 @@ LenaMimoTestCase::DoRun()
     Simulator::Destroy();
 
     NS_LOG_INFO("Check consistency");
-    for (std::size_t i = 0; i < m_estThrDl.size(); i++)
+    for (uint8_t i = 0; i < m_estThrDl.size(); i++)
     {
         NS_LOG_INFO("interval " << i + 1 << ": bytes rxed " << (double)m_dlDataRxed.at(i) << " ref "
                                 << m_estThrDl.at(i));

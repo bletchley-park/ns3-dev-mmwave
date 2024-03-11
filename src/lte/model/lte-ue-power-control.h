@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2014 Piotr Gawlowicz
  *
@@ -55,16 +56,16 @@ class LteUePowerControl : public Object
 {
   public:
     LteUePowerControl();
-    ~LteUePowerControl() override;
+    virtual ~LteUePowerControl();
 
     /**
      * \brief Get the type ID.
      * \return the object TypeId
      */
-    static TypeId GetTypeId();
+    static TypeId GetTypeId(void);
     // inherited from Object
-    void DoInitialize() override;
-    void DoDispose() override;
+    virtual void DoInitialize(void);
+    virtual void DoDispose(void);
 
     /**
      * \brief Set PC maximum function

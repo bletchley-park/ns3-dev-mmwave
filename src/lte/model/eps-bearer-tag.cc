@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011,2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -29,7 +30,7 @@ namespace ns3
 NS_OBJECT_ENSURE_REGISTERED(EpsBearerTag);
 
 TypeId
-EpsBearerTag::GetTypeId()
+EpsBearerTag::GetTypeId(void)
 {
     static TypeId tid =
         TypeId("ns3::EpsBearerTag")
@@ -50,7 +51,7 @@ EpsBearerTag::GetTypeId()
 }
 
 TypeId
-EpsBearerTag::GetInstanceTypeId() const
+EpsBearerTag::GetInstanceTypeId(void) const
 {
     return GetTypeId();
 }
@@ -80,7 +81,7 @@ EpsBearerTag::SetBid(uint8_t bid)
 }
 
 uint32_t
-EpsBearerTag::GetSerializedSize() const
+EpsBearerTag::GetSerializedSize(void) const
 {
     return 3;
 }

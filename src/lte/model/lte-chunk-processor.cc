@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2010 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -50,7 +51,7 @@ void
 LteChunkProcessor::Start()
 {
     NS_LOG_FUNCTION(this);
-    m_sumValues = nullptr;
+    m_sumValues = 0;
     m_totDuration = MicroSeconds(0);
 }
 
@@ -72,8 +73,8 @@ LteChunkProcessor::End()
     NS_LOG_FUNCTION(this);
     if (m_totDuration.GetSeconds() > 0)
     {
-        for (auto it = m_lteChunkProcessorCallbacks.begin();
-             it != m_lteChunkProcessorCallbacks.end();
+        std::vector<LteChunkProcessorCallback>::iterator it;
+        for (it = m_lteChunkProcessorCallbacks.begin(); it != m_lteChunkProcessorCallbacks.end();
              it++)
         {
             (*it)((*m_sumValues) / m_totDuration.GetSeconds());

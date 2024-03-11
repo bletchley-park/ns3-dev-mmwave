@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2015 Danilo Abrignani
  *
@@ -19,14 +20,13 @@
 
 #include "component-carrier-enb.h"
 
-#include "ff-mac-scheduler.h"
-#include "lte-enb-mac.h"
-#include "lte-enb-phy.h"
-#include "lte-ffr-algorithm.h"
-
 #include <ns3/abort.h>
 #include <ns3/boolean.h>
+#include <ns3/ff-mac-scheduler.h>
 #include <ns3/log.h>
+#include <ns3/lte-enb-mac.h>
+#include <ns3/lte-enb-phy.h>
+#include <ns3/lte-ffr-algorithm.h>
 #include <ns3/pointer.h>
 #include <ns3/simulator.h>
 #include <ns3/uinteger.h>
@@ -38,7 +38,7 @@ NS_LOG_COMPONENT_DEFINE("ComponentCarrierEnb");
 NS_OBJECT_ENSURE_REGISTERED(ComponentCarrierEnb);
 
 TypeId
-ComponentCarrierEnb::GetTypeId()
+ComponentCarrierEnb::GetTypeId(void)
 {
     static TypeId tid = TypeId("ns3::ComponentCarrierEnb")
                             .SetParent<ComponentCarrier>()
@@ -71,7 +71,7 @@ ComponentCarrierEnb::ComponentCarrierEnb()
     NS_LOG_FUNCTION(this);
 }
 
-ComponentCarrierEnb::~ComponentCarrierEnb()
+ComponentCarrierEnb::~ComponentCarrierEnb(void)
 {
     NS_LOG_FUNCTION(this);
 }
@@ -83,35 +83,42 @@ ComponentCarrierEnb::DoDispose()
     if (m_phy)
     {
         m_phy->Dispose();
-        m_phy = nullptr;
+        m_phy = 0;
     }
     if (m_mac)
     {
         m_mac->Dispose();
-        m_mac = nullptr;
+        m_mac = 0;
     }
     if (m_scheduler)
     {
         m_scheduler->Dispose();
-        m_scheduler = nullptr;
+        m_scheduler = 0;
     }
     if (m_ffrAlgorithm)
     {
         m_ffrAlgorithm->Dispose();
-        m_ffrAlgorithm = nullptr;
+        m_ffrAlgorithm = 0;
     }
 
     Object::DoDispose();
 }
 
 void
-ComponentCarrierEnb::DoInitialize()
+ComponentCarrierEnb::DoInitialize(void)
 {
     NS_LOG_FUNCTION(this);
+    m_isConstructed = true;
     m_phy->Initialize();
     m_mac->Initialize();
     m_ffrAlgorithm->Initialize();
     m_scheduler->Initialize();
+}
+
+uint16_t
+ComponentCarrierEnb::GetCellId()
+{
+    return m_cellId;
 }
 
 Ptr<LteEnbPhy>
@@ -119,6 +126,13 @@ ComponentCarrierEnb::GetPhy()
 {
     NS_LOG_FUNCTION(this);
     return m_phy;
+}
+
+void
+ComponentCarrierEnb::SetCellId(uint16_t cellId)
+{
+    NS_LOG_FUNCTION(this << cellId);
+    m_cellId = cellId;
 }
 
 void

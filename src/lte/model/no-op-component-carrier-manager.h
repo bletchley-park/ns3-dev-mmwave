@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2015 Danilo Abrignani
  * Copyright (c) 2016 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
@@ -22,9 +23,9 @@
 #ifndef NO_OP_COMPONENT_CARRIER_MANAGER_H
 #define NO_OP_COMPONENT_CARRIER_MANAGER_H
 
-#include "lte-ccm-rrc-sap.h"
-#include "lte-enb-component-carrier-manager.h"
-#include "lte-rrc-sap.h"
+#include <ns3/lte-ccm-rrc-sap.h>
+#include <ns3/lte-enb-component-carrier-manager.h>
+#include <ns3/lte-rrc-sap.h>
 
 #include <map>
 
@@ -54,7 +55,7 @@ class NoOpComponentCarrierManager : public LteEnbComponentCarrierManager
 
   public:
     NoOpComponentCarrierManager();
-    ~NoOpComponentCarrierManager() override;
+    virtual ~NoOpComponentCarrierManager();
     /**
      * \brief Get the type ID.
      * \return the object TypeId
@@ -63,9 +64,9 @@ class NoOpComponentCarrierManager : public LteEnbComponentCarrierManager
 
   protected:
     // Inherited methods
-    void DoInitialize() override;
-    void DoDispose() override;
-    void DoReportUeMeas(uint16_t rnti, LteRrcSap::MeasResults measResults) override;
+    virtual void DoInitialize();
+    virtual void DoDispose();
+    virtual void DoReportUeMeas(uint16_t rnti, LteRrcSap::MeasResults measResults);
     /**
      * \brief Add UE.
      * \param rnti the RNTI
@@ -145,15 +146,8 @@ class NoOpComponentCarrierManager : public LteEnbComponentCarrierManager
      */
     virtual void DoUlReceiveMacCe(MacCeListElement_s bsr, uint8_t componentCarrierId);
     /**
-     * \brief Forward uplink SR to CCM, called by MAC through CCM SAP interface.
-     * \param rnti RNTI of the UE that requested SR
-     * \param componentCarrierId the component carrier ID that forwarded the SR
-     */
-    virtual void DoUlReceiveSr(uint16_t rnti, uint8_t componentCarrierId);
-    /**
      * \brief Function implements the function of the SAP interface of CCM instance which is used by
-     * MAC to notify the PRB occupancy reported by scheduler.
-     * \param prbOccupancy the PRB occupancy
+     * MAC to notify the PRB occupancy reported by scheduler. \param prbOccupancy the PRB occupancy
      * \param componentCarrierId the component carrier ID
      */
     virtual void DoNotifyPrbOccupancy(double prbOccupancy, uint8_t componentCarrierId);
@@ -164,14 +158,14 @@ class NoOpComponentCarrierManager : public LteEnbComponentCarrierManager
 
 }; // end of class NoOpComponentCarrierManager
 
-/**
+/*
  * \brief Component carrier manager implementation that splits traffic equally among carriers.
  */
 class RrComponentCarrierManager : public NoOpComponentCarrierManager
 {
   public:
     RrComponentCarrierManager();
-    ~RrComponentCarrierManager() override;
+    virtual ~RrComponentCarrierManager();
     /**
      * \brief Get the type ID.
      * \return the object TypeId
@@ -180,13 +174,10 @@ class RrComponentCarrierManager : public NoOpComponentCarrierManager
 
   protected:
     // Inherited methods
-    void DoReportBufferStatus(LteMacSapProvider::ReportBufferStatusParameters params) override;
-    void DoUlReceiveMacCe(MacCeListElement_s bsr, uint8_t componentCarrierId) override;
-    void DoUlReceiveSr(uint16_t rnti, uint8_t componentCarrierId) override;
+    virtual void DoReportBufferStatus(LteMacSapProvider::ReportBufferStatusParameters params);
+    virtual void DoUlReceiveMacCe(MacCeListElement_s bsr, uint8_t componentCarrierId);
 
-  private:
-    uint8_t m_lastCcIdForSr{0}; //!< Last CCID to which a SR was routed
-};                              // end of class RrComponentCarrierManager
+}; // end of class RrComponentCarrierManager
 
 } // end of namespace ns3
 

@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2014 Piotr Gawlowicz
  *
@@ -48,25 +49,25 @@ class LteSimpleSpectrumPhy : public SpectrumPhy
 {
   public:
     LteSimpleSpectrumPhy();
-    ~LteSimpleSpectrumPhy() override;
+    virtual ~LteSimpleSpectrumPhy();
 
     /**
      * \brief Get the type ID.
      * \return the object TypeId
      */
-    static TypeId GetTypeId();
+    static TypeId GetTypeId(void);
     // inherited from Object
-    void DoDispose() override;
+    virtual void DoDispose();
 
     // inherited from SpectrumPhy
-    void SetChannel(Ptr<SpectrumChannel> c) override;
-    void SetMobility(Ptr<MobilityModel> m) override;
-    void SetDevice(Ptr<NetDevice> d) override;
-    Ptr<MobilityModel> GetMobility() const override;
-    Ptr<NetDevice> GetDevice() const override;
-    Ptr<const SpectrumModel> GetRxSpectrumModel() const override;
-    Ptr<Object> GetAntenna() const override;
-    void StartRx(Ptr<SpectrumSignalParameters> params) override;
+    void SetChannel(Ptr<SpectrumChannel> c);
+    void SetMobility(Ptr<MobilityModel> m);
+    void SetDevice(Ptr<NetDevice> d);
+    Ptr<MobilityModel> GetMobility() const;
+    Ptr<NetDevice> GetDevice() const;
+    Ptr<const SpectrumModel> GetRxSpectrumModel() const;
+    Ptr<Object> GetAntenna() const;
+    void StartRx(Ptr<SpectrumSignalParameters> params);
 
     /**
      * \brief Set receive spectrum model.

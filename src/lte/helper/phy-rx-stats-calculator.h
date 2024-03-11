@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -22,8 +23,7 @@
 #ifndef PHY_RX_STATS_CALCULATOR_H_
 #define PHY_RX_STATS_CALCULATOR_H_
 
-#include "lte-stats-calculator.h"
-
+#include "ns3/lte-stats-calculator.h"
 #include "ns3/nstime.h"
 #include "ns3/uinteger.h"
 #include <ns3/lte-common.h>
@@ -60,14 +60,14 @@ class PhyRxStatsCalculator : public LteStatsCalculator
     /**
      * Destructor
      */
-    ~PhyRxStatsCalculator() override;
+    virtual ~PhyRxStatsCalculator();
 
     // Inherited from ns3::Object
     /**
-     * Register this type.
-     * \return The object TypeId.
+     *  Register this type.
+     *  \return The object TypeId.
      */
-    static TypeId GetTypeId();
+    static TypeId GetTypeId(void);
 
     /**
      * Set the name of the file where the UL Rx PHY statistics will be stored.
@@ -80,7 +80,7 @@ class PhyRxStatsCalculator : public LteStatsCalculator
      * Get the name of the file where the UL RX PHY statistics will be stored.
      * @return the name of the file where the UL RX PHY statistics will be stored
      */
-    std::string GetUlRxOutputFilename();
+    std::string GetUlRxOutputFilename(void);
 
     /**
      * Set the name of the file where the DL RX PHY statistics will be stored.
@@ -93,7 +93,7 @@ class PhyRxStatsCalculator : public LteStatsCalculator
      * Get the name of the file where the DL RX PHY statistics will be stored.
      * @return the name of the file where the DL RX PHY statistics will be stored
      */
-    std::string GetDlRxOutputFilename();
+    std::string GetDlRxOutputFilename(void);
 
     /**
      * Notifies the stats calculator that an downlink reception has occurred.
@@ -145,16 +145,6 @@ class PhyRxStatsCalculator : public LteStatsCalculator
      * files have not been opened yet
      */
     bool m_ulRxFirstWrite;
-
-    /**
-     * DL RX PHY output trace file
-     */
-    std::ofstream m_dlRxOutFile;
-
-    /**
-     * UL RX PHY output trace file
-     */
-    std::ofstream m_ulRxOutFile;
 };
 
 } // namespace ns3

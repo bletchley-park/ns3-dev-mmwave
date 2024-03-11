@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2014 Piotr Gawlowicz
  *
@@ -70,7 +71,7 @@ LteUePowerControl::DoDispose()
 }
 
 TypeId
-LteUePowerControl::GetTypeId()
+LteUePowerControl::GetTypeId(void)
 {
     static TypeId tid =
         TypeId("ns3::LteUePowerControl")

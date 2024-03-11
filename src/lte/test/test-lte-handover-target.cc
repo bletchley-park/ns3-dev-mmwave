@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2013 Budiarto Herman
  *
@@ -49,6 +50,7 @@ NS_LOG_COMPONENT_DEFINE("LteHandoverTargetTest");
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Testing a handover algorithm, verifying that it selects the right
  *        target cell when more than one options available.
@@ -89,7 +91,7 @@ class LteHandoverTargetTestCase : public TestCase
                               uint16_t targetCellId,
                               std::string handoverAlgorithmType);
 
-    ~LteHandoverTargetTestCase() override;
+    virtual ~LteHandoverTargetTestCase();
 
     /**
      * \brief Triggers when an eNodeB starts a handover and then verifies that
@@ -121,13 +123,13 @@ class LteHandoverTargetTestCase : public TestCase
      * \brief Run a simulation of a micro-cell network using the parameters
      *        provided to the constructor function.
      */
-    void DoRun() override;
+    virtual void DoRun();
 
     /**
      * \brief Called at the end of simulation and verifies that a handover has
      *        occurred in the simulation.
      */
-    void DoTeardown() override;
+    virtual void DoTeardown();
 
     // simulation parameters
     Vector m_uePosition;                 ///< UE positions
@@ -156,7 +158,7 @@ LteHandoverTargetTestCase::LteHandoverTargetTestCase(std::string name,
       m_sourceCellId(sourceCellId),
       m_targetCellId(targetCellId),
       m_handoverAlgorithmType(handoverAlgorithmType),
-      m_sourceEnbDev(nullptr),
+      m_sourceEnbDev(0),
       m_hasHandoverOccurred(false)
 {
     NS_LOG_INFO(this << " name=" << name);
@@ -448,8 +450,4 @@ LteHandoverTargetTestSuite::LteHandoverTargetTestSuite()
 
 } // end of LteHandoverTargetTestSuite ()
 
-/**
- * \ingroup lte-test
- * Static variable for test initialization
- */
 static LteHandoverTargetTestSuite g_lteHandoverTargetTestSuiteInstance;

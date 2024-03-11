@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -32,7 +33,7 @@ NS_LOG_COMPONENT_DEFINE("LteSimpleNetDevice");
 NS_OBJECT_ENSURE_REGISTERED(LteSimpleNetDevice);
 
 TypeId
-LteSimpleNetDevice::GetTypeId()
+LteSimpleNetDevice::GetTypeId(void)
 {
     static TypeId tid = TypeId("ns3::LteSimpleNetDevice")
                             .SetParent<SimpleNetDevice>()
@@ -41,7 +42,7 @@ LteSimpleNetDevice::GetTypeId()
     return tid;
 }
 
-LteSimpleNetDevice::LteSimpleNetDevice()
+LteSimpleNetDevice::LteSimpleNetDevice(void)
 {
     NS_LOG_FUNCTION(this);
 }
@@ -52,20 +53,20 @@ LteSimpleNetDevice::LteSimpleNetDevice(Ptr<Node> node)
     SetNode(node);
 }
 
-LteSimpleNetDevice::~LteSimpleNetDevice()
+LteSimpleNetDevice::~LteSimpleNetDevice(void)
 {
     NS_LOG_FUNCTION(this);
 }
 
 void
-LteSimpleNetDevice::DoDispose()
+LteSimpleNetDevice::DoDispose(void)
 {
     NS_LOG_FUNCTION(this);
     SimpleNetDevice::DoDispose();
 }
 
 void
-LteSimpleNetDevice::DoInitialize()
+LteSimpleNetDevice::DoInitialize(void)
 {
     NS_LOG_FUNCTION(this);
 }

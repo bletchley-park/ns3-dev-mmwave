@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -16,7 +17,7 @@
  *
  * Author:  Biljana Bojovic<bbojovic@cttc.es>
  *          Dizhi Zhou <dizhi.zhou@gmail.com>
- *          Marco Miozzo <marco.miozzo@cttc.es>,
+ *       Marco Miozzo <marco.miozzo@cttc.es>,
  *          Nicola Baldo <nbaldo@cttc.es>
  *
  */
@@ -31,6 +32,7 @@ using namespace ns3;
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief This is a system test program. The test is based on a scenario with single eNB and several
  * UEs. The goal of the test is validating if the obtained throughput performance is consistent with
@@ -58,7 +60,7 @@ class LenaCqaFfMacSchedulerTestCase1 : public TestCase
                                    uint16_t packetSize,
                                    uint16_t interval,
                                    bool errorModelEnabled);
-    ~LenaCqaFfMacSchedulerTestCase1() override;
+    virtual ~LenaCqaFfMacSchedulerTestCase1();
 
   private:
     /**
@@ -69,7 +71,7 @@ class LenaCqaFfMacSchedulerTestCase1 : public TestCase
      * \returns name string
      */
     static std::string BuildNameString(uint16_t nUser, double dist);
-    void DoRun() override;
+    virtual void DoRun(void);
     uint16_t m_nUser;         ///< number of UE nodes
     double m_dist;            ///< distance between the nodes
     uint16_t m_packetSize;    ///< packet size in bytes
@@ -81,6 +83,7 @@ class LenaCqaFfMacSchedulerTestCase1 : public TestCase
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief This is a system test program. The test is based on a scenario with single eNB and several
  * UEs. The goal of the test is validating if the obtained throughput performance is consistent with
@@ -104,7 +107,7 @@ class LenaCqaFfMacSchedulerTestCase2 : public TestCase
                                    std::vector<uint16_t> packetSize,
                                    uint16_t interval,
                                    bool errorModelEnabled);
-    ~LenaCqaFfMacSchedulerTestCase2() override;
+    virtual ~LenaCqaFfMacSchedulerTestCase2();
 
   private:
     /**
@@ -115,7 +118,7 @@ class LenaCqaFfMacSchedulerTestCase2 : public TestCase
      * \returns name string
      */
     static std::string BuildNameString(uint16_t nUser, std::vector<double> dist);
-    void DoRun() override;
+    virtual void DoRun(void);
     uint16_t m_nUser;                    ///< number of UE nodes
     std::vector<double> m_dist;          ///< distance between the nodes
     std::vector<uint16_t> m_packetSize;  ///< packet size in bytes
@@ -126,6 +129,7 @@ class LenaCqaFfMacSchedulerTestCase2 : public TestCase
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief The test suite for testing CQA scheduler functionality
  */
