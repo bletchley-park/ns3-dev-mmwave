@@ -3260,7 +3260,7 @@ LteEnbRrc::GetTypeId(void)
             .AddAttribute("SecondaryCellHandoverMode",
                           "Select the secondary cell handover mode",
                           EnumValue(DYNAMIC_TTT),
-                          MakeEnumAccessor(&LteEnbRrc::m_handoverMode),
+                          MakeEnumAccessor<HandoverMode>(&LteEnbRrc::m_handoverMode),
                           MakeEnumChecker(FIXED_TTT,
                                           "FixedTtt",
                                           DYNAMIC_TTT,
