@@ -972,7 +972,7 @@ LteEnbNetDevice::BuildAndSendReportMessage(E2Termination::RicSubscriptionRequest
     Ptr<KpmIndicationMessage> cuUpMsg = BuildRicIndicationMessageCuUp(plmId);
 
     // Send CU-UP only if offline logging is disabled
-    if (!m_forceE2FileLogging && header != nullptr && cuUpMsg != nullptr)
+    if (!m_forceE2FileLogging && header && cuUpMsg)
     {
       NS_LOG_DEBUG ("Send LTE CU-UP");
       E2AP_PDU *pdu_cuup_ue = new E2AP_PDU; 
@@ -998,7 +998,7 @@ LteEnbNetDevice::BuildAndSendReportMessage(E2Termination::RicSubscriptionRequest
     Ptr<KpmIndicationMessage> cuCpMsg = BuildRicIndicationMessageCuCp(plmId);
 
     // Send CU-CP only if offline logging is disabled
-    if (!m_forceE2FileLogging && header != nullptr && cuCpMsg != nullptr)
+    if (!m_forceE2FileLogging && header && cuCpMsg)
     {
       NS_LOG_DEBUG ("Send LTE CU-CP");
       E2AP_PDU *pdu_cucp_ue = new E2AP_PDU; 
