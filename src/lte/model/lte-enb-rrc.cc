@@ -557,18 +557,18 @@ UeManager::SetupDataRadioBearer(EpsBearer bearer,
     }
     drbInfo->m_logicalChannelConfig.bucketSizeDurationMs = 1000;
 
-    EpcX2Sap::RlcSetupRequest req;
-    req.sourceCellId = m_rrc->GetCellId();
-    req.gtpTeid = drbInfo->m_gtpTeid;
-    req.lteRnti = m_rnti;
-    req.drbid = drbid;
+    // EpcX2Sap::RlcSetupRequest req;
+    drbInfo->m_rlcSetupRequest.sourceCellId = m_rrc->GetCellId();
+    drbInfo->m_rlcSetupRequest.gtpTeid = drbInfo->m_gtpTeid;
+    drbInfo->m_rlcSetupRequest.lteRnti = m_rnti;
+    drbInfo->m_rlcSetupRequest.drbid = drbid;
     // req.lcinfo = lcinfo;
-    req.logicalChannelConfig = drbInfo->m_logicalChannelConfig;
-    req.rlcConfig = drbInfo->m_rlcConfig;
-    req.targetCellId = 0;
-    req.mmWaveRnti = 0;
+    drbInfo->m_rlcSetupRequest.logicalChannelConfig = drbInfo->m_logicalChannelConfig;
+    drbInfo->m_rlcSetupRequest.rlcConfig = drbInfo->m_rlcConfig;
+    drbInfo->m_rlcSetupRequest.targetCellId = 0;
+    drbInfo->m_rlcSetupRequest.mmWaveRnti = 0;
     // mmWaveRnti & targetCellId will be set before sending the request
-    drbInfo->m_rlcSetupRequest = req;
+    // drbInfo->m_rlcSetupRequest = req;
 
     drbInfo->m_epsBearer = bearer;
     drbInfo->m_isMc = false;

@@ -534,8 +534,8 @@ MmWaveCodebookBeamforming::SetBeamformingVectorForDevice(Ptr<NetDevice> otherDev
 {
     NS_LOG_FUNCTION(this << otherDevice << otherAntenna);
 
-    uint32_t thisCbIdx;  // index of the codeword selected for this antenna
-    uint32_t otherCbIdx; // index of the codeword selected for the other antenna
+    uint32_t thisCbIdx = 0;  // index of the codeword selected for this antenna
+    uint32_t otherCbIdx = 0; // index of the codeword selected for the other antenna
 
     // check if the best beam pair has already been computed
     bool notFound = true;
