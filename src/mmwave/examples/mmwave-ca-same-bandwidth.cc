@@ -55,6 +55,7 @@ main(int argc, char* argv[])
     // 1. create MmWavePhyMacCommon object
     Ptr<MmWavePhyMacCommon> phyMacConfig0 = CreateObject<MmWavePhyMacCommon>();
     phyMacConfig0->SetBandwidth(totalBandwidth / 2);
+    phyMacConfig0->SetNumerology(MmWavePhyMacCommon::Numerology::NrNumerology2);
     phyMacConfig0->SetCentreFrequency(frequency0);
 
     // 2. create the MmWaveComponentCarrier object
@@ -69,6 +70,7 @@ main(int argc, char* argv[])
         // 1. create MmWavePhyMacCommon object
         Ptr<MmWavePhyMacCommon> phyMacConfig1 = CreateObject<MmWavePhyMacCommon>();
         phyMacConfig1->SetBandwidth(totalBandwidth / 2);
+        phyMacConfig1->SetNumerology(MmWavePhyMacCommon::Numerology::NrNumerology2);
         phyMacConfig1->SetCentreFrequency(frequency1);
         phyMacConfig1->SetCcId(1);
 

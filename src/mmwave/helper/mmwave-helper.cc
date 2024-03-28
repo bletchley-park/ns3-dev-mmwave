@@ -328,6 +328,7 @@ MmWaveHelper::DoInitialize()
         // For custom configurations use the method SetCcPhyParams
         Ptr<MmWavePhyMacCommon> phyMacConfig = CreateObject<MmWavePhyMacCommon>();
         Ptr<MmWaveComponentCarrier> cc = CreateObject<MmWaveComponentCarrier>();
+        phyMacConfig->SetNumerology(MmWavePhyMacCommon::Numerology::NrNumerology2);
         cc->SetConfigurationParameters(phyMacConfig);
         cc->SetAsPrimary(true);
 

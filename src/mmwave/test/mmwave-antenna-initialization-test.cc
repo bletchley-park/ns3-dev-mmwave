@@ -85,6 +85,7 @@ MmwaveThreeGppAntennaInitializationTestCase::DoRun(void)
     for (uint8_t i = 0; i < numCc; i++)
     {
         Ptr<MmWavePhyMacCommon> phyMacConfig = CreateObject<MmWavePhyMacCommon>();
+        phyMacConfig->SetNumerology(MmWavePhyMacCommon::Numerology::NrNumerology2);
         phyMacConfig->SetAttribute("CenterFreq", DoubleValue(freq[i]));
 
         Ptr<MmWaveComponentCarrier> cc = CreateObject<MmWaveComponentCarrier>();
