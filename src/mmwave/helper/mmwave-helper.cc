@@ -329,8 +329,8 @@ MmWaveHelper::DoInitialize()
         Ptr<MmWavePhyMacCommon> phyMacConfig = CreateObject<MmWavePhyMacCommon>();
         Ptr<MmWaveComponentCarrier> cc = CreateObject<MmWaveComponentCarrier>();
         phyMacConfig->SetNumerology(MmWavePhyMacCommon::Numerology::NrNumerology2);
-        phyMacConfig->SetBandwidth(60);
-        phyMacConfig->SetCentreFrequency(24);
+        phyMacConfig->SetBandwidth(200e6);
+        phyMacConfig->SetCentreFrequency(28e9);
         phyMacConfig->SetCcId(0);
         cc->SetConfigurationParameters(phyMacConfig);
         cc->SetAsPrimary(true);
