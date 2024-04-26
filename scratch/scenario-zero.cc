@@ -357,7 +357,7 @@ main (int argc, char *argv[])
 
   uint8_t nMmWaveEnbNodes = 4;
   uint8_t nLteEnbNodes = 1;
-  uint32_t ues = 100;
+  uint32_t ues = 3;
   uint8_t nUeNodes = ues * nMmWaveEnbNodes;
 
   NS_LOG_INFO (" Bandwidth " << bandwidth << " centerFrequency " << double (centerFrequency)
