@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2014 Piotr Gawlowicz
  *
@@ -18,6 +19,7 @@
  *
  */
 
+#include "ns3/config-store.h"
 #include "ns3/core-module.h"
 #include "ns3/lte-module.h"
 #include "ns3/mobility-module.h"
@@ -44,12 +46,12 @@ main(int argc, char* argv[])
     Config::SetDefault("ns3::LteUePowerControl::AccumulationEnabled", BooleanValue(true));
     Config::SetDefault("ns3::LteUePowerControl::Alpha", DoubleValue(1.0));
 
-    CommandLine cmd(__FILE__);
+    CommandLine cmd;
     cmd.Parse(argc, argv);
 
     Ptr<LteHelper> lteHelper = CreateObject<LteHelper>();
 
-    uint16_t bandwidth = 25;
+    uint8_t bandwidth = 25;
     double d1 = 0;
 
     // Create Nodes: eNodeB and UE
@@ -90,7 +92,7 @@ main(int argc, char* argv[])
     lteHelper->Attach(ueDevs, enbDevs.Get(0));
 
     // Activate a data radio bearer
-    EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+    enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
     EpsBearer bearer(q);
     lteHelper->ActivateDataRadioBearer(ueDevs, bearer);
 

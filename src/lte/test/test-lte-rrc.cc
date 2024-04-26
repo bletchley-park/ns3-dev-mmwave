@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -31,6 +32,7 @@ NS_LOG_COMPONENT_DEFINE("LteRrcTest");
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Test rrc connection establishment.
  */
@@ -44,10 +46,8 @@ class LteRrcConnectionEstablishmentTestCase : public TestCase
      * \param nBearers number of bearers to be setup in each connection
      * \param tConnBase connection time base value for all UEs in ms
      * \param tConnIncrPerUe additional connection time increment for each UE index (0...nUes-1) in
-     * ms
-     * \param delayDiscStart expected duration to perform connection establishment in ms
-     * \param errorExpected if true, test case will wait a bit longer to accommodate for
-     * transmission error
+     * ms \param delayDiscStart expected duration to perform connection establishment in ms \param
+     * errorExpected if true, test case will wait a bit longer to accommodate for transmission error
      * \param useIdealRrc If set to false, real RRC protocol model will be used
      * \param admitRrcConnectionRequest If set to false, eNb will not allow UE connections
      * \param description additional description of the test case
@@ -63,7 +63,7 @@ class LteRrcConnectionEstablishmentTestCase : public TestCase
                                           std::string description = "");
 
   protected:
-    void DoRun() override;
+    virtual void DoRun(void);
     uint32_t m_nUes; ///< number of UEs in the test
 
     /**
@@ -72,13 +72,11 @@ class LteRrcConnectionEstablishmentTestCase : public TestCase
      * \param nUes number of UEs in the test
      * \param nBearers number of bearers to be setup in each connection
      * \param tConnBase connection time base value for all UEs in ms
-     * \param tConnIncrPerUe additional connection time increment for each UE index (0...nUes-1)
-     * in ms
-     * \param delayDiscStart expected duration to perform connection establishment in ms
-     * \param useIdealRrc If set to false, real RRC protocol model will be used
-     * \param admitRrcConnectionRequest If set to false, eNb will not allow UE connections
-     * \param description additional description of the test case
-     * \returns the name string
+     * \param tConnIncrPerUe additional connection time increment for each UE index (0...nUes-1) in
+     * ms \param delayDiscStart expected duration to perform connection establishment in ms \param
+     * useIdealRrc If set to false, real RRC protocol model will be used \param
+     * admitRrcConnectionRequest If set to false, eNb will not allow UE connections \param
+     * description additional description of the test case \returns the name string
      */
     static std::string BuildNameString(uint32_t nUes,
                                        uint32_t nBearers,
@@ -123,13 +121,11 @@ class LteRrcConnectionEstablishmentTestCase : public TestCase
      * \param imsi the IMSI
      * \param cellId the cell ID
      * \param rnti the RNTI
-     * \param connEstFailCount the T300 timer expiration counter value
      */
     void ConnectionTimeoutCallback(std::string context,
                                    uint64_t imsi,
                                    uint16_t cellId,
-                                   uint16_t rnti,
-                                   uint8_t connEstFailCount);
+                                   uint16_t rnti);
 
     uint32_t m_nBearers;       ///< number of bearers to be setup in each connection
     uint32_t m_tConnBase;      ///< connection time base value for all UEs in ms
@@ -321,7 +317,7 @@ LteRrcConnectionEstablishmentTestCase::DoRun()
     // instead of lteHelper->Attach () and lteHelper->ActivateXxx
 
     // Set AdmitConnectionRequest attribute
-    for (auto it = enbDevs.Begin(); it != enbDevs.End(); ++it)
+    for (NetDeviceContainer::Iterator it = enbDevs.Begin(); it != enbDevs.End(); ++it)
     {
         Ptr<LteEnbRrc> enbRrc = (*it)->GetObject<LteEnbNetDevice>()->GetRrc();
         enbRrc->SetAttribute("AdmitRrcConnectionRequest",
@@ -330,7 +326,7 @@ LteRrcConnectionEstablishmentTestCase::DoRun()
 
     uint32_t i = 0;
     uint32_t tmax = 0;
-    for (auto it = ueDevs.Begin(); it != ueDevs.End(); ++it)
+    for (NetDeviceContainer::Iterator it = ueDevs.Begin(); it != ueDevs.End(); ++it)
     {
         Ptr<NetDevice> ueDevice = *it;
         Ptr<NetDevice> enbDevice = enbDevs.Get(0);
@@ -389,7 +385,7 @@ LteRrcConnectionEstablishmentTestCase::Connect(Ptr<NetDevice> ueDevice, Ptr<NetD
 
     for (uint32_t b = 0; b < m_nBearers; ++b)
     {
-        EpsBearer::Qci q = EpsBearer::NGBR_VIDEO_TCP_DEFAULT;
+        enum EpsBearer::Qci q = EpsBearer::NGBR_VIDEO_TCP_DEFAULT;
         EpsBearer bearer(q);
         m_lteHelper->ActivateDataRadioBearer(ueDevice, bearer);
     }
@@ -494,8 +490,8 @@ LteRrcConnectionEstablishmentTestCase::CheckConnected(Ptr<NetDevice> ueDevice,
                                   m_nBearers,
                                   "wrong num bearers at UE");
 
-            auto enbBearerIt = enbDataRadioBearerMapValue.Begin();
-            auto ueBearerIt = ueDataRadioBearerMapValue.Begin();
+            ObjectMapValue::Iterator enbBearerIt = enbDataRadioBearerMapValue.Begin();
+            ObjectMapValue::Iterator ueBearerIt = ueDataRadioBearerMapValue.Begin();
             while (enbBearerIt != enbDataRadioBearerMapValue.End() &&
                    ueBearerIt != ueDataRadioBearerMapValue.End())
             {
@@ -575,14 +571,14 @@ void
 LteRrcConnectionEstablishmentTestCase::ConnectionTimeoutCallback(std::string context,
                                                                  uint64_t imsi,
                                                                  uint16_t cellId,
-                                                                 uint16_t rnti,
-                                                                 uint8_t connEstFailCount)
+                                                                 uint16_t rnti)
 {
     NS_LOG_FUNCTION(this << imsi << cellId);
 }
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Lte Rrc Connection Establishment Error Test Case
  */
@@ -599,7 +595,7 @@ class LteRrcConnectionEstablishmentErrorTestCase : public LteRrcConnectionEstabl
     LteRrcConnectionEstablishmentErrorTestCase(Time jumpAwayTime, std::string description = "");
 
   protected:
-    void DoRun() override;
+    virtual void DoRun(void);
 
   private:
     /// Jump away function
@@ -679,7 +675,7 @@ LteRrcConnectionEstablishmentErrorTestCase::DoRun()
     // instead of lteHelper->Attach () and lteHelper->ActivateXxx
 
     // Set AdmitConnectionRequest attribute
-    for (auto it = enbDevs.Begin(); it != enbDevs.End(); ++it)
+    for (NetDeviceContainer::Iterator it = enbDevs.Begin(); it != enbDevs.End(); ++it)
     {
         Ptr<LteEnbRrc> enbRrc = (*it)->GetObject<LteEnbNetDevice>()->GetRrc();
         enbRrc->SetAttribute("AdmitRrcConnectionRequest",
@@ -688,7 +684,7 @@ LteRrcConnectionEstablishmentErrorTestCase::DoRun()
 
     uint32_t i = 0;
     uint32_t tmax = 0;
-    for (auto it = ueDevs.Begin(); it != ueDevs.End(); ++it)
+    for (NetDeviceContainer::Iterator it = ueDevs.Begin(); it != ueDevs.End(); ++it)
     {
         Ptr<NetDevice> ueDevice = *it;
         Ptr<NetDevice> enbDevice = enbDevs.Get(0);
@@ -708,6 +704,12 @@ LteRrcConnectionEstablishmentErrorTestCase::DoRun()
                             &LteRrcConnectionEstablishmentErrorTestCase::Connect,
                             this,
                             ueDevice,
+                            enbDevice);
+
+        Simulator::Schedule(MilliSeconds(tcc),
+                            &LteRrcConnectionEstablishmentErrorTestCase::CheckConnected,
+                            this,
+                            *it,
                             enbDevice);
 
         // disconnection not supported yet
@@ -763,6 +765,7 @@ LteRrcConnectionEstablishmentErrorTestCase::JumpBack()
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Lte Rrc Test Suite
  */
@@ -782,12 +785,15 @@ LteRrcTestSuite::LteRrcTestSuite()
 
     NS_LOG_FUNCTION(this);
 
-    for (auto useIdealRrc : {false, true})
+    for (uint32_t useIdealRrc = 0; useIdealRrc <= 1; ++useIdealRrc)
     {
-        // <----- all times in ms ----------------->
+        //         <----- all times in ms ----------------->
 
-        // nUes tConnBase delayDiscStart useIdealRrc nBearers tConnIncrPerUe errorExpected
-        // admitRrcConnectionRequest
+        //                                                     nUes      tConnBase delayDiscStart
+        //                                                     useIdealRrc
+        //                                                        nBearers       tConnIncrPerUe
+        //                                                        errorExpected
+        //                                                        admitRrcConnectionRequest
         AddTestCase(
             new LteRrcConnectionEstablishmentTestCase(1, 0, 0, 0, 1, false, useIdealRrc, true),
             TestCase::EXTENSIVE);
@@ -880,17 +886,13 @@ LteRrcTestSuite::LteRrcTestSuite()
                                                                "failure at RRC Connection Setup"),
                 TestCase::QUICK);
     /*
-     * With RLF implementation we now do support the Idle mode,
-     * thus it solve Bug 1762 Comment #25.
+     * The following test case is related to the Idle mode, which is an
+     * unsupported feature at the moment. See also Bug 1762 Comment #25.
      */
-    AddTestCase(
-        new LteRrcConnectionEstablishmentErrorTestCase(Seconds(0.030),
-                                                       "failure at RRC Connection Setup Complete"),
-        TestCase::QUICK);
+    // AddTestCase (new LteRrcConnectionEstablishmentErrorTestCase (
+    //                  Seconds (0.030),
+    //                  "failure at RRC Connection Setup Complete"),
+    //              TestCase::QUICK);
 }
 
-/**
- * \ingroup lte-test
- * Static variable for test initialization
- */
 static LteRrcTestSuite g_lteRrcTestSuiteInstance;

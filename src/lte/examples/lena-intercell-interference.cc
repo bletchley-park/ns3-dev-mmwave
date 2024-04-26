@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -43,7 +44,7 @@ main(int argc, char* argv[])
     uint32_t numUes = 1;
     double simTime = 1.0;
 
-    CommandLine cmd(__FILE__);
+    CommandLine cmd;
     cmd.AddValue("enbDist", "distance between the two eNBs", enbDist);
     cmd.AddValue("radius", "the radius of the disc where UEs are placed around an eNB", radius);
     cmd.AddValue("numUes", "how many UEs are attached to each eNB", numUes);
@@ -74,8 +75,7 @@ main(int argc, char* argv[])
 
     // Create Nodes: eNodeB and UE
     NodeContainer enbNodes;
-    NodeContainer ueNodes1;
-    NodeContainer ueNodes2;
+    NodeContainer ueNodes1, ueNodes2;
     enbNodes.Create(2);
     ueNodes1.Create(numUes);
     ueNodes2.Create(numUes);
@@ -126,7 +126,7 @@ main(int argc, char* argv[])
     lteHelper->Attach(ueDevs2, enbDevs.Get(1));
 
     // Activate a data radio bearer each UE
-    EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+    enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
     EpsBearer bearer(q);
     lteHelper->ActivateDataRadioBearer(ueDevs1, bearer);
     lteHelper->ActivateDataRadioBearer(ueDevs2, bearer);

@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -53,7 +54,7 @@ LteTestUePhy::DoDispose()
 }
 
 TypeId
-LteTestUePhy::GetTypeId()
+LteTestUePhy::GetTypeId(void)
 {
     static TypeId tid =
         TypeId("ns3::LteTestUePhy").SetParent<LtePhy>().AddConstructor<LteTestUePhy>();

@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright 2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -19,10 +20,9 @@
 
 #include "lte-hex-grid-enb-topology-helper.h"
 
-#include "epc-helper.h"
-
 #include <ns3/abort.h>
 #include <ns3/double.h>
+#include <ns3/epc-helper.h>
 #include <ns3/log.h>
 #include <ns3/pointer.h>
 
@@ -40,13 +40,13 @@ LteHexGridEnbTopologyHelper::LteHexGridEnbTopologyHelper()
     NS_LOG_FUNCTION(this);
 }
 
-LteHexGridEnbTopologyHelper::~LteHexGridEnbTopologyHelper()
+LteHexGridEnbTopologyHelper::~LteHexGridEnbTopologyHelper(void)
 {
     NS_LOG_FUNCTION(this);
 }
 
 TypeId
-LteHexGridEnbTopologyHelper::GetTypeId()
+LteHexGridEnbTopologyHelper::GetTypeId(void)
 {
     static TypeId tid =
         TypeId("ns3::LteHexGridEnbTopologyHelper")

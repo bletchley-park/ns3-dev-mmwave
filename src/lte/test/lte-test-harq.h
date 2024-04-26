@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -27,6 +28,7 @@ using namespace ns3;
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief This system test program creates different test cases with a single eNB and
  * several UEs, all having the same Radio Bearer specification. In each test
@@ -47,10 +49,10 @@ class LenaHarqTestCase : public TestCase
      * \param thrRef the throughput reference
      */
     LenaHarqTestCase(uint16_t nUser, uint16_t dist, uint16_t tbSize, double amcBer, double thrRef);
-    ~LenaHarqTestCase() override;
+    virtual ~LenaHarqTestCase();
 
   private:
-    void DoRun() override;
+    virtual void DoRun(void);
     /**
      * Build name string function
      *
@@ -68,6 +70,7 @@ class LenaHarqTestCase : public TestCase
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Test suite for harq test.
  */

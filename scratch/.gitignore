@@ -6,3 +6,5 @@
 !subdir/
 !scratch-simulator.cc
 !CMakeLists.txt
+!scenario-zero.cc
+!scenario-one.cc

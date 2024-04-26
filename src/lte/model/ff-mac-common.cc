@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 CTTC
  *
@@ -17,7 +18,7 @@
  * Author: Marco Miozzo <mmiozzo@cttc.es>
  */
 
-#include "ff-mac-common.h"
+#include <ns3/ff-mac-common.h>
 
 namespace ns3
 {

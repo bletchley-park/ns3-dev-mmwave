@@ -1,3 +1,4 @@
+/* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2010 TELEMATICS LAB, DEE - Politecnico di Bari
  *
@@ -20,6 +21,9 @@
 
 #include "lte-control-messages.h"
 
+#include "lte-net-device.h"
+#include "lte-ue-net-device.h"
+
 #include "ns3/address-utils.h"
 #include "ns3/log.h"
 #include "ns3/uinteger.h"
@@ -29,11 +33,11 @@ namespace ns3
 
 NS_LOG_COMPONENT_DEFINE("LteControlMessage");
 
-LteControlMessage::LteControlMessage()
+LteControlMessage::LteControlMessage(void)
 {
 }
 
-LteControlMessage::~LteControlMessage()
+LteControlMessage::~LteControlMessage(void)
 {
 }
 
@@ -44,19 +48,19 @@ LteControlMessage::SetMessageType(LteControlMessage::MessageType type)
 }
 
 LteControlMessage::MessageType
-LteControlMessage::GetMessageType()
+LteControlMessage::GetMessageType(void)
 {
     return m_type;
 }
 
 // ----------------------------------------------------------------------------------------------------------
 
-DlDciLteControlMessage::DlDciLteControlMessage()
+DlDciLteControlMessage::DlDciLteControlMessage(void)
 {
     SetMessageType(LteControlMessage::DL_DCI);
 }
 
-DlDciLteControlMessage::~DlDciLteControlMessage()
+DlDciLteControlMessage::~DlDciLteControlMessage(void)
 {
 }
 
@@ -66,20 +70,20 @@ DlDciLteControlMessage::SetDci(DlDciListElement_s dci)
     m_dci = dci;
 }
 
-const DlDciListElement_s&
-DlDciLteControlMessage::GetDci()
+DlDciListElement_s
+DlDciLteControlMessage::GetDci(void)
 {
     return m_dci;
 }
 
 // ----------------------------------------------------------------------------------------------------------
 
-UlDciLteControlMessage::UlDciLteControlMessage()
+UlDciLteControlMessage::UlDciLteControlMessage(void)
 {
     SetMessageType(LteControlMessage::UL_DCI);
 }
 
-UlDciLteControlMessage::~UlDciLteControlMessage()
+UlDciLteControlMessage::~UlDciLteControlMessage(void)
 {
 }
 
@@ -89,20 +93,20 @@ UlDciLteControlMessage::SetDci(UlDciListElement_s dci)
     m_dci = dci;
 }
 
-const UlDciListElement_s&
-UlDciLteControlMessage::GetDci()
+UlDciListElement_s
+UlDciLteControlMessage::GetDci(void)
 {
     return m_dci;
 }
 
 // ----------------------------------------------------------------------------------------------------------
 
-DlCqiLteControlMessage::DlCqiLteControlMessage()
+DlCqiLteControlMessage::DlCqiLteControlMessage(void)
 {
     SetMessageType(LteControlMessage::DL_CQI);
 }
 
-DlCqiLteControlMessage::~DlCqiLteControlMessage()
+DlCqiLteControlMessage::~DlCqiLteControlMessage(void)
 {
 }
 
@@ -113,19 +117,19 @@ DlCqiLteControlMessage::SetDlCqi(CqiListElement_s dlcqi)
 }
 
 CqiListElement_s
-DlCqiLteControlMessage::GetDlCqi()
+DlCqiLteControlMessage::GetDlCqi(void)
 {
     return m_dlCqi;
 }
 
 // ----------------------------------------------------------------------------------------------------------
 
-BsrLteControlMessage::BsrLteControlMessage()
+BsrLteControlMessage::BsrLteControlMessage(void)
 {
     SetMessageType(LteControlMessage::BSR);
 }
 
-BsrLteControlMessage::~BsrLteControlMessage()
+BsrLteControlMessage::~BsrLteControlMessage(void)
 {
 }
 
@@ -136,14 +140,14 @@ BsrLteControlMessage::SetBsr(MacCeListElement_s bsr)
 }
 
 MacCeListElement_s
-BsrLteControlMessage::GetBsr()
+BsrLteControlMessage::GetBsr(void)
 {
     return m_bsr;
 }
 
 // ----------------------------------------------------------------------------------------------------------
 
-RachPreambleLteControlMessage::RachPreambleLteControlMessage()
+RachPreambleLteControlMessage::RachPreambleLteControlMessage(void)
 {
     SetMessageType(LteControlMessage::RACH_PREAMBLE);
 }
@@ -162,7 +166,7 @@ RachPreambleLteControlMessage::GetRapId() const
 
 // ----------------------------------------------------------------------------------------------------------
 
-RarLteControlMessage::RarLteControlMessage()
+RarLteControlMessage::RarLteControlMessage(void)
 {
     SetMessageType(LteControlMessage::RAR);
 }
@@ -199,7 +203,7 @@ RarLteControlMessage::RarListEnd() const
 
 // ----------------------------------------------------------------------------------------------------------
 
-MibLteControlMessage::MibLteControlMessage()
+MibLteControlMessage::MibLteControlMessage(void)
 {
     SetMessageType(LteControlMessage::MIB);
 }
@@ -218,7 +222,7 @@ MibLteControlMessage::GetMib() const
 
 // ----------------------------------------------------------------------------------------------------------
 
-Sib1LteControlMessage::Sib1LteControlMessage()
+Sib1LteControlMessage::Sib1LteControlMessage(void)
 {
     SetMessageType(LteControlMessage::SIB1);
 }
@@ -237,12 +241,12 @@ Sib1LteControlMessage::GetSib1() const
 
 // ---------------------------------------------------------------------------
 
-DlHarqFeedbackLteControlMessage::DlHarqFeedbackLteControlMessage()
+DlHarqFeedbackLteControlMessage::DlHarqFeedbackLteControlMessage(void)
 {
     SetMessageType(LteControlMessage::DL_HARQ);
 }
 
-DlHarqFeedbackLteControlMessage::~DlHarqFeedbackLteControlMessage()
+DlHarqFeedbackLteControlMessage::~DlHarqFeedbackLteControlMessage(void)
 {
 }
 
@@ -253,7 +257,7 @@ DlHarqFeedbackLteControlMessage::SetDlHarqFeedback(DlInfoListElement_s m)
 }
 
 DlInfoListElement_s
-DlHarqFeedbackLteControlMessage::GetDlHarqFeedback()
+DlHarqFeedbackLteControlMessage::GetDlHarqFeedback(void)
 {
     return m_dlInfoListElement;
 }

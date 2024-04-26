@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2014 Piotr Gawlowicz
  *
@@ -21,10 +22,9 @@
 #ifndef LTE_FFR_ALGORITHM_H
 #define LTE_FFR_ALGORITHM_H
 
-#include "epc-x2-sap.h"
-#include "ff-mac-sched-sap.h"
-#include "lte-rrc-sap.h"
-
+#include <ns3/epc-x2-sap.h>
+#include <ns3/ff-mac-sched-sap.h>
+#include <ns3/lte-rrc-sap.h>
 #include <ns3/object.h>
 
 #include <map>
@@ -60,7 +60,7 @@ class LteFfrAlgorithm : public Object
 {
   public:
     LteFfrAlgorithm();
-    ~LteFfrAlgorithm() override;
+    virtual ~LteFfrAlgorithm();
 
     /**
      * \brief Get the type ID.
@@ -101,22 +101,22 @@ class LteFfrAlgorithm : public Object
     /**
      * \return the uplink bandwidth in RBs
      */
-    uint16_t GetUlBandwidth() const;
+    uint8_t GetUlBandwidth() const;
 
     /**
      * \param bw the uplink bandwidth in RBs
      */
-    void SetUlBandwidth(uint16_t bw);
+    void SetUlBandwidth(uint8_t bw);
 
     /**
      * \return the downlink bandwidth in RBs
      */
-    uint16_t GetDlBandwidth() const;
+    uint8_t GetDlBandwidth() const;
 
     /**
      * \param bw the downlink bandwidth in RBs
      */
-    void SetDlBandwidth(uint16_t bw);
+    void SetDlBandwidth(uint8_t bw);
 
     /**
      * \param cellTypeId for automatic FR configuration
@@ -130,7 +130,7 @@ class LteFfrAlgorithm : public Object
 
   protected:
     // inherited from Object
-    void DoDispose() override;
+    virtual void DoDispose();
 
     /**
      * \brief Automatic FR reconfiguration
@@ -177,7 +177,7 @@ class LteFfrAlgorithm : public Object
      *
      */
     virtual void DoReportDlCqiInfo(
-        const FfMacSchedSapProvider::SchedDlCqiInfoReqParameters& params) = 0;
+        const struct FfMacSchedSapProvider::SchedDlCqiInfoReqParameters& params) = 0;
 
     /**
      * \brief DoReportUlCqiInfo
@@ -185,7 +185,7 @@ class LteFfrAlgorithm : public Object
      *
      */
     virtual void DoReportUlCqiInfo(
-        const FfMacSchedSapProvider::SchedUlCqiInfoReqParameters& params) = 0;
+        const struct FfMacSchedSapProvider::SchedUlCqiInfoReqParameters& params) = 0;
 
     /**
      * \brief DoReportUlCqiInfo
@@ -205,7 +205,7 @@ class LteFfrAlgorithm : public Object
      * \brief DoGetMinContinuousUlBandwidth in number of RB
      * \return number of RB in min continuous UL Bandwidth
      */
-    virtual uint16_t DoGetMinContinuousUlBandwidth() = 0;
+    virtual uint8_t DoGetMinContinuousUlBandwidth() = 0;
 
     // FFR SAP RRC PROVIDER IMPLEMENTATION
 
@@ -220,7 +220,7 @@ class LteFfrAlgorithm : public Object
      * \param ulBandwidth UL bandwidth in number of RB
      * \param dlBandwidth DL bandwidth in number of RB
      */
-    virtual void DoSetBandwidth(uint16_t ulBandwidth, uint16_t dlBandwidth);
+    virtual void DoSetBandwidth(uint8_t ulBandwidth, uint8_t dlBandwidth);
 
     /**
      * \brief Implementation of LteFfrRrcSapProvider::ReportUeMeas.

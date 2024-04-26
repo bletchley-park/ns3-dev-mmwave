@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -25,6 +26,8 @@
 #include <iostream>
 #include <limits>
 #include <stdint.h>
+
+// #include "ns3/lte-rlc.h"
 
 namespace ns3
 {
@@ -144,7 +147,7 @@ class SequenceNumber10
     uint16_t operator-(const SequenceNumber10& other) const
     {
         uint16_t diff = m_value - other.m_value;
-        return diff;
+        return (diff);
     }
 
     /**
@@ -155,9 +158,9 @@ class SequenceNumber10
     bool operator>(const SequenceNumber10& other) const
     {
         NS_ASSERT(m_modulusBase == other.m_modulusBase);
-        uint16_t v1 = (m_value - m_modulusBase) % 1024;
-        uint16_t v2 = (other.m_value - other.m_modulusBase) % 1024;
-        return v1 > v2;
+        SequenceNumber10 v1((m_value - m_modulusBase) % 1024);
+        SequenceNumber10 v2((other.m_value - other.m_modulusBase) % 1024);
+        return (v1.GetValue() > v2.GetValue());
     }
 
     /**

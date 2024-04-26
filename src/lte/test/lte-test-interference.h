@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -21,13 +22,14 @@
 #ifndef LTE_TEST_INTERFERENCE_H
 #define LTE_TEST_INTERFERENCE_H
 
-#include "ns3/lte-common.h"
 #include "ns3/test.h"
+#include <ns3/lte-common.h>
 
 using namespace ns3;
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Test suite for interference test.
  */
@@ -39,6 +41,7 @@ class LteInterferenceTestSuite : public TestSuite
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Test that SINR calculation and MCS selection works fine in a
  * multi-cell interference scenario.
@@ -51,7 +54,7 @@ class LteInterferenceTestCase : public TestCase
      *
      * \param name the reference name
      * \param d1 distance between ENB and UE
-     * \param d2 distance between ENB and other UE
+     * \param d2 distnace between ENB and other UE
      * \param dlSinr the DL SINR
      * \param ulSinr the UL SINR
      * \param dlSe the DL se
@@ -68,7 +71,7 @@ class LteInterferenceTestCase : public TestCase
                             double ulSe,
                             uint16_t dlMcs,
                             uint16_t ulMcs);
-    ~LteInterferenceTestCase() override;
+    virtual ~LteInterferenceTestCase();
 
     /**
      * DL scheduling function
@@ -91,7 +94,7 @@ class LteInterferenceTestCase : public TestCase
                       uint16_t sizeTb);
 
   private:
-    void DoRun() override;
+    virtual void DoRun(void);
 
     double m_d1;               ///< distance between UE and ENB
     double m_d2;               ///< distance between UE and other ENB

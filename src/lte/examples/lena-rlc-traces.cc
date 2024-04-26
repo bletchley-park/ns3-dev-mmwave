@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -29,7 +30,7 @@ int
 main(int argc, char* argv[])
 {
     // Command line arguments
-    CommandLine cmd(__FILE__);
+    CommandLine cmd;
     cmd.Parse(argc, argv);
 
     ConfigStore inputConfig;
@@ -67,7 +68,7 @@ main(int argc, char* argv[])
     lteHelper->Attach(ueDevs, enbDevs.Get(0));
 
     // Activate an EPS bearer
-    EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+    enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
     EpsBearer bearer(q);
     lteHelper->ActivateDataRadioBearer(ueDevs, bearer);
 

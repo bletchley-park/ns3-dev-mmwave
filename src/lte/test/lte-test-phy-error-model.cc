@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011-2013 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -114,10 +115,6 @@ LenaTestPhyErrorModelSuite::LenaTestPhyErrorModelSuite()
     }
 }
 
-/**
- * \ingroup lte-test
- * Static variable for test initialization
- */
 static LenaTestPhyErrorModelSuite lenaTestPhyErrorModelSuite;
 
 std::string
@@ -149,7 +146,7 @@ LenaDataPhyErrorModelTestCase::~LenaDataPhyErrorModelTestCase()
 }
 
 void
-LenaDataPhyErrorModelTestCase::DoRun()
+LenaDataPhyErrorModelTestCase::DoRun(void)
 {
     double ber = 0.03;
     Config::SetDefault("ns3::LteAmc::Ber", DoubleValue(ber));
@@ -190,6 +187,10 @@ LenaDataPhyErrorModelTestCase::DoRun()
     lena->SetPathlossModelAttribute("ShadowSigmaIndoor", DoubleValue(0.0));
     lena->SetPathlossModelAttribute("ShadowSigmaExtWalls", DoubleValue(0.0));
 
+    // set DL and UL bandwidth
+    lena->SetEnbDeviceAttribute("DlBandwidth", UintegerValue(25));
+    lena->SetEnbDeviceAttribute("UlBandwidth", UintegerValue(25));
+
     // Create Devices and install them in the Nodes (eNB and UE)
     NetDeviceContainer enbDevs;
     NetDeviceContainer ueDevs;
@@ -205,7 +206,7 @@ LenaDataPhyErrorModelTestCase::DoRun()
     lena->Attach(ueDevs, enbDevs.Get(0));
 
     // Activate an EPS bearer
-    EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+    enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
     EpsBearer bearer(q);
     lena->ActivateDataRadioBearer(ueDevs, bearer);
 
@@ -249,7 +250,7 @@ LenaDataPhyErrorModelTestCase::DoRun()
 
         double dlRxPackets = rlcStats->GetDlRxPackets(imsi, lcId);
         double dlTxPackets = rlcStats->GetDlTxPackets(imsi, lcId);
-        double dlBler [[maybe_unused]] = 1.0 - (dlRxPackets / dlTxPackets);
+        [[maybe_unused]] double dlBler = 1.0 - (dlRxPackets / dlTxPackets);
         double expectedDlRxPackets = dlTxPackets - dlTxPackets * m_blerRef;
         NS_LOG_INFO("\tUser " << i << " imsi " << imsi << " DOWNLINK"
                               << " pkts rx " << dlRxPackets << " tx " << dlTxPackets << " BLER "
@@ -260,7 +261,7 @@ LenaDataPhyErrorModelTestCase::DoRun()
 
         // sanity check for whether the tx packets reported by the stats are correct
         // we expect one packet per TTI
-        auto expectedDlTxPackets = static_cast<double>(statsDuration.GetMilliSeconds());
+        double expectedDlTxPackets = static_cast<double>(statsDuration.GetMilliSeconds());
         NS_TEST_ASSERT_MSG_EQ_TOL(dlTxPackets,
                                   expectedDlTxPackets,
                                   expectedDlTxPackets * 0.005,
@@ -305,7 +306,7 @@ LenaDlCtrlPhyErrorModelTestCase::~LenaDlCtrlPhyErrorModelTestCase()
 }
 
 void
-LenaDlCtrlPhyErrorModelTestCase::DoRun()
+LenaDlCtrlPhyErrorModelTestCase::DoRun(void)
 {
     double ber = 0.03;
     Config::SetDefault("ns3::LteAmc::Ber", DoubleValue(ber));
@@ -314,11 +315,6 @@ LenaDlCtrlPhyErrorModelTestCase::DoRun()
     Config::SetDefault("ns3::LteSpectrumPhy::DataErrorModelEnabled", BooleanValue(false));
     Config::SetDefault("ns3::RrFfMacScheduler::HarqEnabled", BooleanValue(false));
     Config::SetGlobal("RngRun", UintegerValue(m_rngRun));
-
-    Config::SetDefault("ns3::RadioBearerStatsCalculator::DlRlcOutputFilename",
-                       StringValue(CreateTempDirFilename("DlRlcStats.txt")));
-    Config::SetDefault("ns3::RadioBearerStatsCalculator::UlRlcOutputFilename",
-                       StringValue(CreateTempDirFilename("UlRlcStats.txt")));
 
     // Disable Uplink Power Control
     Config::SetDefault("ns3::LteUePhy::EnableUplinkPowerControl", BooleanValue(false));
@@ -351,6 +347,10 @@ LenaDlCtrlPhyErrorModelTestCase::DoRun()
     lena->SetPathlossModelAttribute("ShadowSigmaIndoor", DoubleValue(0.0));
     lena->SetPathlossModelAttribute("ShadowSigmaExtWalls", DoubleValue(0.0));
 
+    // set DL and UL bandwidth
+    lena->SetEnbDeviceAttribute("DlBandwidth", UintegerValue(25));
+    lena->SetEnbDeviceAttribute("UlBandwidth", UintegerValue(25));
+
     // Create Devices and install them in the Nodes (eNB and UE)
     NetDeviceContainer enbDevs;
     NetDeviceContainer ueDevs;
@@ -366,7 +366,7 @@ LenaDlCtrlPhyErrorModelTestCase::DoRun()
     lena->Attach(ueDevs, enbDevs.Get(0));
 
     // Activate an EPS bearer
-    EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+    enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
     EpsBearer bearer(q);
     lena->ActivateDataRadioBearer(ueDevs, bearer);
 
@@ -411,7 +411,7 @@ LenaDlCtrlPhyErrorModelTestCase::DoRun()
         uint8_t lcId = 3;
         double dlRxPackets = rlcStats->GetDlRxPackets(imsi, lcId);
         double dlTxPackets = rlcStats->GetDlTxPackets(imsi, lcId);
-        double dlBler [[maybe_unused]] = 1.0 - (dlRxPackets / dlTxPackets);
+        [[maybe_unused]] double dlBler = 1.0 - (dlRxPackets / dlTxPackets);
         double expectedDlRxPackets = dlTxPackets - dlTxPackets * m_blerRef;
         NS_LOG_INFO("\tUser " << i << " imsi " << imsi << " DOWNLINK"
                               << " pkts rx " << dlRxPackets << " tx " << dlTxPackets << " BLER "
@@ -422,7 +422,7 @@ LenaDlCtrlPhyErrorModelTestCase::DoRun()
 
         // sanity check for whether the tx packets reported by the stats are correct
         // we expect one packet per TTI
-        auto expectedDlTxPackets = static_cast<double>(statsDuration.GetMilliSeconds());
+        double expectedDlTxPackets = static_cast<double>(statsDuration.GetMilliSeconds());
         NS_TEST_ASSERT_MSG_EQ_TOL(dlTxPackets,
                                   expectedDlTxPackets,
                                   expectedDlTxPackets * 0.005,

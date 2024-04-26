@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -27,12 +28,12 @@ using namespace ns3;
 
 /**
  * \ingroup lte
- * \ingroup tests
  * \defgroup lte-test lte module tests
  */
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Test suite for testing GPRS tunnelling protocol header coding and decoding.
  */
@@ -49,10 +50,10 @@ class EpsGtpuHeaderTestCase : public TestCase
 {
   public:
     EpsGtpuHeaderTestCase();
-    ~EpsGtpuHeaderTestCase() override;
+    virtual ~EpsGtpuHeaderTestCase();
 
   private:
-    void DoRun() override;
+    virtual void DoRun(void);
 };
 
 #endif /* EPC_TEST_GTPU_H */

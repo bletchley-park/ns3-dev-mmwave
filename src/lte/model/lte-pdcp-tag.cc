@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 CTTC
  *
@@ -42,7 +43,7 @@ PdcpTag::PdcpTag(Time senderTimestamp)
 }
 
 TypeId
-PdcpTag::GetTypeId()
+PdcpTag::GetTypeId(void)
 {
     static TypeId tid =
         TypeId("ns3::PdcpTag").SetParent<Tag>().SetGroupName("Lte").AddConstructor<PdcpTag>();
@@ -50,13 +51,13 @@ PdcpTag::GetTypeId()
 }
 
 TypeId
-PdcpTag::GetInstanceTypeId() const
+PdcpTag::GetInstanceTypeId(void) const
 {
     return GetTypeId();
 }
 
 uint32_t
-PdcpTag::GetSerializedSize() const
+PdcpTag::GetSerializedSize(void) const
 {
     return sizeof(Time);
 }
@@ -83,7 +84,7 @@ PdcpTag::Print(std::ostream& os) const
 }
 
 Time
-PdcpTag::GetSenderTimestamp() const
+PdcpTag::GetSenderTimestamp(void) const
 {
     return m_senderTimestamp;
 }

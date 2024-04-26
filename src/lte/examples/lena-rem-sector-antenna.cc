@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -29,14 +30,15 @@
 #include <iomanip>
 #include <string>
 #include <vector>
-// #include "ns3/gtk-config-store.h"
+//#include "ns3/gtk-config-store.h"
 
 using namespace ns3;
+using std::vector;
 
 int
 main(int argc, char* argv[])
 {
-    CommandLine cmd(__FILE__);
+    CommandLine cmd;
     cmd.Parse(argc, argv);
 
     ConfigStore inputConfig;
@@ -62,7 +64,7 @@ main(int argc, char* argv[])
     NodeContainer enbNodes;
     NodeContainer oneSectorNodes;
     NodeContainer threeSectorNodes;
-    std::vector<NodeContainer> ueNodes;
+    vector<NodeContainer> ueNodes;
 
     oneSectorNodes.Create(nEnb - 3);
     threeSectorNodes.Create(3);
@@ -78,7 +80,7 @@ main(int argc, char* argv[])
     }
 
     MobilityHelper mobility;
-    std::vector<Vector> enbPosition;
+    vector<Vector> enbPosition;
     Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator>();
     Ptr<Building> building;
     building = Create<Building>();
@@ -165,7 +167,7 @@ main(int argc, char* argv[])
 
     // Create Devices and install them in the Nodes (eNB and UE)
     NetDeviceContainer enbDevs;
-    std::vector<NetDeviceContainer> ueDevs;
+    vector<NetDeviceContainer> ueDevs;
 
     // power setting in dBm for small cells
     Config::SetDefault("ns3::LteEnbPhy::TxPower", DoubleValue(20.0));
@@ -198,7 +200,7 @@ main(int argc, char* argv[])
         NetDeviceContainer ueDev = lteHelper->InstallUeDevice(ueNodes.at(i));
         ueDevs.push_back(ueDev);
         lteHelper->Attach(ueDev, enbDevs.Get(i));
-        EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+        enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
         EpsBearer bearer(q);
         lteHelper->ActivateDataRadioBearer(ueDev, bearer);
     }
@@ -221,7 +223,7 @@ main(int argc, char* argv[])
     //  GtkConfigStore config;
     //  config.ConfigureAttributes ();
 
-    lteHelper = nullptr;
+    lteHelper = 0;
     Simulator::Destroy();
     return 0;
 }

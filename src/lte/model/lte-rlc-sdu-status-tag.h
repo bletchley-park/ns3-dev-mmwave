@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -46,28 +47,28 @@ class LteRlcSduStatusTag : public Tag
      *
      * \returns the status
      */
-    uint8_t GetStatus() const;
+    uint8_t GetStatus(void) const;
 
     /**
      * \brief Get the type ID.
      * \return the object TypeId
      */
-    static TypeId GetTypeId();
-    TypeId GetInstanceTypeId() const override;
-    uint32_t GetSerializedSize() const override;
-    void Serialize(TagBuffer i) const override;
-    void Deserialize(TagBuffer i) override;
-    void Print(std::ostream& os) const override;
+    static TypeId GetTypeId(void);
+    virtual TypeId GetInstanceTypeId(void) const;
+    virtual uint32_t GetSerializedSize(void) const;
+    virtual void Serialize(TagBuffer i) const;
+    virtual void Deserialize(TagBuffer i);
+    virtual void Print(std::ostream& os) const;
 
-    /// SduStatus_t enumeration
-    enum SduStatus_t
+    /// SduStatus_t typedef
+    typedef enum
     {
         FULL_SDU = 1,
         FIRST_SEGMENT = 2,
         MIDDLE_SEGMENT = 3,
         LAST_SEGMENT = 4,
         ANY_SEGMENT = 5
-    };
+    } SduStatus_t; ///< SduStatus_t enumeration
 
   private:
     uint8_t m_sduStatus; ///< SDU status

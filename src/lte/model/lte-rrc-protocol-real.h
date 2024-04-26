@@ -1,5 +1,7 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
+ * Copyright (c) 2016, University of Padova, Dep. of Information Engineering, SIGNET lab
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -16,15 +18,18 @@
  *
  * Authors: Nicola Baldo <nbaldo@cttc.es>
  *          Lluis Parcerisa <lparcerisa@cttc.cat>
+ *
+ * Modified by: Michele Polese <michele.polese@gmail.com>
+ *          Dual Connectivity functionalities
  */
 
 #ifndef LTE_RRC_PROTOCOL_REAL_H
 #define LTE_RRC_PROTOCOL_REAL_H
 
-#include "lte-pdcp-sap.h"
-#include "lte-rlc-sap.h"
-#include "lte-rrc-sap.h"
-
+#include <ns3/lte-pdcp-sap.h>
+#include <ns3/lte-rlc-sap.h>
+#include <ns3/lte-rrc-header.h>
+#include <ns3/lte-rrc-sap.h>
 #include <ns3/object.h>
 #include <ns3/ptr.h>
 
@@ -59,15 +64,15 @@ class LteUeRrcProtocolReal : public Object
 
   public:
     LteUeRrcProtocolReal();
-    ~LteUeRrcProtocolReal() override;
+    virtual ~LteUeRrcProtocolReal();
 
     // inherited from Object
-    void DoDispose() override;
+    virtual void DoDispose(void);
     /**
      * \brief Get the type ID.
      * \return the object TypeId
      */
-    static TypeId GetTypeId();
+    static TypeId GetTypeId(void);
 
     /**
      * Set LTE UE RRC SAP provider function
@@ -108,7 +113,7 @@ class LteUeRrcProtocolReal : public Object
      *
      * \param msg LteRrcSap::RrcConnectionSetupCompleted
      */
-    void DoSendRrcConnectionSetupCompleted(LteRrcSap::RrcConnectionSetupCompleted msg) const;
+    void DoSendRrcConnectionSetupCompleted(LteRrcSap::RrcConnectionSetupCompleted msg);
     /**
      * Send RRC connection reconfiguration setup completed function
      *
@@ -122,30 +127,21 @@ class LteUeRrcProtocolReal : public Object
      * \param msg LteRrcSap::RrcConnectionReestablishmentRequest
      */
     void DoSendRrcConnectionReestablishmentRequest(
-        LteRrcSap::RrcConnectionReestablishmentRequest msg) const;
+        LteRrcSap::RrcConnectionReestablishmentRequest msg);
     /**
      * Send RRC connection reestablishment complete function
      *
      * \param msg LteRrcSap::RrcConnectionReestablishmentComplete
      */
     void DoSendRrcConnectionReestablishmentComplete(
-        LteRrcSap::RrcConnectionReestablishmentComplete msg) const;
+        LteRrcSap::RrcConnectionReestablishmentComplete msg);
     /**
      * Send measurement report function
      *
      * \param msg LteRrcSap::MeasurementReport
      */
     void DoSendMeasurementReport(LteRrcSap::MeasurementReport msg);
-    /**
-     * \brief Send ideal UE context remove request function
-     *
-     * Notify eNodeB to release UE context once radio link failure
-     * or random access failure is detected. It is needed since no
-     * RLF detection mechanism at eNodeB is implemented
-     *
-     * \param rnti the RNTI of the UE
-     */
-    void DoSendIdealUeContextRemoveRequest(uint16_t rnti);
+    void DoSendNotifySecondaryCellConnected(uint16_t mmWaveRnti, uint16_t mmWaveCellId);
 
     /// Set ENB RRC SAP provider
     void SetEnbRrcSapProvider();
@@ -193,15 +189,15 @@ class LteEnbRrcProtocolReal : public Object
 
   public:
     LteEnbRrcProtocolReal();
-    ~LteEnbRrcProtocolReal() override;
+    virtual ~LteEnbRrcProtocolReal();
 
     // inherited from Object
-    void DoDispose() override;
+    virtual void DoDispose(void);
     /**
      * \brief Get the type ID.
      * \return the object TypeId
      */
-    static TypeId GetTypeId();
+    static TypeId GetTypeId(void);
 
     /**
      * Set LTE ENB RRC SAP provider function
@@ -313,6 +309,8 @@ class LteEnbRrcProtocolReal : public Object
      * \param msg LteRrcSap::RrcConnectionReject
      */
     void DoSendRrcConnectionReject(uint16_t rnti, LteRrcSap::RrcConnectionReject msg);
+    void DoSendRrcConnectionSwitch(uint16_t rnti, LteRrcSap::RrcConnectionSwitch msg);
+    void DoSendRrcConnectToMmWave(uint16_t rnti, uint16_t mmWaveCellId);
     /**
      * Encode handover preparation information function
      *
@@ -367,6 +365,8 @@ class LteEnbRrcProtocolReal : public Object
         m_completeSetupUeParametersMap; ///< complete setup UE parameters map
 };
 
+///////////////////////////////////////
+
 /// RealProtocolRlcSapUser class
 class RealProtocolRlcSapUser : public LteRlcSapUser
 {
@@ -380,7 +380,7 @@ class RealProtocolRlcSapUser : public LteRlcSapUser
     RealProtocolRlcSapUser(LteEnbRrcProtocolReal* pdcp, uint16_t rnti);
 
     // Interface implemented from LteRlcSapUser
-    void ReceivePdcpPdu(Ptr<Packet> p) override;
+    virtual void ReceivePdcpPdu(Ptr<Packet> p);
 
   private:
     RealProtocolRlcSapUser();

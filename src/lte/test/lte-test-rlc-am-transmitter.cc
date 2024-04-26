@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -47,10 +48,6 @@ LteRlcAmTransmitterTestSuite::LteRlcAmTransmitterTestSuite()
                 TestCase::QUICK);
 }
 
-/**
- * \ingroup lte-test
- * Static variable for test initialization
- */
 static LteRlcAmTransmitterTestSuite lteRlcAmTransmitterTestSuite;
 
 LteRlcAmTransmitterTestCase::LteRlcAmTransmitterTestCase(std::string name)
@@ -63,7 +60,7 @@ LteRlcAmTransmitterTestCase::~LteRlcAmTransmitterTestCase()
 }
 
 void
-LteRlcAmTransmitterTestCase::DoRun()
+LteRlcAmTransmitterTestCase::DoRun(void)
 {
     // LogLevel logLevel = (LogLevel)(LOG_PREFIX_FUNC | LOG_PREFIX_TIME | LOG_LEVEL_ALL);
     // LogComponentEnable ("LteRlcAmTransmitterTest", logLevel);
@@ -130,7 +127,7 @@ LteRlcAmTransmitterOneSduTestCase::~LteRlcAmTransmitterOneSduTestCase()
 }
 
 void
-LteRlcAmTransmitterOneSduTestCase::DoRun()
+LteRlcAmTransmitterOneSduTestCase::DoRun(void)
 {
     // Create topology
     LteRlcAmTransmitterTestCase::DoRun();
@@ -163,7 +160,7 @@ LteRlcAmTransmitterSegmentationTestCase::~LteRlcAmTransmitterSegmentationTestCas
 }
 
 void
-LteRlcAmTransmitterSegmentationTestCase::DoRun()
+LteRlcAmTransmitterSegmentationTestCase::DoRun(void)
 {
     // Create topology
     LteRlcAmTransmitterTestCase::DoRun();
@@ -206,7 +203,7 @@ LteRlcAmTransmitterConcatenationTestCase::~LteRlcAmTransmitterConcatenationTestC
 }
 
 void
-LteRlcAmTransmitterConcatenationTestCase::DoRun()
+LteRlcAmTransmitterConcatenationTestCase::DoRun(void)
 {
     // Create topology
     LteRlcAmTransmitterTestCase::DoRun();
@@ -244,7 +241,7 @@ LteRlcAmTransmitterReportBufferStatusTestCase::~LteRlcAmTransmitterReportBufferS
 }
 
 void
-LteRlcAmTransmitterReportBufferStatusTestCase::DoRun()
+LteRlcAmTransmitterReportBufferStatusTestCase::DoRun(void)
 {
     // Create topology
     LteRlcAmTransmitterTestCase::DoRun();

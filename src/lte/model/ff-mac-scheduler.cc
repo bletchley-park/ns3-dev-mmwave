@@ -1,3 +1,4 @@
+/* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -47,20 +48,19 @@ FfMacScheduler::DoDispose()
 }
 
 TypeId
-FfMacScheduler::GetTypeId()
+FfMacScheduler::GetTypeId(void)
 {
-    static TypeId tid =
-        TypeId("ns3::FfMacScheduler")
-            .SetParent<Object>()
-            .SetGroupName("Lte")
-            .AddAttribute("UlCqiFilter",
-                          "The filter to apply on UL CQIs received",
-                          EnumValue(FfMacScheduler::SRS_UL_CQI),
-                          MakeEnumAccessor<UlCqiFilter_t>(&FfMacScheduler::m_ulCqiFilter),
-                          MakeEnumChecker(FfMacScheduler::SRS_UL_CQI,
-                                          "SRS_UL_CQI",
-                                          FfMacScheduler::PUSCH_UL_CQI,
-                                          "PUSCH_UL_CQI"));
+    static TypeId tid = TypeId("ns3::FfMacScheduler")
+                            .SetParent<Object>()
+                            .SetGroupName("Lte")
+                            .AddAttribute("UlCqiFilter",
+                                          "The filter to apply on UL CQIs received",
+                                          EnumValue(FfMacScheduler::SRS_UL_CQI),
+                                          MakeEnumAccessor<UlCqiFilter_t>(&FfMacScheduler::m_ulCqiFilter),
+                                          MakeEnumChecker(FfMacScheduler::SRS_UL_CQI,
+                                                          "SRS_UL_CQI",
+                                                          FfMacScheduler::PUSCH_UL_CQI,
+                                                          "PUSCH_UL_CQI"));
     return tid;
 }
 

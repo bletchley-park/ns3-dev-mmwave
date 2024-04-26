@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -35,8 +36,8 @@ class LtePhyTag : public Tag
      * \brief Get the type ID.
      * \return the object TypeId
      */
-    static TypeId GetTypeId();
-    TypeId GetInstanceTypeId() const override;
+    static TypeId GetTypeId(void);
+    virtual TypeId GetInstanceTypeId(void) const;
 
     /**
      * Create an empty LtePhyTag
@@ -49,12 +50,12 @@ class LtePhyTag : public Tag
      */
     LtePhyTag(uint16_t cellId);
 
-    ~LtePhyTag() override;
+    virtual ~LtePhyTag();
 
-    void Serialize(TagBuffer i) const override;
-    void Deserialize(TagBuffer i) override;
-    uint32_t GetSerializedSize() const override;
-    void Print(std::ostream& os) const override;
+    virtual void Serialize(TagBuffer i) const;
+    virtual void Deserialize(TagBuffer i);
+    virtual uint32_t GetSerializedSize() const;
+    virtual void Print(std::ostream& os) const;
 
     /**
      * Get cell ID

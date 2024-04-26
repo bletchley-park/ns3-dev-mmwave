@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -28,7 +29,7 @@
 #include "ns3/mobility-module.h"
 #include "ns3/network-module.h"
 #include "ns3/point-to-point-helper.h"
-// #include "ns3/gtk-config-store.h"
+//#include "ns3/gtk-config-store.h"
 
 using namespace ns3;
 
@@ -49,7 +50,7 @@ main(int argc, char* argv[])
     double interPacketInterval = 100;
 
     // Command line arguments
-    CommandLine cmd(__FILE__);
+    CommandLine cmd;
     cmd.AddValue("numberOfNodes", "Number of eNodeBs + UE pairs", numberOfNodes);
     cmd.AddValue("simTime", "Total duration of the simulation [s])", simTime);
     cmd.AddValue("distance", "Distance between eNBs [m]", distance);
@@ -69,15 +70,14 @@ main(int argc, char* argv[])
     Ptr<Node> pgw = epcHelper->GetPgwNode();
 
     // Enable Logging
-    auto logLevel = (LogLevel)(LOG_PREFIX_FUNC | LOG_PREFIX_TIME | LOG_LEVEL_ALL);
+    LogLevel logLevel = (LogLevel)(LOG_PREFIX_FUNC | LOG_PREFIX_TIME | LOG_LEVEL_ALL);
 
     LogComponentEnable("BearerDeactivateExample", LOG_LEVEL_ALL);
     LogComponentEnable("LteHelper", logLevel);
     LogComponentEnable("EpcHelper", logLevel);
     LogComponentEnable("EpcEnbApplication", logLevel);
-    LogComponentEnable("EpcMmeApplication", logLevel);
-    LogComponentEnable("EpcPgwApplication", logLevel);
-    LogComponentEnable("EpcSgwApplication", logLevel);
+    LogComponentEnable("EpcSgwPgwApplication", logLevel);
+    LogComponentEnable("EpcMme", logLevel);
     LogComponentEnable("LteEnbRrc", logLevel);
 
     // Create a single RemoteHost
@@ -153,7 +153,7 @@ main(int argc, char* argv[])
         qos.mbrDl = qos.gbrDl;
         qos.mbrUl = qos.gbrUl;
 
-        EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
+        enum EpsBearer::Qci q = EpsBearer::GBR_CONV_VOICE;
         EpsBearer bearer(q, qos);
         bearer.arp.priorityLevel = 15 - (u + 1);
         bearer.arp.preemptionCapability = true;

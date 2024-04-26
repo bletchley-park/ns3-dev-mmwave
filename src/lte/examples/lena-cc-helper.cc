@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2015 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -19,9 +20,9 @@
 
 #include "ns3/cc-helper.h"
 #include "ns3/component-carrier.h"
+#include "ns3/config-store.h"
 #include "ns3/core-module.h"
 #include <ns3/buildings-helper.h>
-// #include "ns3/config-store.h"
 
 using namespace ns3;
 
@@ -30,7 +31,7 @@ void Print(ComponentCarrier cc);
 int
 main(int argc, char* argv[])
 {
-    CommandLine cmd(__FILE__);
+    CommandLine cmd;
     cmd.Parse(argc, argv);
 
     Config::SetDefault("ns3::ComponentCarrier::UlBandwidth", UintegerValue(50));
@@ -44,8 +45,10 @@ main(int argc, char* argv[])
 
     std::map<uint8_t, ComponentCarrier> ccm = cch->EquallySpacedCcs();
 
+    std::map<uint8_t, ComponentCarrier>::iterator it;
+
     std::cout << " CcMap size " << ccm.size() << std::endl;
-    for (auto it = ccm.begin(); it != ccm.end(); it++)
+    for (it = ccm.begin(); it != ccm.end(); it++)
     {
         Print(it->second);
     }

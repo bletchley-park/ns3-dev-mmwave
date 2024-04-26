@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -29,6 +30,7 @@ using namespace ns3;
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief This system test program creates different test cases with a single eNB and
  * several UEs, all having the same Radio Bearer specification. In each test
@@ -55,17 +57,17 @@ class LenaTdBetFfMacSchedulerTestCase1 : public TestCase
                                      double thrRefDl,
                                      double thrRefUl,
                                      bool errorModelEnabled);
-    ~LenaTdBetFfMacSchedulerTestCase1() override;
+    virtual ~LenaTdBetFfMacSchedulerTestCase1();
 
   private:
     /**
      * Builds the test name string based on provided parameter values
      * \param nUser the number of UE nodes
-     * \param dist the distance between UE nodes and eNodeB
+     * \param dist the distnace between UE nodes and eNodeB
      * \returns the name string
      */
     static std::string BuildNameString(uint16_t nUser, double dist);
-    void DoRun() override;
+    virtual void DoRun(void);
     uint16_t m_nUser;         ///< number of UE nodes
     double m_dist;            ///< the distance between UE nodes and eNodeB
     double m_thrRefDl;        ///< the DL throughput reference
@@ -75,6 +77,7 @@ class LenaTdBetFfMacSchedulerTestCase1 : public TestCase
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Lena TdBet Ff Mac Scheduler Test Case
  */
@@ -93,7 +96,7 @@ class LenaTdBetFfMacSchedulerTestCase2 : public TestCase
                                      std::vector<uint32_t> achievableRateDl,
                                      std::vector<uint32_t> estThrTdBetUl,
                                      bool errorModelEnabled);
-    ~LenaTdBetFfMacSchedulerTestCase2() override;
+    virtual ~LenaTdBetFfMacSchedulerTestCase2();
 
   private:
     /**
@@ -103,7 +106,7 @@ class LenaTdBetFfMacSchedulerTestCase2 : public TestCase
      * \returns the name string
      */
     static std::string BuildNameString(uint16_t nUser, std::vector<double> dist);
-    void DoRun() override;
+    virtual void DoRun(void);
     uint16_t m_nUser;                         ///< number of UE nodes
     std::vector<double> m_dist;               ///< the distance between nodes
     std::vector<uint32_t> m_achievableRateDl; ///< DL achievable rate
@@ -113,6 +116,7 @@ class LenaTdBetFfMacSchedulerTestCase2 : public TestCase
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Test suite for TdBetFfMacScheduler tests.
  */

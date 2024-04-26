@@ -143,6 +143,8 @@ if(${NS3_CCACHE})
   endif()
 endif()
 
+include_directories(/usr/include/e2sim)
+include_directories(/usr/local/include/e2sim)
 # ##############################################################################
 # Process options                     #
 # ##############################################################################

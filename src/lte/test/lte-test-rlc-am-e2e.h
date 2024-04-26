@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -21,18 +22,15 @@
 #ifndef LTE_TEST_RLC_AM_E2E_H
 #define LTE_TEST_RLC_AM_E2E_H
 
-#include "ns3/ptr.h"
 #include "ns3/test.h"
-
-namespace ns3
-{
-class Packet;
-}
+#include <ns3/ptr.h>
+#include <ns3/packet.h>
 
 using namespace ns3;
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Test suite for RlcAmE2e test case.
  */
@@ -44,6 +42,7 @@ class LteRlcAmE2eTestSuite : public TestSuite
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * Test cases used for the test suite lte-rlc-am-e2e. See the testing section of
  * the LTE module documentation for details.
@@ -61,10 +60,10 @@ class LteRlcAmE2eTestCase : public TestCase
      */
     LteRlcAmE2eTestCase(std::string name, uint32_t seed, double losses, bool bulkSduArrival);
     LteRlcAmE2eTestCase();
-    ~LteRlcAmE2eTestCase() override;
+    virtual ~LteRlcAmE2eTestCase();
 
   private:
-    void DoRun() override;
+    virtual void DoRun(void);
 
     /**
      * DL drop event

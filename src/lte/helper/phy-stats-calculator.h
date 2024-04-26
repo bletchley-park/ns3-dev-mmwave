@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -20,8 +21,7 @@
 #ifndef PHY_STATS_CALCULATOR_H_
 #define PHY_STATS_CALCULATOR_H_
 
-#include "lte-stats-calculator.h"
-
+#include "ns3/lte-stats-calculator.h"
 #include "ns3/nstime.h"
 #include "ns3/spectrum-value.h"
 #include "ns3/uinteger.h"
@@ -67,14 +67,14 @@ class PhyStatsCalculator : public LteStatsCalculator
     /**
      * Destructor
      */
-    ~PhyStatsCalculator() override;
+    virtual ~PhyStatsCalculator();
 
     // Inherited from ns3::Object
     /**
-     * Register this type.
-     * @return The object TypeId.
+     *  Register this type.
+     *  @return The object TypeId.
      */
-    static TypeId GetTypeId();
+    static TypeId GetTypeId(void);
 
     /**
      * Set the name of the file where the RSRP/SINR statistics will be stored.
@@ -87,7 +87,7 @@ class PhyStatsCalculator : public LteStatsCalculator
      * Get the name of the file where the RSRP/SINR statistics will be stored.
      * @return the name of the file where the RSRP/SINR statistics will be stored
      */
-    std::string GetCurrentCellRsrpSinrFilename();
+    std::string GetCurrentCellRsrpSinrFilename(void);
 
     /**
      * Set the name of the file where the UE SINR statistics will be stored.
@@ -100,7 +100,7 @@ class PhyStatsCalculator : public LteStatsCalculator
      * Get the name of the file where the UE SINR statistics will be stored.
      * @return the name of the file where the UE SINR statistics will be stored
      */
-    std::string GetUeSinrFilename();
+    std::string GetUeSinrFilename(void);
 
     /**
      * Set the name of the file where the interference statistics will be stored.
@@ -113,7 +113,7 @@ class PhyStatsCalculator : public LteStatsCalculator
      * Get the name of the file where the interference statistics will be stored.
      * @return the name of the file where the interference statistics will be stored
      */
-    std::string GetInterferenceFilename();
+    std::string GetInterferenceFilename(void);
 
     /**
      * Notifies the stats calculator that an RSRP and SINR report has occurred.
@@ -240,21 +240,6 @@ class PhyStatsCalculator : public LteStatsCalculator
      * Name of the file where the interference statistics will be saved
      */
     std::string m_interferenceFilename;
-
-    /**
-     * RSRP statistics output trace file
-     */
-    std::ofstream m_rsrpOutFile;
-
-    /**
-     * UE SINR statistics output trace file
-     */
-    std::ofstream m_ueSinrOutFile;
-
-    /**
-     * Interference statistics output trace file
-     */
-    std::ofstream m_interferenceOutFile;
 };
 
 } // namespace ns3

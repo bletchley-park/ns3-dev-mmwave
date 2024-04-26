@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -46,7 +47,7 @@ LteStatsCalculator::~LteStatsCalculator()
 }
 
 TypeId
-LteStatsCalculator::GetTypeId()
+LteStatsCalculator::GetTypeId(void)
 {
     static TypeId tid = TypeId("ns3::LteStatsCalculator")
                             .SetParent<Object>()
@@ -62,7 +63,7 @@ LteStatsCalculator::SetUlOutputFilename(std::string outputFilename)
 }
 
 std::string
-LteStatsCalculator::GetUlOutputFilename()
+LteStatsCalculator::GetUlOutputFilename(void)
 {
     return m_ulOutputFilename;
 }
@@ -74,7 +75,7 @@ LteStatsCalculator::SetDlOutputFilename(std::string outputFilename)
 }
 
 std::string
-LteStatsCalculator::GetDlOutputFilename()
+LteStatsCalculator::GetDlOutputFilename(void)
 {
     return m_dlOutputFilename;
 }
@@ -82,7 +83,14 @@ LteStatsCalculator::GetDlOutputFilename()
 bool
 LteStatsCalculator::ExistsImsiPath(std::string path)
 {
-    return m_pathImsiMap.find(path) != m_pathImsiMap.end();
+    if (m_pathImsiMap.find(path) == m_pathImsiMap.end())
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
 }
 
 void
@@ -101,7 +109,14 @@ LteStatsCalculator::GetImsiPath(std::string path)
 bool
 LteStatsCalculator::ExistsCellIdPath(std::string path)
 {
-    return m_pathCellIdMap.find(path) != m_pathCellIdMap.end();
+    if (m_pathCellIdMap.find(path) == m_pathCellIdMap.end())
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
 }
 
 void
@@ -139,7 +154,6 @@ LteStatsCalculator::FindImsiFromEnbRlcPath(std::string path)
     {
         NS_FATAL_ERROR("Lookup " << ueMapPath << " got no matches");
     }
-    return 0; // Silence compiler warning about lack of return value
 }
 
 uint64_t
@@ -187,7 +201,6 @@ LteStatsCalculator::FindImsiFromLteNetDevice(std::string path)
     {
         NS_FATAL_ERROR("Lookup " << path << " got no matches");
     }
-    return 0; // Silence compiler warning about lack of return value
 }
 
 uint16_t
@@ -211,7 +224,6 @@ LteStatsCalculator::FindCellIdFromEnbRlcPath(std::string path)
     {
         NS_FATAL_ERROR("Lookup " << enbNetDevicePath << " got no matches");
     }
-    return 0; // Silence compiler warning about lack of return value
 }
 
 uint64_t

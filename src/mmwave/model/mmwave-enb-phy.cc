@@ -679,7 +679,7 @@ MmWaveEnbPhy::UpdateUeSinrEstimate()
                                                                                           ueMob,
                                                                                           enbMob,
                                                                                           txPam,
-                                                                                          rxPam);
+                                                                                          rxPam)->psd;
         }
 
         NS_LOG_LOGIC("RxPsd " << *rxPsd);

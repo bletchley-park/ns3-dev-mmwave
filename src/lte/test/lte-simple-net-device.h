@@ -1,3 +1,4 @@
+/* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -43,9 +44,9 @@ class LteSimpleNetDevice : public SimpleNetDevice
      * \brief Get the type ID.
      * \return the object TypeId
      */
-    static TypeId GetTypeId();
+    static TypeId GetTypeId(void);
 
-    LteSimpleNetDevice();
+    LteSimpleNetDevice(void);
     /**
      * Constructor
      *
@@ -53,15 +54,15 @@ class LteSimpleNetDevice : public SimpleNetDevice
      */
     LteSimpleNetDevice(Ptr<Node> node);
 
-    ~LteSimpleNetDevice() override;
-    void DoDispose() override;
+    virtual ~LteSimpleNetDevice(void);
+    virtual void DoDispose();
 
     // inherited from NetDevice
-    bool Send(Ptr<Packet> packet, const Address& dest, uint16_t protocolNumber) override;
+    virtual bool Send(Ptr<Packet> packet, const Address& dest, uint16_t protocolNumber);
 
   protected:
     // inherited from Object
-    void DoInitialize() override;
+    virtual void DoInitialize(void);
 };
 
 } // namespace ns3

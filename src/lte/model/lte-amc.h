@@ -1,3 +1,4 @@
+/* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2010 TELEMATICS LAB, DEE - Politecnico di Bari
  *
@@ -45,10 +46,10 @@ class LteAmc : public Object
      * \brief Get the type ID.
      * \return the object TypeId
      */
-    static TypeId GetTypeId();
+    static TypeId GetTypeId(void);
 
     LteAmc();
-    ~LteAmc() override;
+    virtual ~LteAmc();
 
     /// Types of AMC model.
     enum AmcModel
@@ -77,19 +78,15 @@ class LteAmc : public Object
 
     /**
      * \brief Get the Transport Block Size for a selected MCS and number of PRB (table 7.1.7.2.1-1
-     * of 36.213)
-     * \param mcs the MCS index
-     * \param nprb the no. of PRB
-     * \return the Transport Block Size in bits
+     * of 36.213) \param mcs the MCS index \param nprb the no. of PRB \return the Transport Block
+     * Size in bits
      */
     int GetDlTbSizeFromMcs(int mcs, int nprb);
 
     /**
      * \brief Get the Transport Block Size for a selected MCS and number of PRB (table 8.6.1-1
-     * of 36.213)
-     * \param mcs the MCS index
-     * \param nprb the no. of PRB
-     * \return the Transport Block Size in bits
+     * of 36.213) \param mcs the MCS index \param nprb the no. of PRB \return the Transport Block
+     * Size in bits
      */
     int GetUlTbSizeFromMcs(int mcs, int nprb);
 

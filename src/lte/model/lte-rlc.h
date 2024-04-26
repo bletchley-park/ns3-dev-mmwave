@@ -1,5 +1,7 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
+ * Copyright (c) 2016, University of Padova, Dep. of Information Engineering, SIGNET lab
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -15,19 +17,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * Author: Nicola Baldo <nbaldo@cttc.es>
+ *
+ * Modified by: Michele Polese <michele.polese@gmail.com>
+ *          Dual Connectivity functionalities
  */
 
 #ifndef LTE_RLC_H
 #define LTE_RLC_H
 
-#include "lte-mac-sap.h"
-#include "lte-rlc-sap.h"
-
+#include "ns3/lte-mac-sap.h"
+#include "ns3/lte-rlc-sap.h"
 #include "ns3/nstime.h"
 #include "ns3/object.h"
 #include "ns3/trace-source-accessor.h"
 #include "ns3/traced-value.h"
 #include "ns3/uinteger.h"
+#include <ns3/epc-x2-sap.h>
 #include <ns3/packet.h>
 #include <ns3/simple-ref-count.h>
 
@@ -40,27 +45,44 @@ namespace ns3
 // class LteMacSapProvider;
 // class LteMacSapUser;
 
+class LteRlc;
+
+class LteRlcSpecificLteMacSapUser : public LteMacSapUser
+{
+  public:
+    LteRlcSpecificLteMacSapUser(LteRlc* rlc);
+
+    // Interface implemented from LteMacSapUser
+    virtual void NotifyTxOpportunity(LteMacSapUser::TxOpportunityParameters params);
+    virtual void NotifyHarqDeliveryFailure();
+    virtual void NotifyHarqDeliveryFailure(uint8_t harqId);
+    virtual void ReceivePdu(LteMacSapUser::ReceivePduParameters params);
+
+  private:
+    LteRlcSpecificLteMacSapUser();
+    LteRlc* m_rlc;
+};
+
 /**
  * This abstract base class defines the API to interact with the Radio Link Control
  * (LTE_RLC) in LTE, see 3GPP TS 36.322
  *
  */
-class LteRlc : public Object // SimpleRefCount<LteRlc>
+class LteRlc : public Object
 {
-    /// allow LteRlcSpecificLteMacSapUser class friend access
     friend class LteRlcSpecificLteMacSapUser;
-    /// allow LteRlcSpecificLteRlcSapProvider<LteRlc> class friend access
+    friend class EpcX2RlcSpecificUser<LteRlc>;
     friend class LteRlcSpecificLteRlcSapProvider<LteRlc>;
 
   public:
     LteRlc();
-    ~LteRlc() override;
+    virtual ~LteRlc();
     /**
      * \brief Get the type ID.
      * \return the object TypeId
      */
-    static TypeId GetTypeId();
-    void DoDispose() override;
+    static TypeId GetTypeId(void);
+    virtual void DoDispose();
 
     /**
      *
@@ -77,9 +99,11 @@ class LteRlc : public Object // SimpleRefCount<LteRlc>
     void SetLcId(uint8_t lcId);
 
     /**
-     * \param packetDelayBudget
-     */
-    void SetPacketDelayBudgetMs(uint16_t packetDelayBudget);
+    *
+    *
+    * \param imsi
+    */
+    void SetImsi (uint64_t imsi);
 
     /**
      *
@@ -94,6 +118,22 @@ class LteRlc : public Object // SimpleRefCount<LteRlc>
      * \return the RLC SAP Provider interface offered to the PDCP by this LTE_RLC
      */
     LteRlcSapProvider* GetLteRlcSapProvider();
+
+    /**
+     * Set the param needed for X2 tunneling
+     * \param the UeDataParams defined in RRC
+     */
+    void SetUeDataParams(EpcX2Sap::UeDataParams params);
+
+    /**
+     * \param s the EpcX2Rlc Provider to the Epc X2 interface
+     */
+    void SetEpcX2RlcProvider(EpcX2RlcProvider* s);
+
+    /**
+     * \return the EpcX2Rlc User, given to X2 to access Rlc SendMcPdcpPdu method
+     */
+    EpcX2RlcUser* GetEpcX2RlcUser();
 
     /**
      *
@@ -133,8 +173,35 @@ class LteRlc : public Object // SimpleRefCount<LteRlc>
                                           uint32_t bytes,
                                           uint64_t delay);
 
+    /**
+     * TracedCallback signature for
+     *
+     * \param [in] rnti C-RNTI scheduled.
+     * \param [in] lcid The logical channel id corresponding to
+     *             the sending RLC instance.
+     * \param [in] bytes The packet size.
+     * \param [in] the number of RLC AM retransmissions for that packet
+     */
+    typedef void (*RetransmissionCountCallback)(uint16_t rnti,
+                                                uint8_t lcid,
+                                                uint32_t bytes,
+                                                uint32_t numRetx);
+
     /// \todo MRE What is the sense to duplicate all the interfaces here???
     // NB to avoid the use of multiple inheritance
+
+    uint32_t GetTxBytesInReportingPeriod() const {
+      return m_txBytesInReportingPeriod;
+    }
+
+    uint32_t GetTxPacketsInReportingPeriod() const {
+      return m_txPacketsInReportingPeriod;
+    }
+
+    void ResetRlcCounters () {
+      m_txBytesInReportingPeriod = 0;
+      m_txPacketsInReportingPeriod = 0;
+    }
 
   protected:
     // Interface forwarded by LteRlcSapProvider
@@ -159,6 +226,7 @@ class LteRlc : public Object // SimpleRefCount<LteRlc>
      * Notify HARQ delivery failure
      */
     virtual void DoNotifyHarqDeliveryFailure() = 0;
+    virtual void DoNotifyHarqDeliveryFailure(uint8_t harqId);
     /**
      * Receive PDU function
      *
@@ -166,13 +234,14 @@ class LteRlc : public Object // SimpleRefCount<LteRlc>
      */
     virtual void DoReceivePdu(LteMacSapUser::ReceivePduParameters params) = 0;
 
+    virtual void DoSendMcPdcpSdu(EpcX2Sap::UeDataParams params) = 0;
+
     LteMacSapUser* m_macSapUser;         ///< MAC SAP user
     LteMacSapProvider* m_macSapProvider; ///< MAC SAP provider
 
     uint16_t m_rnti; ///< RNTI
     uint8_t m_lcid;  ///< LCID
-    uint16_t m_packetDelayBudgetMs{
-        UINT16_MAX}; //!< the packet delay budget in ms of the corresponding logical channel
+    uint64_t m_imsi; ///< IMSI
 
     /**
      * Used to inform of a PDU delivery to the MAC SAP provider
@@ -182,11 +251,19 @@ class LteRlc : public Object // SimpleRefCount<LteRlc>
      * Used to inform of a PDU reception from the MAC SAP user
      */
     TracedCallback<uint16_t, uint8_t, uint32_t, uint64_t> m_rxPdu;
-    /**
-     * The trace source fired when the RLC drops a packet before
-     * transmission.
-     */
-    TracedCallback<Ptr<const Packet>> m_txDropTrace;
+
+    TracedCallback<uint16_t, uint8_t, uint32_t, uint32_t>
+        m_txCompletedCallback; // callback used to broadcast the number of retx for each RLC packet
+
+    // MC functionalities
+    // UeDataParams needed to forward data to MmWave
+    EpcX2Sap::UeDataParams m_ueDataParams;
+    bool isMc;
+    EpcX2RlcProvider* m_epcX2RlcProvider;
+    EpcX2RlcUser* m_epcX2RlcUser;
+
+    uint32_t m_txPacketsInReportingPeriod;
+    uint32_t m_txBytesInReportingPeriod;
 };
 
 /**
@@ -201,19 +278,20 @@ class LteRlcSm : public LteRlc
 {
   public:
     LteRlcSm();
-    ~LteRlcSm() override;
+    virtual ~LteRlcSm();
     /**
      * \brief Get the type ID.
      * \return the object TypeId
      */
-    static TypeId GetTypeId();
-    void DoInitialize() override;
-    void DoDispose() override;
+    static TypeId GetTypeId(void);
+    virtual void DoInitialize();
+    virtual void DoDispose();
 
-    void DoTransmitPdcpPdu(Ptr<Packet> p) override;
-    void DoNotifyTxOpportunity(LteMacSapUser::TxOpportunityParameters txOpParams) override;
-    void DoNotifyHarqDeliveryFailure() override;
-    void DoReceivePdu(LteMacSapUser::ReceivePduParameters rxPduParams) override;
+    virtual void DoTransmitPdcpPdu(Ptr<Packet> p);
+    virtual void DoNotifyTxOpportunity(LteMacSapUser::TxOpportunityParameters txOpParams);
+    virtual void DoNotifyHarqDeliveryFailure();
+    virtual void DoSendMcPdcpSdu(EpcX2Sap::UeDataParams params);
+    virtual void DoReceivePdu(LteMacSapUser::ReceivePduParameters rxPduParams);
 
   private:
     /// Report buffer status

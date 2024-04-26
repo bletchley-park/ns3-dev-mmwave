@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011,2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -39,8 +40,8 @@ class EpsBearerTag : public Tag
      * \brief Get the type ID.
      * \return the object TypeId
      */
-    static TypeId GetTypeId();
-    TypeId GetInstanceTypeId() const override;
+    static TypeId GetTypeId(void);
+    virtual TypeId GetInstanceTypeId(void) const;
 
     /**
      * Create an empty EpsBearerTag
@@ -69,21 +70,21 @@ class EpsBearerTag : public Tag
      */
     void SetBid(uint8_t bid);
 
-    void Serialize(TagBuffer i) const override;
-    void Deserialize(TagBuffer i) override;
-    uint32_t GetSerializedSize() const override;
-    void Print(std::ostream& os) const override;
+    virtual void Serialize(TagBuffer i) const;
+    virtual void Deserialize(TagBuffer i);
+    virtual uint32_t GetSerializedSize() const;
+    virtual void Print(std::ostream& os) const;
 
     /**
      * Get RNTI function
      * \returns the RNTI
      */
-    uint16_t GetRnti() const;
+    uint16_t GetRnti(void) const;
     /**
      * Get Bearer Id function
      * \returns the Bearer Id
      */
-    uint8_t GetBid() const;
+    uint8_t GetBid(void) const;
 
   private:
     uint16_t m_rnti; ///< RNTI value

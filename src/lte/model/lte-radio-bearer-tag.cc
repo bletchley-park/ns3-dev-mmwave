@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -28,7 +29,7 @@ namespace ns3
 NS_OBJECT_ENSURE_REGISTERED(LteRadioBearerTag);
 
 TypeId
-LteRadioBearerTag::GetTypeId()
+LteRadioBearerTag::GetTypeId(void)
 {
     static TypeId tid =
         TypeId("ns3::LteRadioBearerTag")
@@ -50,7 +51,7 @@ LteRadioBearerTag::GetTypeId()
 }
 
 TypeId
-LteRadioBearerTag::GetInstanceTypeId() const
+LteRadioBearerTag::GetInstanceTypeId(void) const
 {
     return GetTypeId();
 }
@@ -94,7 +95,7 @@ LteRadioBearerTag::SetLayer(uint8_t layer)
 }
 
 uint32_t
-LteRadioBearerTag::GetSerializedSize() const
+LteRadioBearerTag::GetSerializedSize(void) const
 {
     return 4;
 }

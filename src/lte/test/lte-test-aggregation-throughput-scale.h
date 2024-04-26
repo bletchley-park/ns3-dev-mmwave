@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2017 Alexander Krotov
  *
@@ -52,24 +53,18 @@ class LteAggregationThroughputScaleTestCase : public TestCase
      */
     LteAggregationThroughputScaleTestCase(std::string name);
 
-    ~LteAggregationThroughputScaleTestCase() override;
+    virtual ~LteAggregationThroughputScaleTestCase();
 
   private:
     /**
      * \brief Setup the simulation, run it, and verify the result.
      */
-    void DoRun() override;
+    virtual void DoRun();
 
-    /**
-     * \brief Get throughput function
-     *
-     * \param numberOfComponentCarriers Number of component carriers
-     * \return The total data received (in Megabits)
-     */
     double GetThroughput(uint8_t numberOfComponentCarriers);
 
-    uint16_t m_expectedCellId; ///< Cell ID UE is expected to attach to
-    uint16_t m_actualCellId;   ///< Cell ID UE has attached to
+    uint16_t m_expectedCellId; //< Cell ID UE is expected to attach to
+    uint16_t m_actualCellId;   //< Cell ID UE has attached to
 };
 
 #endif /* LTE_AGGREGATION_THROUGHPUT_SCALE_H */

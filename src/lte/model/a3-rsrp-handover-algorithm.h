@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2013 Budiarto Herman
  *
@@ -21,10 +22,9 @@
 #ifndef A3_RSRP_HANDOVER_ALGORITHM_H
 #define A3_RSRP_HANDOVER_ALGORITHM_H
 
-#include "lte-handover-algorithm.h"
-#include "lte-handover-management-sap.h"
-#include "lte-rrc-sap.h"
-
+#include <ns3/lte-handover-algorithm.h>
+#include <ns3/lte-handover-management-sap.h>
+#include <ns3/lte-rrc-sap.h>
 #include <ns3/nstime.h>
 
 namespace ns3
@@ -68,7 +68,7 @@ class A3RsrpHandoverAlgorithm : public LteHandoverAlgorithm
     /// Creates a strongest cell handover algorithm instance.
     A3RsrpHandoverAlgorithm();
 
-    ~A3RsrpHandoverAlgorithm() override;
+    virtual ~A3RsrpHandoverAlgorithm();
 
     /**
      * \brief Get the type ID.
@@ -77,19 +77,19 @@ class A3RsrpHandoverAlgorithm : public LteHandoverAlgorithm
     static TypeId GetTypeId();
 
     // inherited from LteHandoverAlgorithm
-    void SetLteHandoverManagementSapUser(LteHandoverManagementSapUser* s) override;
-    LteHandoverManagementSapProvider* GetLteHandoverManagementSapProvider() override;
+    virtual void SetLteHandoverManagementSapUser(LteHandoverManagementSapUser* s);
+    virtual LteHandoverManagementSapProvider* GetLteHandoverManagementSapProvider();
 
     /// let the forwarder class access the protected and private members
     friend class MemberLteHandoverManagementSapProvider<A3RsrpHandoverAlgorithm>;
 
   protected:
     // inherited from Object
-    void DoInitialize() override;
-    void DoDispose() override;
+    virtual void DoInitialize();
+    virtual void DoDispose();
 
     // inherited from LteHandoverAlgorithm as a Handover Management SAP implementation
-    void DoReportUeMeas(uint16_t rnti, LteRrcSap::MeasResults measResults) override;
+    void DoReportUeMeas(uint16_t rnti, LteRrcSap::MeasResults measResults);
 
   private:
     /**
@@ -102,7 +102,7 @@ class A3RsrpHandoverAlgorithm : public LteHandoverAlgorithm
     bool IsValidNeighbour(uint16_t cellId);
 
     /// The expected measurement identity for A3 measurements.
-    std::vector<uint8_t> m_measIds;
+    uint8_t m_measId;
 
     /**
      * The `Hysteresis` attribute. Handover margin (hysteresis) in dB (rounded to

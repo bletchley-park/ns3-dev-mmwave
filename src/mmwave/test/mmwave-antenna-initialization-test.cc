@@ -141,7 +141,7 @@ MmwaveThreeGppAntennaInitializationTestCase::DoRun(void)
         Ptr<PhasedArrayModel> antenna = mmwaveBfModel->GetAntenna();
 
         // check if the number of antenna elements has been configured
-        NS_TEST_ASSERT_MSG_EQ(antenna->GetNumberOfElements(),
+        NS_TEST_ASSERT_MSG_EQ(antenna->GetNumElems(),
                               m_numEnbAntennaRows * m_numEnbAntennaColums,
                               "The number of antenna elements was not properly configured");
     }
@@ -181,7 +181,7 @@ MmwaveThreeGppAntennaInitializationTestCase::DoRun(void)
         Ptr<PhasedArrayModel> antenna = mmwaveBfModel->GetAntenna();
 
         // check if the number of antenna elements has been configured
-        NS_TEST_ASSERT_MSG_EQ(antenna->GetNumberOfElements(),
+        NS_TEST_ASSERT_MSG_EQ(antenna->GetNumElems(),
                               m_numUeAntennaRows * m_numUeAntennaColumns,
                               "The number of antenna elements was not properly configured");
     }

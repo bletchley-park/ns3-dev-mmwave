@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -28,6 +29,7 @@ NS_LOG_COMPONENT_DEFINE("LteTestSpectrumValueHelper");
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Test checks if lte spectrum model is generated properly. Different
  * test cases are configured by defining different frequency and banwidth.
@@ -40,18 +42,18 @@ class LteSpectrumModelTestCase : public TestCase
      *
      * \param str the test reference name
      * \param earfcn the central carrier frequency
-     * \param bw bandwidth the bandwidth
+     * \param bw bandwidth tha bandwidth
      * \param fcs the expected spectrum model
      */
     LteSpectrumModelTestCase(const char* str, uint16_t earfcn, uint8_t bw, std::vector<double> fcs);
-    ~LteSpectrumModelTestCase() override;
+    virtual ~LteSpectrumModelTestCase();
 
   protected:
     Ptr<SpectrumModel> m_actual;   ///< actual spectrum model
     Ptr<SpectrumModel> m_expected; ///< expected spectrum model
 
   private:
-    void DoRun() override;
+    virtual void DoRun(void);
 };
 
 LteSpectrumModelTestCase::LteSpectrumModelTestCase(const char* str,
@@ -70,7 +72,7 @@ LteSpectrumModelTestCase::~LteSpectrumModelTestCase()
 }
 
 void
-LteSpectrumModelTestCase::DoRun()
+LteSpectrumModelTestCase::DoRun(void)
 {
     NS_LOG_FUNCTION(this);
     NS_TEST_ASSERT_MSG_SPECTRUM_MODEL_EQ_TOL((*m_actual),
@@ -81,6 +83,7 @@ LteSpectrumModelTestCase::DoRun()
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Test that the function for creation of LTE noise power spectral
  * density is working properly.
@@ -102,14 +105,14 @@ class LteNoisePsdTestCase : public TestCase
                         uint8_t bw,
                         double noiseFigureDb,
                         SpectrumValue& expected);
-    ~LteNoisePsdTestCase() override;
+    virtual ~LteNoisePsdTestCase();
 
   protected:
     Ptr<SpectrumValue> m_actual;   ///< actual spectrum value
     Ptr<SpectrumValue> m_expected; ///< expected spectrum value
 
   private:
-    void DoRun() override;
+    virtual void DoRun(void);
 };
 
 LteNoisePsdTestCase::LteNoisePsdTestCase(const char* str,
@@ -129,7 +132,7 @@ LteNoisePsdTestCase::~LteNoisePsdTestCase()
 }
 
 void
-LteNoisePsdTestCase::DoRun()
+LteNoisePsdTestCase::DoRun(void)
 {
     NS_TEST_ASSERT_MSG_EQ(m_actual->GetSpectrumModelUid(),
                           m_expected->GetSpectrumModelUid(),
@@ -142,6 +145,7 @@ LteNoisePsdTestCase::DoRun()
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Test that the funtcion for the creation of the Lte transmission power
  * spectral density is working as expected.
@@ -155,7 +159,7 @@ class LteTxPsdTestCase : public TestCase
      * \param str the reference name
      * \param earfcn
      * \param bw bandwidth
-     * \param txPowerDbm transmit power in dBm
+     * \param txPowerDbm tranmit power in dBm
      * \param activeRbs active RBs
      * \param expected executed spectrum value
      */
@@ -165,14 +169,14 @@ class LteTxPsdTestCase : public TestCase
                      double txPowerDbm,
                      std::vector<int> activeRbs,
                      SpectrumValue& expected);
-    ~LteTxPsdTestCase() override;
+    virtual ~LteTxPsdTestCase();
 
   protected:
     Ptr<SpectrumValue> m_actual;   ///< actual spectrum value
     Ptr<SpectrumValue> m_expected; ///< expected spectrum value
 
   private:
-    void DoRun() override;
+    virtual void DoRun(void);
 };
 
 LteTxPsdTestCase::LteTxPsdTestCase(const char* str,
@@ -194,7 +198,7 @@ LteTxPsdTestCase::~LteTxPsdTestCase()
 }
 
 void
-LteTxPsdTestCase::DoRun()
+LteTxPsdTestCase::DoRun(void)
 {
     NS_TEST_ASSERT_MSG_EQ(m_actual->GetSpectrumModelUid(),
                           m_expected->GetSpectrumModelUid(),
@@ -207,6 +211,7 @@ LteTxPsdTestCase::DoRun()
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Test suite for LteSpectrumValueHelper. Test suite is
  * checking different functionalities of LteSpectrumValueHelper.
@@ -217,10 +222,6 @@ class LteSpectrumValueHelperTestSuite : public TestSuite
     LteSpectrumValueHelperTestSuite();
 };
 
-/**
- * \ingroup lte-test
- * Static variable for test initialization
- */
 static LteSpectrumValueHelperTestSuite g_lteSpectrumValueHelperTestSuite;
 
 LteSpectrumValueHelperTestSuite::LteSpectrumValueHelperTestSuite()

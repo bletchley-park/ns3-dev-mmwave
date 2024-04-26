@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2013 Budiarto Herman
  *
@@ -21,8 +22,7 @@
 #ifndef LTE_HANDOVER_ALGORITHM_H
 #define LTE_HANDOVER_ALGORITHM_H
 
-#include "lte-rrc-sap.h"
-
+#include <ns3/lte-rrc-sap.h>
 #include <ns3/object.h>
 
 namespace ns3
@@ -66,7 +66,7 @@ class LteHandoverAlgorithm : public Object
 {
   public:
     LteHandoverAlgorithm();
-    ~LteHandoverAlgorithm() override;
+    virtual ~LteHandoverAlgorithm();
 
     /**
      * \brief Get the type ID.
@@ -91,7 +91,7 @@ class LteHandoverAlgorithm : public Object
 
   protected:
     // inherited from Object
-    void DoDispose() override;
+    virtual void DoDispose();
 
     // HANDOVER MANAGEMENT SAP PROVIDER IMPLEMENTATION
 

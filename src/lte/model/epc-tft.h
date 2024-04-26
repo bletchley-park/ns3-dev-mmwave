@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -109,30 +110,32 @@ class EpcTft : public SimpleRefCount<EpcTft>
                      uint16_t lp,
                      uint8_t tos);
 
-        /// Used to specify the precedence for the packet filter among all packet filters in the
-        /// TFT; higher values will be evaluated last.
-        uint8_t precedence;
+        uint8_t precedence; /**< used to specify the precedence for the
+                             * packet filter among all packet filters in
+                             * the TFT; higher values will be evaluated
+                             * last.
+                             */
 
-        /// Whether the filter needs to be applied to uplink / downlink only, or in both cases
-        Direction direction;
+        Direction direction; /**< whether the filter needs to be applied
+                    to uplink / downlink only, or in both cases*/
 
-        Ipv4Address remoteAddress; //!< IPv4 address of the remote host
-        Ipv4Mask remoteMask;       //!< IPv4 address mask of the remote host
-        Ipv4Address localAddress;  //!< IPv4 address of the UE
-        Ipv4Mask localMask;        //!< IPv4 address mask of the UE
+        Ipv4Address remoteAddress; /**< IPv4 address of the remote host  */
+        Ipv4Mask remoteMask;       /**< IPv4 address mask of the remote host */
+        Ipv4Address localAddress;  /**< IPv4 address of the UE */
+        Ipv4Mask localMask;        /**< IPv4 address mask of the UE */
 
-        Ipv6Address remoteIpv6Address; //!< IPv6 address of the remote host
-        Ipv6Prefix remoteIpv6Prefix;   //!< IPv6 address prefix of the remote host
-        Ipv6Address localIpv6Address;  //!< IPv6 address of the UE
-        Ipv6Prefix localIpv6Prefix;    //!< IPv6 address prefix of the UE
+        Ipv6Address remoteIpv6Address; /**< IPv6 address of the remote host  */
+        Ipv6Prefix remoteIpv6Prefix;   /**< IPv6 address prefix of the remote host  */
+        Ipv6Address localIpv6Address;  /**< IPv6 address of the UE */
+        Ipv6Prefix localIpv6Prefix;    /**< IPv6 address prefix of the UE */
 
-        uint16_t remotePortStart; //!< start of the port number range of the remote host
-        uint16_t remotePortEnd;   //!< end of the port number range of the remote host
-        uint16_t localPortStart;  //!< start of the port number range of the UE
-        uint16_t localPortEnd;    //!< end of the port number range of the UE
+        uint16_t remotePortStart; /**< start of the port number range of the remote host */
+        uint16_t remotePortEnd;   /**< end of the port number range of the remote host */
+        uint16_t localPortStart;  /**< start of the port number range of the UE */
+        uint16_t localPortEnd;    /**< end of the port number range of the UE */
 
-        uint8_t typeOfService;     //!< type of service field
-        uint8_t typeOfServiceMask; //!< type of service field mask
+        uint8_t typeOfService;     /**< type of service field */
+        uint8_t typeOfServiceMask; /**< type of service field mask */
     };
 
     EpcTft();
@@ -184,12 +187,6 @@ class EpcTft : public SimpleRefCount<EpcTft>
                  uint16_t remotePort,
                  uint16_t localPort,
                  uint8_t typeOfService);
-
-    /**
-     * Get the packet filters
-     * \return a container of packet filters
-     */
-    std::list<PacketFilter> GetPacketFilters() const;
 
   private:
     std::list<PacketFilter> m_filters; ///< packet filter list

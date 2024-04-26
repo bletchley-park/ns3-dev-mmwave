@@ -1,3 +1,4 @@
+/* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 CTTC
  *
@@ -23,8 +24,6 @@
 
 #include <ns3/spectrum-signal-parameters.h>
 
-#include <list>
-
 namespace ns3
 {
 
@@ -38,6 +37,7 @@ class LteControlMessage;
  */
 struct LteSpectrumSignalParameters : public SpectrumSignalParameters
 {
+    // inherited from SpectrumSignalParameters
     Ptr<SpectrumSignalParameters> Copy() const override;
 
     /**
@@ -66,6 +66,7 @@ struct LteSpectrumSignalParameters : public SpectrumSignalParameters
  */
 struct LteSpectrumSignalParametersDataFrame : public SpectrumSignalParameters
 {
+    // inherited from SpectrumSignalParameters
     Ptr<SpectrumSignalParameters> Copy() const override;
 
     /**
@@ -96,6 +97,7 @@ struct LteSpectrumSignalParametersDataFrame : public SpectrumSignalParameters
  */
 struct LteSpectrumSignalParametersDlCtrlFrame : public SpectrumSignalParameters
 {
+    // inherited from SpectrumSignalParameters
     Ptr<SpectrumSignalParameters> Copy() const override;
 
     /**
@@ -122,6 +124,7 @@ struct LteSpectrumSignalParametersDlCtrlFrame : public SpectrumSignalParameters
  */
 struct LteSpectrumSignalParametersUlSrsFrame : public SpectrumSignalParameters
 {
+    // inherited from SpectrumSignalParameters
     Ptr<SpectrumSignalParameters> Copy() const override;
 
     /**

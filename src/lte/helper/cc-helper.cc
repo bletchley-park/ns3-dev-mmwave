@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2015 Danilo Abrignani
  *
@@ -39,20 +40,20 @@ NS_LOG_COMPONENT_DEFINE("CcHelper");
 
 NS_OBJECT_ENSURE_REGISTERED(CcHelper);
 
-CcHelper::CcHelper()
+CcHelper::CcHelper(void)
 {
     NS_LOG_FUNCTION(this);
     m_ccFactory.SetTypeId(ComponentCarrier::GetTypeId());
 }
 
 void
-CcHelper::DoInitialize()
+CcHelper::DoInitialize(void)
 {
     NS_LOG_FUNCTION(this);
 }
 
 TypeId
-CcHelper::GetTypeId()
+CcHelper::GetTypeId(void)
 {
     static TypeId tid =
         TypeId("ns3::CcHelper")
@@ -88,7 +89,7 @@ CcHelper::GetTypeId()
     return tid;
 }
 
-CcHelper::~CcHelper()
+CcHelper::~CcHelper(void)
 {
     NS_LOG_FUNCTION(this);
 }
@@ -138,31 +139,31 @@ CcHelper::SetUlBandwidth(uint16_t ulBandwidth)
 }
 
 uint16_t
-CcHelper::GetNumberOfComponentCarriers() const
+CcHelper::GetNumberOfComponentCarriers()
 {
     return m_numberOfComponentCarriers;
 }
 
 uint32_t
-CcHelper::GetUlEarfcn() const
+CcHelper::GetUlEarfcn()
 {
     return m_ulEarfcn;
 }
 
 uint32_t
-CcHelper::GetDlEarfcn() const
+CcHelper::GetDlEarfcn()
 {
     return m_dlEarfcn;
 }
 
 uint16_t
-CcHelper::GetDlBandwidth() const
+CcHelper::GetDlBandwidth()
 {
     return m_dlBandwidth;
 }
 
 uint16_t
-CcHelper::GetUlBandwidth() const
+CcHelper::GetUlBandwidth()
 {
     return m_ulBandwidth;
 }
@@ -184,12 +185,12 @@ CcHelper::EquallySpacedCcs()
 
     uint32_t ulEarfcn = m_ulEarfcn;
     uint32_t dlEarfcn = m_dlEarfcn;
-    uint16_t maxBandwidthRb = std::max<uint16_t>(m_ulBandwidth, m_dlBandwidth);
+    uint32_t maxBandwidthRb = std::max<uint32_t>(m_ulBandwidth, m_dlBandwidth);
 
     // Convert bandwidth from RBs to kHz
     uint32_t maxBandwidthKhz = LteSpectrumValueHelper::GetChannelBandwidth(maxBandwidthRb) / 1e3;
 
-    for (uint16_t i = 0; i < m_numberOfComponentCarriers; i++)
+    for (uint8_t i = 0; i < m_numberOfComponentCarriers; i++)
     {
         // Make sure we stay within the same band.
         if (LteSpectrumValueHelper::GetUplinkCarrierBand(ulEarfcn) !=
@@ -231,7 +232,7 @@ CcHelper::CreateSingleCc(uint16_t ulBandwidth,
                          uint16_t dlBandwidth,
                          uint32_t ulEarfcn,
                          uint32_t dlEarfcn,
-                         bool isPrimary) const
+                         bool isPrimary)
 {
     ComponentCarrier cc;
     if (m_ulEarfcn != 0)

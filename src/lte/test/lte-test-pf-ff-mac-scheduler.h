@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -28,6 +29,7 @@ using namespace ns3;
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief This system test program creates different test cases with a single eNB and
  * several UEs, all having the same Radio Bearer specification. In each test
@@ -54,17 +56,17 @@ class LenaPfFfMacSchedulerTestCase1 : public TestCase
                                   double thrRefDl,
                                   double thrRefUl,
                                   bool errorModelEnabled);
-    ~LenaPfFfMacSchedulerTestCase1() override;
+    virtual ~LenaPfFfMacSchedulerTestCase1();
 
   private:
     /**
      * Build name string
      * \param nUser the number of UE nodes
-     * \param dist the distance between nodes
+     * \param dist the distnace between nodes
      * \returns the name string
      */
     static std::string BuildNameString(uint16_t nUser, double dist);
-    void DoRun() override;
+    virtual void DoRun(void);
     uint16_t m_nUser;         ///< number of UE nodes
     double m_dist;            ///< the distance between nodes
     double m_thrRefDl;        ///< the DL throughput reference
@@ -74,6 +76,7 @@ class LenaPfFfMacSchedulerTestCase1 : public TestCase
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief Lena PfFf Mac Scheduler Test Case 2
  */
@@ -92,17 +95,17 @@ class LenaPfFfMacSchedulerTestCase2 : public TestCase
                                   std::vector<uint32_t> estThrPfDl,
                                   std::vector<uint32_t> estThrPfUl,
                                   bool errorModelEnabled);
-    ~LenaPfFfMacSchedulerTestCase2() override;
+    virtual ~LenaPfFfMacSchedulerTestCase2();
 
   private:
     /**
      * Builds the test name string based on provided parameter values
      * \param nUser the number of UE nodes
-     * \param dist the distance between nodes
+     * \param dist the distnace between nodes
      * \returns the name string
      */
     static std::string BuildNameString(uint16_t nUser, std::vector<double> dist);
-    void DoRun() override;
+    virtual void DoRun(void);
     uint16_t m_nUser;                   ///< number of UE nodes
     std::vector<double> m_dist;         ///< the distance between nodes
     std::vector<uint32_t> m_estThrPfDl; ///< the estimated DL throughput
@@ -112,6 +115,7 @@ class LenaPfFfMacSchedulerTestCase2 : public TestCase
 
 /**
  * \ingroup lte-test
+ * \ingroup tests
  *
  * \brief PfFfMacScheduler test suite
  */

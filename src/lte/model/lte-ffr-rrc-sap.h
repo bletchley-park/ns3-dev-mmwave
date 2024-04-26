@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2014 Piotr Gawlowicz
  *
@@ -21,8 +22,8 @@
 #ifndef LTE_FFR_RRC_SAP_H
 #define LTE_FFR_RRC_SAP_H
 
-#include "epc-x2-sap.h"
-#include "lte-rrc-sap.h"
+#include <ns3/epc-x2-sap.h>
+#include <ns3/lte-rrc-sap.h>
 
 namespace ns3
 {
@@ -147,16 +148,14 @@ class MemberLteFfrRrcSapProvider : public LteFfrRrcSapProvider
      */
     MemberLteFfrRrcSapProvider(C* owner);
 
-    // Delete default constructor to avoid misuse
-    MemberLteFfrRrcSapProvider() = delete;
-
-    // inherited from LteHandoverManagementSapProvider
-    void SetCellId(uint16_t cellId) override;
-    void SetBandwidth(uint8_t ulBandwidth, uint8_t dlBandwidth) override;
-    void ReportUeMeas(uint16_t rnti, LteRrcSap::MeasResults measResults) override;
-    void RecvLoadInformation(EpcX2Sap::LoadInformationParams params) override;
+    // inherited from LteHandoverManagemenrSapProvider
+    virtual void SetCellId(uint16_t cellId);
+    virtual void SetBandwidth(uint8_t ulBandwidth, uint8_t dlBandwidth);
+    virtual void ReportUeMeas(uint16_t rnti, LteRrcSap::MeasResults measResults);
+    virtual void RecvLoadInformation(EpcX2Sap::LoadInformationParams params);
 
   private:
+    MemberLteFfrRrcSapProvider();
     C* m_owner; ///< the owner class
 
 }; // end of class MemberLteFfrRrcSapProvider
@@ -211,18 +210,16 @@ class MemberLteFfrRrcSapUser : public LteFfrRrcSapUser
      */
     MemberLteFfrRrcSapUser(C* owner);
 
-    // Delete default constructor to avoid misuse
-    MemberLteFfrRrcSapUser() = delete;
-
     // inherited from LteFfrRrcSapUser
-    uint8_t AddUeMeasReportConfigForFfr(LteRrcSap::ReportConfigEutra reportConfig) override;
+    virtual uint8_t AddUeMeasReportConfigForFfr(LteRrcSap::ReportConfigEutra reportConfig);
 
-    void SetPdschConfigDedicated(uint16_t rnti,
-                                 LteRrcSap::PdschConfigDedicated pdschConfigDedicated) override;
+    virtual void SetPdschConfigDedicated(uint16_t rnti,
+                                         LteRrcSap::PdschConfigDedicated pdschConfigDedicated);
 
-    void SendLoadInformation(EpcX2Sap::LoadInformationParams params) override;
+    virtual void SendLoadInformation(EpcX2Sap::LoadInformationParams params);
 
   private:
+    MemberLteFfrRrcSapUser();
     C* m_owner; ///< the owner class
 
 }; // end of class LteFfrRrcSapUser

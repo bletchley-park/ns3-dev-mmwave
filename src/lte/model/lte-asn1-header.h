@@ -1,3 +1,4 @@
+/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2012 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
  *
@@ -37,21 +38,21 @@ class Asn1Header : public Header
 {
   public:
     Asn1Header();
-    ~Asn1Header() override;
+    virtual ~Asn1Header();
 
     /**
      * \brief Get the type ID.
      * \return the object TypeId
      */
-    static TypeId GetTypeId();
-    TypeId GetInstanceTypeId() const override;
-    uint32_t GetSerializedSize() const override;
-    void Serialize(Buffer::Iterator bIterator) const override;
+    static TypeId GetTypeId(void);
+    virtual TypeId GetInstanceTypeId(void) const;
+    uint32_t GetSerializedSize(void) const;
+    void Serialize(Buffer::Iterator bIterator) const;
 
     // Inherited from ns3::Header base class
     // Pure virtual methods, to be implemented in child classes
-    uint32_t Deserialize(Buffer::Iterator bIterator) override = 0;
-    void Print(std::ostream& os) const override = 0;
+    virtual uint32_t Deserialize(Buffer::Iterator bIterator) = 0;
+    virtual void Print(std::ostream& os) const = 0;
 
     /**
      * This function serializes class attributes to m_serializationResult
@@ -62,7 +63,7 @@ class Asn1Header : public Header
      * in child classes) as the meaningful information elements are in
      * the subclasses.
      */
-    virtual void PreSerialize() const = 0;
+    virtual void PreSerialize(void) const = 0;
 
   protected:
     mutable uint8_t m_serializationPendingBits;    //!< pending bits
@@ -323,6 +324,13 @@ class Asn1Header : public Header
      * \returns the modified buffer iterator
      */
     template <int N>
+    /**
+     * Deserialize a sequence
+     * \param optionalOrDefaultMask buffer to store the result
+     * \param isExtensionMarkerPresent true if Extension Marker is present
+     * \param bIterator buffer iterator
+     * \returns the modified buffer iterator
+     */
     Buffer::Iterator DeserializeSequence(std::bitset<N>* optionalOrDefaultMask,
                                          bool isExtensionMarkerPresent,
                                          Buffer::Iterator bIterator);
